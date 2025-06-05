@@ -261,7 +261,7 @@ public class attendancePage extends JPanel {
                     int row = e.getFirstRow();
                     Boolean start = (Boolean) tableModel.getValueAt(row, 2);
                     Boolean end = (Boolean) tableModel.getValueAt(row, 3);
-                    String status = (start && end) ? "Wowowow" : "Nyayaya";
+                    String status = (start && end) ? "Present" : "Absent";
                     tableModel.setValueAt(status, row, 4);
                 }
             }
@@ -271,7 +271,7 @@ public class attendancePage extends JPanel {
         String[] names = {"Jana Agustin", "Peavey Capacio", "Joseph Desalit", "Eliand Penus", "Earl Perucho"};
         for (int i = 0; i < 15; i++) {
             String name = names[i % names.length]; // loop through names repeatedly
-            tableModel.addRow(new Object[]{String.valueOf(i + 1), name, false, false, "Nyayaya"});
+            tableModel.addRow(new Object[]{String.valueOf(i + 1), name, false, false, "Absent"});
         }
 
         saveBtn = new JButton("Save");

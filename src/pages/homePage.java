@@ -9,6 +9,8 @@ import javax.swing.border.EmptyBorder;
 
 public class homePage extends JFrame {
     private JButton selectedButton = null;
+    private JPanel recordPanel;
+
     public static void launch() {
         try {
             homePage frame = new homePage();
@@ -84,6 +86,14 @@ public class homePage extends JFrame {
         contentPane.add(sideBar);
         sideBar.setLayout(null);
 
+        // Create recordPanel for sideBar
+        recordPanel = new JPanel();
+        recordPanel.setBackground(new Color(37,37,37)); // Darker shade for contrast
+        recordPanel.setBounds(0, 230, 200, 85);
+        recordPanel.setLayout(null);
+        recordPanel.setVisible(false); // Initially hidden
+
+
         ImageIcon barangay = new ImageIcon("imgs/brgyLogo.png");
         Image scaled3 = barangay.getImage().getScaledInstance(180, 100, Image.SCALE_SMOOTH);
         ImageIcon resized3 = new ImageIcon(scaled3);
@@ -94,8 +104,9 @@ public class homePage extends JFrame {
 
         JButton btnHome = createSidebarButton("🏠 Home", 110, mainPanel, "home");
         JButton btnAttendance = createSidebarButton("📋 Attendance", 150, mainPanel, "attendance");
-        mainPanel.add(new attendancePage(), "attendance");
-        JButton btnTransaction = createSidebarButton("💼 Member List", 190, mainPanel, "attendance");
+        JButton btnTransaction = createSidebarButton("🔻 Records", 190, sideBar, "recordSub");
+        JButton btnAttendRecord = createSidebarButton("📃 Past Attendance", 230, mainPanel, "attendance");
+        JButton btnDemoRecord = createSidebarButton("🫂 Member List", 270, mainPanel, "attendance");
         JButton btnAccount = createSidebarButton("👤 Account", 350, mainPanel, "attendance");
         JButton btnSettings = createSidebarButton("⚙ Settings", 420, mainPanel, "attendance");
         JButton btnHelp = createSidebarButton("❓ Help", 545, mainPanel, "attendance");
@@ -109,6 +120,13 @@ public class homePage extends JFrame {
         sideBar.add(btnHelp);
         sideBar.add(btnLogOut);
 
+        btnAttendRecord.setBounds(0, 0, 200, 40);
+        btnDemoRecord.setBounds(0, 40, 200, 40);
+        btnAttendRecord.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        btnDemoRecord.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        recordPanel.add(btnAttendRecord);
+        recordPanel.add(btnDemoRecord);
+
         ArrayList<JButton> sidebarButtons = new ArrayList<>();
         sidebarButtons.add(btnHome);
         sidebarButtons.add(btnAttendance);
@@ -117,6 +135,8 @@ public class homePage extends JFrame {
         sidebarButtons.add(btnSettings);
         sidebarButtons.add(btnHelp);
         sidebarButtons.add(btnLogOut);
+        sidebarButtons.add(btnAttendRecord);
+        sidebarButtons.add(btnDemoRecord);
 
         selectButton(btnHome);
 
@@ -130,7 +150,8 @@ public class homePage extends JFrame {
         separator2.setForeground(new Color(150, 150, 150));
         sideBar.add(separator2);
 
-
+        sideBar.add(recordPanel, "recordSub");
+        mainPanel.add(new attendancePage(), "attendance");
     }
 
     private JButton createSidebarButton(String text, int yPosition, JPanel mainPanel, String cardName) {
@@ -148,8 +169,12 @@ public class homePage extends JFrame {
         button.addActionListener(e -> {
             selectButton(button);
             if (cardName != null && !cardName.isEmpty()) {
-                CardLayout cl = (CardLayout)(mainPanel.getLayout());
-                cl.show(mainPanel, cardName);
+                if ("recordSub".equals(cardName)) {
+                    recordPanel.setVisible(!recordPanel.isVisible());
+                } else if (cardName != null && !cardName.isEmpty()) {
+                    CardLayout cl = (CardLayout)(mainPanel.getLayout());
+                    cl.show(mainPanel, cardName);
+                }
             }
         });
 
