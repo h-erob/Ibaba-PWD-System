@@ -1,19 +1,18 @@
 package pages;
 
 import java.awt.*;
-import java.io.Serial;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-public class homePage extends JFrame {
+public class mainPage extends JFrame {
     private JButton selectedButton = null;
     private JPanel recordPanel;
 
     public static void launch() {
         try {
-            homePage frame = new homePage();
+            mainPage frame = new mainPage();
             frame.setTitle("Barangay Ibaba PWD Sector");
             frame.setResizable(false);
             frame.setLocationRelativeTo(null);
@@ -23,7 +22,7 @@ public class homePage extends JFrame {
         }
     }
 
-    public homePage() {
+    public mainPage() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1200, 700);
         JPanel contentPane = new JPanel();
