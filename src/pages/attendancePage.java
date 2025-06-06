@@ -65,13 +65,17 @@ public class attendancePage extends JPanel {
         label.setBounds(32, 63, 900, 30);
         add(label);
 
-        search = new JTextField("  Search");
+        search = new JTextField("Search");
         search.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
         search.setBounds(773, 63, 168, 31);
         search.setBackground(Color.WHITE);
         search.setForeground(Color.GRAY);
-        search.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        search.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY, 1),
+                BorderFactory.createEmptyBorder(0, 10, 0, 0) // top, left, bottom, right
+        ));
         add(search);
+
         search.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -92,7 +96,7 @@ public class attendancePage extends JPanel {
 
         // Table model with Boolean for Start and End columns
         tableModel = new DefaultTableModel(
-                new String[]{"#", "Member Name", "Start", "End", "Remarks"}, 0
+                new String[]{"#", "Member Name", "Start", "End", "Status"}, 0
         ) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {

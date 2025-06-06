@@ -36,13 +36,6 @@ public class mainPage extends JFrame {
         mainPanel.setLayout(new CardLayout()); // Allows switching views easily
         contentPane.add(mainPanel);
 
-        // Add the default background as the initial view
-        ImageIcon background = new ImageIcon("imgs/background.png");
-        Image scaled1 = background.getImage().getScaledInstance(1000, 590, Image.SCALE_SMOOTH);
-        ImageIcon resized1 = new ImageIcon(scaled1);
-        JLabel bgImg = new JLabel(resized1);
-        mainPanel.add(bgImg, "home");
-
         // Start of top bar panel
         JPanel topBar = new JPanel();
         topBar.setBackground(new Color(249,241,20));
@@ -151,6 +144,10 @@ public class mainPage extends JFrame {
 
         sideBar.add(recordPanel, "recordSub");
         mainPanel.add(new attendancePage(), "attendance");
+        mainPanel.add(new homePage(), "home");
+        CardLayout cl = (CardLayout)(mainPanel.getLayout());
+        cl.show(mainPanel, "home");
+
     }
 
     private JButton createSidebarButton(String text, int yPosition, JPanel mainPanel, String cardName) {
@@ -170,9 +167,9 @@ public class mainPage extends JFrame {
             if (cardName != null && !cardName.isEmpty()) {
                 if ("recordSub".equals(cardName)) {
                     recordPanel.setVisible(!recordPanel.isVisible());
-                } else if (cardName != null && !cardName.isEmpty()) {
+                } else {
                     CardLayout cl = (CardLayout)(mainPanel.getLayout());
-                    cl.show(mainPanel, cardName);
+                    cl.show(mainPanel, cardName); // 👈 Shows "homepage" when Home is clicked
                 }
             }
         });
