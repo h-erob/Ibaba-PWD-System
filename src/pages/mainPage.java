@@ -97,7 +97,7 @@ public class mainPage extends JFrame {
         JButton btnHome = createSidebarButton("🏠 Home", 110, mainPanel, "home");
         JButton btnAttendance = createSidebarButton("📋 Attendance", 150, mainPanel, "attendance");
         JButton btnTransaction = createSidebarButton("🔻 Records", 190, sideBar, "recordSub");
-        JButton btnAttendRecord = createSidebarButton("📃 Past Attendance", 230, mainPanel, "attendance");
+        JButton btnAttendRecord = createSidebarButton("📃 Past Attendance", 230, mainPanel, "recordAttendance");
         JButton btnDemoRecord = createSidebarButton("🫂 Member List", 270, mainPanel, "attendance");
         JButton btnAccount = createSidebarButton("👤 Account", 350, mainPanel, "attendance");
         JButton btnSettings = createSidebarButton("⚙ Settings", 420, mainPanel, "attendance");
@@ -142,9 +142,10 @@ public class mainPage extends JFrame {
         separator2.setForeground(new Color(150, 150, 150));
         sideBar.add(separator2);
 
-        sideBar.add(recordPanel, "recordSub");
-        mainPanel.add(new attendancePage(), "attendance");
         mainPanel.add(new homePage(), "home");
+        mainPanel.add(new attendancePage(), "attendance");
+        sideBar.add(recordPanel, "recordSub");
+        mainPanel.add(new records_attendancePage(), "recordAttendance");
         CardLayout cl = (CardLayout)(mainPanel.getLayout());
         cl.show(mainPanel, "home");
 
