@@ -3,70 +3,44 @@ package pages;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.*;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 
-
-public class records_attendancePage extends JPanel {
+public class records_members extends JPanel {
     private final JTable table;
     private final DefaultTableModel tableModel;
     private final JTextField search;
-    private JLabel label; // Moved label to be accessible in the whole class
+    private final JButton addBtn;
+    private final JButton delBtn;
+    private final JButton updBtn;
 
-    public records_attendancePage() {
+    public records_members() {
         setLayout(null);
         setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // Top bar container
         JPanel topBar = new JPanel();
         topBar.setBackground(new Color(210, 210, 210));
         topBar.setBounds(0, 0, 991, 50);
         topBar.setLayout(null);
         add(topBar);
 
-        String[] choices = {
-                "2025", "2024", "2023", "2022"
-        };
-
-        JComboBox<String> month = new JComboBox<>(choices);
-        month.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
-        month.setBounds(34, 10, 82, 32);
-        month.setBackground(Color.WHITE);
-        month.setForeground(Color.BLACK);
-        month.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-        month.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
-                                                          boolean isSelected, boolean cellHasFocus) {
-                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                label.setHorizontalAlignment(SwingConstants.CENTER);
-                return label;
-            }
-        });
-        topBar.add(month);
-        month.addActionListener(e -> {
-            String selectedYear = (String) month.getSelectedItem();
-            label.setText(selectedYear + " total month/s: 11");
-        });
-
-        String chosenMonth = String.valueOf(month.getSelectedItem());
-
-        label = new JLabel(month.getSelectedItem() + " total month/s: 11");
+        JLabel label = new JLabel("Total Members in the System: ");
         label.setFont(new Font("Trebuchet MS", Font.BOLD, 22));
-        label.setBounds(32, 63, 900, 30);
-        add(label);
+        label.setBounds(34, 11, 900, 30);
+        topBar.add(label);
 
         search = new JTextField("Search");
         search.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
-        search.setBounds(773, 63, 168, 31);
+        search.setBounds(773, 11, 168, 31);
         search.setBackground(Color.WHITE);
         search.setForeground(Color.GRAY);
         search.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY, 1),
                 BorderFactory.createEmptyBorder(0, 10, 0, 0) // top, left, bottom, right
         ));
-        add(search);
+        topBar.add(search);
 
         search.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
@@ -86,8 +60,24 @@ public class records_attendancePage extends JPanel {
             }
         });
 
+        addBtn = new JButton("Add");
+        addBtn.setBounds(677, 58, 90, 35);
+        addBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
+        add(addBtn);
+
+        delBtn = new JButton("Delete");
+        delBtn.setBounds(773, 58, 90, 35);
+        delBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
+        add(delBtn);
+
+        updBtn = new JButton("Update");
+        updBtn.setBounds(869, 58, 90, 35);
+        updBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
+        add(updBtn);
+
+
         tableModel = new DefaultTableModel(
-                new String[]{"#", "Member Name", "Last Month attended", "Total Attendance"}, 0
+                new String[]{"#", "Member Name", "PWD-ID #", "Birthday", "Sex", "PWD #", "Guardian #", "Remarks" }, 0
         ) {
         };
 
@@ -101,12 +91,24 @@ public class records_attendancePage extends JPanel {
         table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
         table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
         table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(5).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(6).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(7).setCellRenderer(centerRenderer);
 
         // Set preferred column widths
-        table.getColumnModel().getColumn(0).setPreferredWidth(20);   // "#"
+        table.getColumnModel().getColumn(0).setPreferredWidth(40);   // "#"
         table.getColumnModel().getColumn(1).setPreferredWidth(260);  // "Member Name"
-        table.getColumnModel().getColumn(2).setPreferredWidth(130);  // "Start"
-        table.getColumnModel().getColumn(3).setPreferredWidth(120);  // "End"
+        table.getColumnModel().getColumn(2).setPreferredWidth(130);  // "PWD id num"
+        table.getColumnModel().getColumn(3).setPreferredWidth(120);  // "Birthday"
+        table.getColumnModel().getColumn(4).setPreferredWidth(40);   // "Sex"
+        table.getColumnModel().getColumn(5).setPreferredWidth(260);  // "PWD num"
+        table.getColumnModel().getColumn(6).setPreferredWidth(130);  // "Guardian num"
+        table.getColumnModel().getColumn(7).setPreferredWidth(120);  // Remarks
+
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+
 
         JTableHeader header = table.getTableHeader();
         header.setFont(new Font("Trebuchet MS", Font.BOLD, 20));
@@ -153,14 +155,15 @@ public class records_attendancePage extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(30, 100, 930, 393);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane);
 
 
-        // Add rows with initial Boolean values for Start and End
+        /* Add rows with initial Boolean values for Start and End
         String[] names = {"Jana Agustin", "Peavey Capacio", "Joseph Desalit", "Eliand Penus", "Earl Perucho"};
         for (int i = 0; i < 15; i++) {
             String name = names[i % names.length]; // loop through names repeatedly
             tableModel.addRow(new Object[]{String.valueOf(i + 1), name, "December", "11"});
-        }
+        } */
     }
 }
