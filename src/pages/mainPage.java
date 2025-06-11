@@ -33,7 +33,7 @@ public class mainPage extends JFrame {
 
         JPanel mainPanel = new JPanel();
         mainPanel.setBounds(200, 110, 1000, 590);
-        mainPanel.setLayout(new CardLayout()); // Allows switching views easily
+        mainPanel.setLayout(new CardLayout());
         contentPane.add(mainPanel);
 
         // Start of top bar panel

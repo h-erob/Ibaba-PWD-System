@@ -7,6 +7,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class records_members extends JPanel {
     private final JTable table;
@@ -61,17 +63,22 @@ public class records_members extends JPanel {
         });
 
         addBtn = new JButton("Add");
-        addBtn.setBounds(677, 58, 90, 35);
+        addBtn.setBounds(670, 58, 90, 35);
         addBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         add(addBtn);
+        addBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                pages.records_membersbtn.addMembersPage.launch();
+            }
+        } );
 
         delBtn = new JButton("Delete");
-        delBtn.setBounds(773, 58, 90, 35);
+        delBtn.setBounds(766, 58, 90, 35);
         delBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         add(delBtn);
 
         updBtn = new JButton("Update");
-        updBtn.setBounds(869, 58, 90, 35);
+        updBtn.setBounds(862, 58, 90, 35);
         updBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         add(updBtn);
 
@@ -97,14 +104,14 @@ public class records_members extends JPanel {
         table.getColumnModel().getColumn(7).setCellRenderer(centerRenderer);
 
         // Set preferred column widths
-        table.getColumnModel().getColumn(0).setPreferredWidth(40);   // "#"
+        table.getColumnModel().getColumn(0).setPreferredWidth(45);   // "#"
         table.getColumnModel().getColumn(1).setPreferredWidth(260);  // "Member Name"
-        table.getColumnModel().getColumn(2).setPreferredWidth(130);  // "PWD id num"
-        table.getColumnModel().getColumn(3).setPreferredWidth(120);  // "Birthday"
-        table.getColumnModel().getColumn(4).setPreferredWidth(40);   // "Sex"
-        table.getColumnModel().getColumn(5).setPreferredWidth(260);  // "PWD num"
-        table.getColumnModel().getColumn(6).setPreferredWidth(130);  // "Guardian num"
-        table.getColumnModel().getColumn(7).setPreferredWidth(120);  // Remarks
+        table.getColumnModel().getColumn(2).setPreferredWidth(200);  // "PWD id num"
+        table.getColumnModel().getColumn(3).setPreferredWidth(153);  // "Birthday"
+        table.getColumnModel().getColumn(4).setPreferredWidth(80);   // "Sex"
+        table.getColumnModel().getColumn(5).setPreferredWidth(180);  // "PWD num"
+        table.getColumnModel().getColumn(6).setPreferredWidth(200);  // "Guardian num"
+        table.getColumnModel().getColumn(7).setPreferredWidth(140);  // Remarks
 
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
@@ -116,6 +123,7 @@ public class records_members extends JPanel {
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 50));
         header.setForeground(Color.BLACK);
         header.setOpaque(true);
+        header.setReorderingAllowed(false);
         header.setBorder(new Border() {
             private final int radius = 10;
             private final Color borderColor = Color.GRAY;
@@ -153,10 +161,21 @@ public class records_members extends JPanel {
 
         // Scroll pane with table
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(30, 100, 930, 393);
+        scrollPane.setBounds(32, 100, 935, 418);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane);
+
+        tableModel.addRow(new Object[]{1,"Jana Agustin", "CH-0000-0000-0000", "12-29-04", "F", "00000000000", "09953649868", "Deceased"});
+        tableModel.addRow(new Object[]{2,"Joseph Desalit", "CH-0000-0000-0000", "07-18-04", "M", "00000000000", "09051231234", "Alive"});
+        tableModel.addRow(new Object[]{3,"Jana Agustin", "CH-0000-0000-0000", "12-29-04", "F", "00000000000", "09953649868", "Deceased"});
+        tableModel.addRow(new Object[]{4,"Joseph Desalit", "CH-0000-0000-0000", "07-18-04", "M", "00000000000", "09051231234", "Alive"});
+        tableModel.addRow(new Object[]{5,"Jana Agustin", "CH-0000-0000-0000", "12-29-04", "F", "00000000000", "09953649868", "Deceased"});
+        tableModel.addRow(new Object[]{6,"Joseph Desalit", "CH-0000-0000-0000", "07-18-04", "M", "00000000000", "09051231234", "Alive"});
+        tableModel.addRow(new Object[]{7,"Jana Agustin", "CH-0000-0000-0000", "12-29-04", "F", "00000000000", "09953649868", "Deceased"});
+        tableModel.addRow(new Object[]{8,"Joseph Desalit", "CH-0000-0000-0000", "07-18-04", "M", "00000000000", "09051231234", "Alive"});
+        tableModel.addRow(new Object[]{9,"Joseph Desalit", "CH-0000-0000-0000", "07-18-04", "M", "00000000000", "09051231234", "Alive"});
+
 
 
         /* Add rows with initial Boolean values for Start and End

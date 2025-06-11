@@ -215,6 +215,7 @@ public class attendancePage extends JPanel {
         header.setBackground(new Color(245, 245, 245));
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 50));
         header.setForeground(Color.BLACK);
+        header.setReorderingAllowed(false);
         header.setOpaque(true);
         header.setBorder(new Border() {
             private final int radius = 10;
