@@ -52,7 +52,7 @@ public class records_attendancePage extends JPanel {
 
         String chosenMonth = String.valueOf(month.getSelectedItem());
 
-        label = new JLabel(month.getSelectedItem() + " total month/s: 11");
+        label = new JLabel(month.getSelectedItem() + " Attendance Tracked for: 11 Months");
         label.setFont(new Font("Trebuchet MS", Font.BOLD, 22));
         label.setBounds(32, 63, 900, 30);
         add(label);

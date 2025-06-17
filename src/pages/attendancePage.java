@@ -9,11 +9,12 @@ import javax.swing.event.TableModelListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class attendancePage extends JPanel {
-    private final JTextField yearField;
     private final JTable table;
     private final JTextField search;
     private final DefaultTableModel tableModel;
@@ -30,37 +31,38 @@ public class attendancePage extends JPanel {
         topBar.setLayout(null);
         add(topBar);
 
-        yearField = new JTextField(4);
-        yearField.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
-        yearField.setBounds(120, 10, 80, 31);
-        yearField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-        yearField.setHorizontalAlignment(JTextField.CENTER);
-        topBar.add(yearField);
+        Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
 
-        String[] choices = {
-                "JAN", "FEB", "MAR", "APR", "MAY",
-                "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
-        };
+        SimpleDateFormat wholeDate = new SimpleDateFormat("MM/dd/yyyy");
+        Date now = new Date();
+        String wholeDateText = wholeDate.format(now);
 
-        JComboBox<String> month = new JComboBox<>(choices);
-        month.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
-        month.setBounds(34, 10, 82, 32);
-        month.setBackground(Color.WHITE);
-        month.setForeground(Color.BLACK);
-        month.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-        month.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
-                                                          boolean isSelected, boolean cellHasFocus) {
-                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                label.setHorizontalAlignment(SwingConstants.CENTER);
-                return label;
-            }
-        });
-        topBar.add(month);
+        JPanel datePane = new JPanel();
+        datePane.setBackground(new Color(240, 240, 240));
+        datePane.setBounds(30, 6, 130, 38);
+        datePane.setBorder(border);
+        datePane.setLayout(null);
+        topBar.add(datePane);
+
+        JLabel dateIcon = new JLabel("📆");
+        dateIcon.setBounds(6, 5, 30, 26);
+        dateIcon.setFont(new Font("", Font.BOLD, 25));
+        datePane.add(dateIcon);
+
+        JLabel totalMemHeader = new JLabel("DATE");
+        totalMemHeader.setBounds(39, 6, 100, 15);
+        totalMemHeader.setFont(new Font("Arial",Font.BOLD, 13));
+        datePane.add(totalMemHeader);
+
+        JLabel totalMemSub = new JLabel(wholeDateText);
+        totalMemSub.setBounds(39, 16, 100, 22);
+        totalMemSub.setForeground(new Color(70,70,70));
+        totalMemSub.setFont(new Font("Arial",Font.PLAIN, 13));
+        datePane.add(totalMemSub);
+
 
         // Header label
-        JLabel label = new JLabel("BARANGAY IBABA: PWD ATTENDANCE MONITORING TABLE");
+        JLabel label = new JLabel("BARANGAY IBABA: PWD ATTENDANCE MONITORING SHEET");
         label.setFont(new Font("Trebuchet MS", Font.BOLD, 22));
         label.setBounds(32, 63, 900, 30);
         add(label);
@@ -94,21 +96,20 @@ public class attendancePage extends JPanel {
             }
         });
 
-        // Table model with Boolean for Start and End columns
         tableModel = new DefaultTableModel(
-                new String[]{"#", "Member Name", "Start", "End", "Status"}, 0
+                new String[]{"", "Member Name", "Status"}, 0
         ) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 2 || columnIndex == 3) {
-                    return Boolean.class; // Start and End columns are checkboxes
+                if (columnIndex == 2) {
+                    return Boolean.class;
                 }
                 return super.getColumnClass(columnIndex);
             }
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 2 || column == 3; // Start and End columns are editable
+                return column == 2;
             }
         };
 
@@ -190,25 +191,23 @@ public class attendancePage extends JPanel {
             }
         };
 
-        // Apply renderer and editor to Start and End columns
+
+
+        // Apply renderer and editor to Last column
         table.getColumnModel().getColumn(2).setCellRenderer(customCheckboxRenderer);
         table.getColumnModel().getColumn(2).setCellEditor(customCheckboxEditor);
-        table.getColumnModel().getColumn(3).setCellRenderer(customCheckboxRenderer);
-        table.getColumnModel().getColumn(3).setCellEditor(customCheckboxEditor);
 
         // Center-align text in non-checkbox columns
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
         table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-        table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
 
         // Set preferred column widths
-        table.getColumnModel().getColumn(0).setPreferredWidth(30);   // "#"
-        table.getColumnModel().getColumn(1).setPreferredWidth(260);  // "Member Name"
-        table.getColumnModel().getColumn(2).setPreferredWidth(120);  // "Start"
-        table.getColumnModel().getColumn(3).setPreferredWidth(120);  // "End"
-        table.getColumnModel().getColumn(4).setPreferredWidth(180);  // "Remarks"
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table.getColumnModel().getColumn(0).setPreferredWidth(60);   // "#"
+        table.getColumnModel().getColumn(1).setPreferredWidth(390);  // "Member Name"
+        table.getColumnModel().getColumn(2).setPreferredWidth(225);  // Status
 
         JTableHeader header = table.getTableHeader();
         header.setFont(new Font("Trebuchet MS", Font.BOLD, 20));
@@ -244,7 +243,7 @@ public class attendancePage extends JPanel {
 
         // Table visual setup
         table.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
-        table.setRowHeight(43);
+        table.setRowHeight(48);
         table.setShowGrid(false);
         table.setIntercellSpacing(new Dimension(0, 0));
         table.setForeground(Color.BLACK);
@@ -254,7 +253,7 @@ public class attendancePage extends JPanel {
 
         // Scroll pane with table
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(30, 100, 930, 393);
+        scrollPane.setBounds(265, 100, 693, 393);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         add(scrollPane);
 
@@ -262,7 +261,7 @@ public class attendancePage extends JPanel {
         tableModel.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
-                if (e.getType() == TableModelEvent.UPDATE && (e.getColumn() == 2 || e.getColumn() == 3)) {
+                if (e.getType() == TableModelEvent.UPDATE && (e.getColumn() == 2)) {
                     int row = e.getFirstRow();
                     Boolean start = (Boolean) tableModel.getValueAt(row, 2);
                     Boolean end = (Boolean) tableModel.getValueAt(row, 3);
@@ -304,14 +303,7 @@ public class attendancePage extends JPanel {
             this.start = start;
             this.end = end;
         }
-
-        public boolean isStart() {
-            return start;
-        }
-
-        public boolean isEnd() {
-            return end;
-        }
+        
     }
 
 

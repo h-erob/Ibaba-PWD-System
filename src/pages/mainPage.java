@@ -32,23 +32,23 @@ public class mainPage extends JFrame {
         contentPane.setLayout(null);
 
         JPanel mainPanel = new JPanel();
-        mainPanel.setBounds(200, 110, 1000, 590);
+        mainPanel.setBounds(200, 114, 1000, 590);
         mainPanel.setLayout(new CardLayout());
         contentPane.add(mainPanel);
 
         // Start of top bar panel
         JPanel topBar = new JPanel();
-        topBar.setBackground(new Color(249,241,20));
-        topBar.setBounds(200, 0, 991, 112);
+        topBar.setBackground(new Color(0, 202, 238));
+        topBar.setBounds(200, 0, 991, 119);
         contentPane.add(topBar);
         topBar.setLayout(null);
 
         ImageIcon adminLogo = new ImageIcon("imgs/adminLogo.png");
-        Image scaled2 = adminLogo.getImage().getScaledInstance(93, 52, Image.SCALE_SMOOTH);
+        Image scaled2 = adminLogo.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
         ImageIcon resized2 = new ImageIcon(scaled2);
         JLabel adLogo = new JLabel(resized2);
 
-        adLogo.setBounds(870, 30, 93, 52);
+        adLogo.setBounds(878, 34, 93, 52);
         topBar.add(adLogo);
 
         JLabel headerText = new JLabel("Magandang Araw, Ka Barangay");
@@ -61,6 +61,7 @@ public class mainPage extends JFrame {
         headerSubText.setBounds(30, 60, 435, 27);
         topBar.add(headerSubText);
 
+        /*
         JLabel adminText = new JLabel("Admin");
         adminText.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         adminText.setBounds(842, 46, 58, 14);
@@ -70,6 +71,8 @@ public class mainPage extends JFrame {
         adminSubText.setFont(new Font("Trebuchet MS", Font.PLAIN, 11));
         adminSubText.setBounds(857, 57, 43, 14);
         topBar.add(adminSubText);
+        */
+
 
         // Start of side bar panel
         JPanel sideBar = new JPanel();
@@ -81,41 +84,39 @@ public class mainPage extends JFrame {
         // Create recordPanel for sideBar
         recordPanel = new JPanel();
         recordPanel.setBackground(new Color(37,37,37)); // Darker shade for contrast
-        recordPanel.setBounds(0, 230, 200, 85);
+        recordPanel.setBounds(0, 265, 200, 85);
         recordPanel.setLayout(null);
         recordPanel.setVisible(false); // Initially hidden
 
 
-        ImageIcon barangay = new ImageIcon("imgs/brgyLogo.png");
-        Image scaled3 = barangay.getImage().getScaledInstance(180, 100, Image.SCALE_SMOOTH);
+        ImageIcon barangay = new ImageIcon("imgs/homeLogo.png");
+        Image scaled3 = barangay.getImage().getScaledInstance(142, 80, Image.SCALE_SMOOTH);
         ImageIcon resized3 = new ImageIcon(scaled3);
         JLabel brgyLogo = new JLabel(resized3);
 
-        brgyLogo.setBounds(12, 5, 180, 100);
+        brgyLogo.setBounds(11, 7, 180, 100);
         sideBar.add(brgyLogo);
 
-        JButton btnHome = createSidebarButton("🏠 Home", 110, mainPanel, "home");
-        JButton btnAttendance = createSidebarButton("📋 Attendance", 150, mainPanel, "attendance");
-        JButton btnTransaction = createSidebarButton("🔻 Records", 190, sideBar, "recordSub");
-        JButton btnAttendRecord = createSidebarButton("- Past Attendance", 230, mainPanel, "recordAttendance");
-        JButton btnDemoRecord = createSidebarButton("- Member List", 270, mainPanel, "recordMembers");
-        JButton btnAccount = createSidebarButton("👤 Account", 350, mainPanel, "attendance");
-        JButton btnSettings = createSidebarButton("⚙ Settings", 420, mainPanel, "attendance");
-        JButton btnHelp = createSidebarButton("❓ Help", 545, mainPanel, "attendance");
-        JButton btnLogOut = createSidebarButton("🚪 Log Out", 585, mainPanel, "attendance");
+        JButton btnHome = createSidebarButton("🏠 Home", 115, mainPanel, "home");
+        JButton btnAttendance = createSidebarButton("📋 Attendance", 165, mainPanel, "attendance");
+        JButton btnTransaction = createSidebarButton("📂 Records", 215, sideBar, "recordSub");
+        JButton btnAttendRecord = createSidebarButton("- Past Attendance", 255, mainPanel, "recordAttendance");
+        JButton btnDemoRecord = createSidebarButton("- Member List", 295, mainPanel, "recordMembers");
+        JButton btnSettings = createSidebarButton("⚙ Settings", 485, mainPanel, "home");
+        JButton btnHelp = createSidebarButton("❓ Help", 535, mainPanel, "home");
+        JButton btnLogOut = createSidebarButton("🚪 Log Out", 585, mainPanel, "");
 
         sideBar.add(btnHome);
         sideBar.add(btnAttendance);
         sideBar.add(btnTransaction);
-        sideBar.add(btnAccount);
         sideBar.add(btnSettings);
         sideBar.add(btnHelp);
         sideBar.add(btnLogOut);
 
         btnAttendRecord.setBounds(0, 0, 200, 40);
         btnDemoRecord.setBounds(0, 40, 200, 40);
-        btnAttendRecord.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
-        btnDemoRecord.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        btnAttendRecord.setFont(new Font("Trebuchet MS", Font.BOLD, 14));
+        btnDemoRecord.setFont(new Font("Trebuchet MS", Font.BOLD, 14));
         recordPanel.add(btnAttendRecord);
         recordPanel.add(btnDemoRecord);
 
@@ -123,7 +124,6 @@ public class mainPage extends JFrame {
         sidebarButtons.add(btnHome);
         sidebarButtons.add(btnAttendance);
         sidebarButtons.add(btnTransaction);
-        sidebarButtons.add(btnAccount);
         sidebarButtons.add(btnSettings);
         sidebarButtons.add(btnHelp);
         sidebarButtons.add(btnLogOut);
@@ -132,21 +132,19 @@ public class mainPage extends JFrame {
 
         selectButton(btnHome);
 
-        JSeparator separator1 = new JSeparator();
-        separator1.setBounds(40, 490, 120, 1);
-        separator1.setForeground(new Color(150, 150, 150));
-        sideBar.add(separator1);
-
-        JSeparator separator2 = new JSeparator();
-        separator2.setBounds(40, 330, 120, 1);
-        separator2.setForeground(new Color(150, 150, 150));
-        sideBar.add(separator2);
+        JSeparator separator = new JSeparator();
+        separator.setBounds(45, 482, 110, 2);
+        separator.setForeground(new Color(150, 150, 150));
+        sideBar.add(separator);
 
         mainPanel.add(new homePage(), "home");
         mainPanel.add(new attendancePage(), "attendance");
         sideBar.add(recordPanel, "recordSub");
         mainPanel.add(new records_attendancePage(), "recordAttendance");
         mainPanel.add(new records_members(), "recordMembers");
+        btnLogOut.addActionListener(e -> {
+            new logoutPane(this);
+        });
         CardLayout cl = (CardLayout)(mainPanel.getLayout());
         cl.show(mainPanel, "home");
 
@@ -154,9 +152,9 @@ public class mainPage extends JFrame {
 
     private JButton createSidebarButton(String text, int yPosition, JPanel mainPanel, String cardName) {
         JButton button = new JButton(text);
-        button.setBounds(0, yPosition, 201, 40);
+        button.setBounds(0, yPosition, 201, 50);
 
-        button.setFont(new Font("", Font.PLAIN, 16));
+        button.setFont(new Font("", Font.BOLD, 16));
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
@@ -171,7 +169,7 @@ public class mainPage extends JFrame {
                     recordPanel.setVisible(!recordPanel.isVisible());
                 } else {
                     CardLayout cl = (CardLayout)(mainPanel.getLayout());
-                    cl.show(mainPanel, cardName); // 👈 Shows "homepage" when Home is clicked
+                    cl.show(mainPanel, cardName);
                 }
             }
         });
@@ -186,7 +184,7 @@ public class mainPage extends JFrame {
             selectedButton.setBackground(new Color(37,37,37));
             selectedButton.setForeground(new Color(150, 150, 150));
         }
-        buttonToSelect.setBackground(new Color(249,241,20));
+        buttonToSelect.setBackground(new Color(0, 202, 238));
         buttonToSelect.setForeground(new Color(37,37,37));
         selectedButton = buttonToSelect;
     }

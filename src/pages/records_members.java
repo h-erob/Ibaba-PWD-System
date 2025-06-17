@@ -15,7 +15,6 @@ public class records_members extends JPanel {
     private final DefaultTableModel tableModel;
     private final JTextField search;
     private final JButton addBtn;
-    private final JButton delBtn;
     private final JButton updBtn;
 
     public records_members() {
@@ -28,7 +27,7 @@ public class records_members extends JPanel {
         topBar.setLayout(null);
         add(topBar);
 
-        JLabel label = new JLabel("Total Members in the System: ");
+        JLabel label = new JLabel("Total Members: ");
         label.setFont(new Font("Trebuchet MS", Font.BOLD, 22));
         label.setBounds(34, 11, 900, 30);
         topBar.add(label);
@@ -62,8 +61,55 @@ public class records_members extends JPanel {
             }
         });
 
+        JCheckBox viewDemo = new JCheckBox("View Demographic Sheet") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                int boxSize = 20;
+                int boxX = 0;
+                int boxY = (getHeight() - boxSize) / 2;
+
+                if (getModel().isSelected()) {
+                    g2.setColor(Color.BLACK);
+                    g2.fillRoundRect(boxX, boxY, boxSize, boxSize, 5, 5);
+
+                    g2.setColor(Color.WHITE);
+                    g2.setStroke(new BasicStroke(4));
+                    g2.drawLine(boxX + 5, boxY + 10, boxX + 9, boxY + 14);
+                    g2.drawLine(boxX + 9, boxY + 14, boxX + 15, boxY + 6);
+                } else {
+                    g2.setColor(Color.BLACK);
+                    g2.drawRoundRect(boxX, boxY, boxSize, boxSize, 5, 5);
+                }
+
+                // Draw the label text manually
+                g2.setFont(getFont());
+                g2.setColor(getForeground());
+
+                FontMetrics fm = g2.getFontMetrics();
+                int textX = boxX + boxSize + 6;
+                int textY = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+                g2.drawString(getText(), textX, textY);
+
+                g2.dispose();
+            }
+
+            @Override
+            public boolean isOpaque() {
+                return false;
+            }
+        };
+
+        viewDemo.setFocusPainted(false);
+        viewDemo.setFont(new Font("Trebuchet MS", Font.BOLD, 22));
+        viewDemo.setForeground(Color.BLACK);
+        viewDemo.setBounds(34, 58, 300, 30); // width adjusted for full label
+        add(viewDemo);
+
         addBtn = new JButton("Add");
-        addBtn.setBounds(670, 58, 90, 35);
+        addBtn.setBounds(765, 58, 90, 35);
         addBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         add(addBtn);
         addBtn.addActionListener(new ActionListener() {
@@ -71,11 +117,6 @@ public class records_members extends JPanel {
                 pages.records_membersbtn.addMembersPage.launch();
             }
         } );
-
-        delBtn = new JButton("Delete");
-        delBtn.setBounds(766, 58, 90, 35);
-        delBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
-        add(delBtn);
 
         updBtn = new JButton("Update");
         updBtn.setBounds(862, 58, 90, 35);
@@ -114,8 +155,6 @@ public class records_members extends JPanel {
         table.getColumnModel().getColumn(7).setPreferredWidth(140);  // Remarks
 
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
-
 
         JTableHeader header = table.getTableHeader();
         header.setFont(new Font("Trebuchet MS", Font.BOLD, 20));
@@ -175,14 +214,5 @@ public class records_members extends JPanel {
         tableModel.addRow(new Object[]{7,"Jana Agustin", "CH-0000-0000-0000", "12-29-04", "F", "00000000000", "09953649868", "Deceased"});
         tableModel.addRow(new Object[]{8,"Joseph Desalit", "CH-0000-0000-0000", "07-18-04", "M", "00000000000", "09051231234", "Alive"});
         tableModel.addRow(new Object[]{9,"Joseph Desalit", "CH-0000-0000-0000", "07-18-04", "M", "00000000000", "09051231234", "Alive"});
-
-
-
-        /* Add rows with initial Boolean values for Start and End
-        String[] names = {"Jana Agustin", "Peavey Capacio", "Joseph Desalit", "Eliand Penus", "Earl Perucho"};
-        for (int i = 0; i < 15; i++) {
-            String name = names[i % names.length]; // loop through names repeatedly
-            tableModel.addRow(new Object[]{String.valueOf(i + 1), name, "December", "11"});
-        } */
     }
 }
