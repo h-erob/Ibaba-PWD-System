@@ -2,8 +2,8 @@ package pages;
 
 import javax.swing.*;
 
-public class logoutPane {
-    public logoutPane(JFrame mainFrame){
+public class logoutPage {
+    public logoutPage(JFrame mainFrame){
         int choice = JOptionPane.showConfirmDialog(null, "Do you wish to log out?", "Confirmation", JOptionPane.YES_NO_OPTION);
 
         if (choice == JOptionPane.YES_OPTION){
