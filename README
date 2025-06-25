@@ -1,0 +1,69 @@
+# Membership and Attendance Tracking System
+
+A Java + MySQL-based system to manage demographic records, track monthly attendance, and monitor membership validity for community members.
+
+## 📂 Project Structure
+
+- `src/` – Java source files
+- `pwdCares.sql` – MySQL schema + sample data
+
+## 🛠️ Features
+
+- Members registration with complete demographic and household information
+- Medical history and medication tracking
+- Attendance tracking per member per month
+- Yearly attendance summaries
+- Membership status tracking (Expired, Renewed, Deceased, Alive)
+- ID validity checks and renewal system
+
+## 🗃️ Database Schema
+See `pwdCares.sql` for full table definitions:
+
+Tables:
+- `members` – Main profile sheet
+- `household_members` – Family composition
+- `medical_history` – Health conditions (checkboxes)
+- `medications` – Up to 15 meds per member
+- `attendance` – Per date member attendance
+
+## 💾 How to Import the Database
+
+1. Open **MySQL Workbench**
+2. Go to `Server > Data Import`
+3. Choose `Import from Self-Contained File`
+   - Path: `pwdCares.sql`
+4. Target Schema: create or select `membership_system`
+5. Click `Start Import`
+
+## ⚙️ Java Setup Instructions
+
+### 1. Prerequisites
+- Java 24
+- IntelliJ IDEA (recommended)
+- MySQL Workbench
+
+### 2. Install MySQL JDBC Driver
+Use Maven:
+```xml
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>9.3.0</version>
+</dependency>
+```
+
+Or add it manually via IntelliJ's **Project Structure > Libraries**.
+
+### 3. Example DB Connection
+```java
+Connection conn = DriverManager.getConnection(
+    "jdbc:mysql://localhost:3306/membership_system", "root", "your_password");
+```
+
+## 📌 Usage Notes
+- `status`, `civilStatus`,and `sex` columns are `ENUM`, synced with GUI dropdowns
+- Attendance dropdown is dynamically populated from distinct attendance years
+- Auto-expiration reminders and renewal checks are handled in SQL or Java
+
+## 📬 Feedback
+Pull requests and suggestions are welcome!
