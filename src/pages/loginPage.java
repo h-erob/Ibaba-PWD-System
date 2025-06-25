@@ -94,10 +94,10 @@ public class loginPage extends JFrame {
         bgPanel.setLayout(null);
 
         ImageIcon brgyLogo = new ImageIcon("imgs/loginLogo.png");
-        Image size = brgyLogo.getImage().getScaledInstance(173, 100, Image.SCALE_SMOOTH);
-        ImageIcon resize1 = new ImageIcon(size);
-        JLabel BRGYLogo = new JLabel(resize1);
-        BRGYLogo.setBounds(30, 52, 173, 71);
+        //Image size = brgyLogo.getImage().getScaledInstance(173, 100, Image.SCALE_SMOOTH);
+        //ImageIcon resize1 = new ImageIcon(size);
+        JLabel BRGYLogo = new JLabel(brgyLogo);
+        BRGYLogo.setBounds(30, 52, 173, 55);
         contentPane.add(BRGYLogo);
 
         ImageIcon bgLogo = new ImageIcon("imgs/loginBg.png");
@@ -171,7 +171,7 @@ public class loginPage extends JFrame {
         proceed = new JButton(">");
         proceed.setFont(new Font("Arial", Font.BOLD, 30));
         proceed.setBounds(94, 285, 42, 40);
-        proceed.setBackground(new Color(0, 202, 238));
+        proceed.setBackground(new Color(254, 239, 25));
         proceed.setForeground(Color.BLACK);
         proceed.setBorderPainted(false);
         proceed.setFocusPainted(false);

@@ -7,6 +7,9 @@ import java.awt.*;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.ArrayList;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import dal.members.membersDAO;
 import db.database;
 
@@ -17,6 +20,7 @@ public class records_attendancePage extends JPanel {
     private JLabel label;
     private JComboBox<String> yearComboBox;
     private membersDAO dao;
+    private List<Object[]> allRows; // Store all rows for filtering
 
     public records_attendancePage() {
         setLayout(null);
@@ -95,8 +99,16 @@ public class records_attendancePage extends JPanel {
             }
         });
 
+        // Add key listener for search functionality
+        search.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                filterTable();
+            }
+        });
+
         tableModel = new DefaultTableModel(
-                new String[]{" ", "Member Name", "Last Date Attended", "Total Attendance"}, 0
+                new String[]{" ", "Member Name", "Last Date Attended", "Total Present"}, 0
         );
 
         table = new JTable(tableModel);
@@ -188,20 +200,41 @@ public class records_attendancePage extends JPanel {
 
             List<membersDAO.AttendanceRecord> records = dao.getAttendanceRecordsForYear(year);
             tableModel.setRowCount(0); // Clear existing rows
+            allRows = new ArrayList<>(); // Initialize allRows
             for (int i = 0; i < records.size(); i++) {
                 membersDAO.AttendanceRecord record = records.get(i);
                 String lastDate = record.lastAttendanceDate != null ?
                         new SimpleDateFormat("MM/dd/yyyy").format(record.lastAttendanceDate) : "N/A";
-                tableModel.addRow(new Object[]{
+                Object[] row = new Object[]{
                         String.valueOf(i + 1),
                         record.fullName,
                         lastDate,
                         String.valueOf(record.totalAttendance)
-                });
+                };
+                tableModel.addRow(row);
+                allRows.add(row);
             }
+            filterTable(); // Apply any existing search filter
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void filterTable() {
+        String searchText = search.getText().trim().toLowerCase();
+        if (searchText.equals("search")) searchText = "";
+
+        tableModel.setRowCount(0); // Clear current rows
+        int rowIndex = 1;
+        for (Object[] row : allRows) {
+            String memberName = ((String) row[1]).toLowerCase();
+            if (searchText.isEmpty() || memberName.contains(searchText)) {
+                // Update the index for the first column
+                Object[] newRow = row.clone();
+                newRow[0] = String.valueOf(rowIndex++);
+                tableModel.addRow(newRow);
+            }
         }
     }
 

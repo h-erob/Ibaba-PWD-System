@@ -125,7 +125,6 @@ public class membersDAO {
                         pstmt.executeUpdate();
                     }
                 }
-                pstmt.close();
             }
 
             connection.commit();
@@ -267,6 +266,152 @@ public class membersDAO {
         }
     }
 
+    public boolean updateMember(
+            int memberId, String fullName, String pwdIdNumber, String disabilityType, String status,
+            Date dateIssued, Date idValidUntil, Date birthdate, int age, String sex, String civilStatus,
+            String placeOfBirth, String educationLevel, String occupation, String address, String mobileNumber,
+            String email, String fbAccountName, String guardianName, String guardianRelation, String guardianMobile,
+            boolean takesMedications, List<Map<String, Object>> householdMembers, Map<String, Boolean> medicalConditions,
+            String otherConditions, List<String> medications) throws SQLException {
+        boolean success = false;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection.setAutoCommit(false);
+
+            // Update members table
+            String memberSql = "UPDATE members SET full_name = ?, pwd_id_number = ?, disability_type = ?, status = ?, " +
+                    "birthdate = ?, age = ?, sex = ?, civil_status = ?, place_of_birth = ?, education_level = ?, " +
+                    "occupation = ?, address = ?, mobile_number = ?, email = ?, fb_account_name = ?, guardian_name = ?, " +
+                    "guardian_relation = ?, guardian_mobile = ?, takes_medications = ? WHERE member_id = ?";
+            pstmt = connection.prepareStatement(memberSql);
+            pstmt.setString(1, fullName);
+            pstmt.setString(2, pwdIdNumber);
+            pstmt.setString(3, disabilityType);
+            pstmt.setString(4, status);
+            pstmt.setDate(5, birthdate);
+            pstmt.setInt(6, age);
+            pstmt.setString(7, sex);
+            pstmt.setString(8, civilStatus);
+            pstmt.setString(9, placeOfBirth);
+            pstmt.setString(10, educationLevel);
+            pstmt.setString(11, occupation);
+            pstmt.setString(12, address);
+            pstmt.setString(13, mobileNumber);
+            pstmt.setString(14, email != null ? email : "");
+            pstmt.setString(15, fbAccountName != null ? fbAccountName : "");
+            pstmt.setString(16, guardianName);
+            pstmt.setString(17, guardianRelation);
+            pstmt.setString(18, guardianMobile);
+            pstmt.setBoolean(19, takesMedications);
+            pstmt.setInt(20, memberId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // Delete existing household members
+            String deleteHouseholdSql = "DELETE FROM members_household WHERE member_id = ?";
+            pstmt = connection.prepareStatement(deleteHouseholdSql);
+            pstmt.setInt(1, memberId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // Insert new household members
+            if (householdMembers != null && !householdMembers.isEmpty()) {
+                String householdSql = "INSERT INTO members_household (member_id, name, relationship, age, birthdate, " +
+                        "civil_status, education_level, occupation) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                pstmt = connection.prepareStatement(householdSql);
+                for (Map<String, Object> household : householdMembers) {
+                    pstmt.setInt(1, memberId);
+                    pstmt.setString(2, (String) household.get("name"));
+                    pstmt.setString(3, (String) household.get("relationship"));
+                    Object ageObj = household.get("age");
+                    if (ageObj != null && !((String) ageObj).isEmpty()) {
+                        pstmt.setInt(4, Integer.parseInt((String) ageObj));
+                    } else {
+                        pstmt.setNull(4, java.sql.Types.INTEGER);
+                    }
+                    Object birthdateObj = household.get("birthdate");
+                    if (birthdateObj != null) {
+                        pstmt.setDate(5, (java.sql.Date) birthdateObj);
+                    } else {
+                        pstmt.setNull(5, java.sql.Types.DATE);
+                    }
+                    pstmt.setString(6, (String) household.get("civilStatus"));
+                    pstmt.setString(7, (String) household.get("education"));
+                    pstmt.setString(8, (String) household.get("occupation"));
+                    pstmt.executeUpdate();
+                }
+                pstmt.close();
+            }
+
+            // Delete existing medical conditions
+            String deleteConditionsSql = "DELETE FROM members_conditions WHERE member_id = ?";
+            pstmt = connection.prepareStatement(deleteConditionsSql);
+            pstmt.setInt(1, memberId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // Insert new medical conditions
+            String conditionsSql = "INSERT INTO members_conditions (member_id, diabetes, stroke, heart_problems, cancer, " +
+                    "high_blood, lung_problems, arthritis, osteoporosis, epilepsy, kidney_problems, other_conditions) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            pstmt = connection.prepareStatement(conditionsSql);
+            pstmt.setInt(1, memberId);
+            pstmt.setBoolean(2, medicalConditions.getOrDefault("diabetes", false));
+            pstmt.setBoolean(3, medicalConditions.getOrDefault("stroke", false));
+            pstmt.setBoolean(4, medicalConditions.getOrDefault("heart_problems", false));
+            pstmt.setBoolean(5, medicalConditions.getOrDefault("cancer", false));
+            pstmt.setBoolean(6, medicalConditions.getOrDefault("high_blood", false));
+            pstmt.setBoolean(7, medicalConditions.getOrDefault("lung_problems", false));
+            pstmt.setBoolean(8, medicalConditions.getOrDefault("arthritis", false));
+            pstmt.setBoolean(9, medicalConditions.getOrDefault("osteoporosis", false));
+            pstmt.setBoolean(10, medicalConditions.getOrDefault("epilepsy", false));
+            pstmt.setBoolean(11, medicalConditions.getOrDefault("kidney_problems", false));
+            pstmt.setString(12, otherConditions != null ? otherConditions : "");
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // Delete existing medications
+            String deleteMedicationsSql = "DELETE FROM members_medications WHERE member_id = ?";
+            pstmt = connection.prepareStatement(deleteMedicationsSql);
+            pstmt.setInt(1, memberId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // Insert new medications
+            if (medications != null && !medications.isEmpty()) {
+                String medicationsSql = "INSERT INTO members_medications (member_id, medication_name) VALUES (?, ?)";
+                pstmt = connection.prepareStatement(medicationsSql);
+                for (String medication : medications) {
+                    if (!medication.trim().isEmpty()) {
+                        pstmt.setInt(1, memberId);
+                        pstmt.setString(2, medication);
+                        pstmt.executeUpdate();
+                    }
+                }
+                pstmt.close();
+            }
+
+            connection.commit();
+            success = true;
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            throw e;
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (pstmt != null) try { pstmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+        }
+        return success;
+    }
+
     // New method to add attendance records
     public void addAttendance(java.sql.Date attendanceDate, List<AttendanceEntry> entries) throws SQLException {
         String sql = "INSERT INTO attendance (member_id, attendance_date, status) VALUES (?, ?, ?) " +
@@ -310,11 +455,12 @@ public class membersDAO {
     public List<AttendanceRecord> getAttendanceRecordsForYear(String year) throws SQLException {
         List<AttendanceRecord> records = new ArrayList<>();
         String sql = "SELECT m.member_id, m.full_name, " +
-                "MAX(a.attendance_date) AS last_attendance_date, " +
-                "COUNT(a.attendance_id) AS total_attendance " +
+                "MAX(CASE WHEN a.status IN ('present', 'excused') THEN a.attendance_date ELSE NULL END) AS last_attendance_date, " +
+                "SUM(CASE WHEN a.status IN ('present', 'excused') THEN 1 ELSE 0 END) AS total_attendance " +
                 "FROM members m " +
                 "LEFT JOIN attendance a ON m.member_id = a.member_id AND YEAR(a.attendance_date) = ? " +
-                "GROUP BY m.member_id, m.full_name";
+                "GROUP BY m.member_id, m.full_name " +
+                "ORDER BY m.full_name";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, Integer.parseInt(year));
             try (ResultSet rs = pstmt.executeQuery()) {

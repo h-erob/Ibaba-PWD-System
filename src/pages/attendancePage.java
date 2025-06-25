@@ -7,8 +7,11 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.sql.SQLException;
@@ -23,6 +26,7 @@ public class attendancePage extends JPanel {
     private JLabel absentNumLbl;
     private JLabel excusedNumLbl;
     private membersDAO dao;
+    private List<Object[]> allRows; // Store all rows for filtering
 
     public attendancePage() {
         setLayout(null);
@@ -107,9 +111,17 @@ public class attendancePage extends JPanel {
             }
         });
 
+        // Add key listener for search functionality
+        search.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                filterTable();
+            }
+        });
+
         // Table model with Member ID
         tableModel = new DefaultTableModel(
-                new String[]{"Member ID", "Row Number", "Member Name", "Status"}, 0
+                new String[]{"Member ID", " ", "Member Name", "Status"}, 0
         ) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
@@ -124,13 +136,18 @@ public class attendancePage extends JPanel {
             }
         };
 
-        // Populate table with database data
+        // Populate table with database data, sorted alphabetically
+        allRows = new ArrayList<>();
         if (dao != null) {
             try {
                 List<membersDAO.MemberData> members = dao.getMembers();
+                // Sort members by fullName
+                members.sort(Comparator.comparing(m -> m.fullName.toLowerCase()));
                 for (int i = 0; i < members.size(); i++) {
                     membersDAO.MemberData member = members.get(i);
-                    tableModel.addRow(new Object[]{member.memberId, String.valueOf(i + 1), member.fullName, "Absent"});
+                    Object[] row = new Object[]{member.memberId, String.valueOf(i + 1), member.fullName, "Absent"};
+                    tableModel.addRow(row);
+                    allRows.add(row);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -296,6 +313,13 @@ public class attendancePage extends JPanel {
                     int row = e.getFirstRow();
                     String status = (String) tableModel.getValueAt(row, 3);
                     updateCounts();
+                    // Update allRows to reflect the new status
+                    for (Object[] rowData : allRows) {
+                        if (rowData[0].equals(tableModel.getValueAt(row, 0))) {
+                            rowData[3] = status;
+                            break;
+                        }
+                    }
                 }
             }
         });
@@ -404,8 +428,37 @@ public class attendancePage extends JPanel {
             for (int i = 0; i < tableModel.getRowCount(); i++) {
                 tableModel.setValueAt("Absent", i, 3);
             }
+            // Update allRows to reflect reset
+            for (Object[] row : allRows) {
+                row[3] = "Absent";
+            }
             updateCounts();
+            filterTable(); // Re-apply search filter
         });
+    }
+
+    private void filterTable() {
+        String searchText = search.getText().trim().toLowerCase();
+        if (searchText.equals("search")) searchText = "";
+
+        tableModel.setRowCount(0); // Clear current rows
+        // Sort filtered rows alphabetically by member name (index 2)
+        List<Object[]> filteredRows = new ArrayList<>();
+        for (Object[] row : allRows) {
+            String memberName = ((String) row[2]).toLowerCase();
+            if (searchText.isEmpty() || memberName.contains(searchText)) {
+                filteredRows.add(row);
+            }
+        }
+        filteredRows.sort(Comparator.comparing(row -> ((String) row[2]).toLowerCase()));
+
+        // Add sorted rows to table
+        int rowIndex = 1;
+        for (Object[] row : filteredRows) {
+            Object[] newRow = row.clone();
+            newRow[1] = String.valueOf(rowIndex++); // Update index
+            tableModel.addRow(newRow);
+        }
     }
 
     private class RadioEditor extends AbstractCellEditor implements TableCellEditor {
@@ -633,15 +686,5 @@ public class attendancePage extends JPanel {
             g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, radius, radius);
             g2.dispose();
         }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Attendance Page Test");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1000, 600);
-            frame.add(new attendancePage());
-            frame.setVisible(true);
-        });
     }
 }

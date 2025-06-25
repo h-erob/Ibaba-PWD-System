@@ -134,7 +134,7 @@ public class addMembersPage extends JFrame {
 
         // Step labels
         personalInfoLbl = new JLabel("PERSONAL INFO");
-        personalInfoLbl.setForeground(new Color(56, 113, 193));
+        personalInfoLbl.setForeground(new Color(191, 155, 3));
         personalInfoLbl.setFont(new Font("Trebuchet MS", Font.BOLD, 13));
         personalInfoLbl.setBounds(20, 8, 100, 30);
         stepBarPanel.add(personalInfoLbl);
@@ -218,7 +218,7 @@ public class addMembersPage extends JFrame {
         nextButton.addActionListener(e -> {
             cardLayout.next(mainPanel);
             personalInfoLbl.setForeground(new Color(100, 100, 100));
-            contactLbl.setForeground(new Color(56, 113, 193));
+            contactLbl.setForeground(new Color(191, 155, 3));
             familyComplbl.setForeground(new Color(100, 100, 100));
             medicalHistoryLbl.setForeground(new Color(100, 100, 100));
             medicationsLbl.setForeground(new Color(100, 100, 100));
@@ -235,7 +235,7 @@ public class addMembersPage extends JFrame {
             cardLayout.next(mainPanel);
             personalInfoLbl.setForeground(new Color(100, 100, 100));
             contactLbl.setForeground(new Color(100, 100, 100));
-            familyComplbl.setForeground(new Color(56, 113, 193));
+            familyComplbl.setForeground(new Color(191, 155, 3));
             medicalHistoryLbl.setForeground(new Color(100, 100, 100));
             medicationsLbl.setForeground(new Color(100, 100, 100));
             mainPanel.revalidate();
@@ -249,7 +249,7 @@ public class addMembersPage extends JFrame {
         page2.add(returnButton2);
         returnButton2.addActionListener(e -> {
             cardLayout.previous(mainPanel);
-            personalInfoLbl.setForeground(new Color(56, 113, 193));
+            personalInfoLbl.setForeground(new Color(191, 155, 3));
             contactLbl.setForeground(new Color(100, 100, 100));
             familyComplbl.setForeground(new Color(100, 100, 100));
             medicalHistoryLbl.setForeground(new Color(100, 100, 100));
@@ -268,7 +268,7 @@ public class addMembersPage extends JFrame {
             personalInfoLbl.setForeground(new Color(100, 100, 100));
             contactLbl.setForeground(new Color(100, 100, 100));
             familyComplbl.setForeground(new Color(100, 100, 100));
-            medicalHistoryLbl.setForeground(new Color(56, 113, 193));
+            medicalHistoryLbl.setForeground(new Color(191, 155, 3));
             medicationsLbl.setForeground(new Color(100, 100, 100));
             mainPanel.revalidate();
             mainPanel.repaint();
@@ -282,7 +282,7 @@ public class addMembersPage extends JFrame {
         returnButton3.addActionListener(e -> {
             cardLayout.previous(mainPanel);
             personalInfoLbl.setForeground(new Color(100, 100, 100));
-            contactLbl.setForeground(new Color(56, 113, 193));
+            contactLbl.setForeground(new Color(191, 155, 3));
             familyComplbl.setForeground(new Color(100, 100, 100));
             medicalHistoryLbl.setForeground(new Color(100, 100, 100));
             medicationsLbl.setForeground(new Color(100, 100, 100));
@@ -301,7 +301,7 @@ public class addMembersPage extends JFrame {
             contactLbl.setForeground(new Color(100, 100, 100));
             familyComplbl.setForeground(new Color(100, 100, 100));
             medicalHistoryLbl.setForeground(new Color(100, 100, 100));
-            medicationsLbl.setForeground(new Color(56, 113, 193));
+            medicationsLbl.setForeground(new Color(191, 155, 3));
             mainPanel.revalidate();
             mainPanel.repaint();
             getContentPane().revalidate();
@@ -314,7 +314,7 @@ public class addMembersPage extends JFrame {
         returnButton4.addActionListener(e -> {
             cardLayout.previous(mainPanel);
             personalInfoLbl.setForeground(new Color(100, 100, 100));
-            familyComplbl.setForeground(new Color(56, 113, 193));
+            familyComplbl.setForeground(new Color(191, 155, 3));
             contactLbl.setForeground(new Color(100, 100, 100));
             medicalHistoryLbl.setForeground(new Color(100, 100, 100));
             medicationsLbl.setForeground(new Color(100, 100, 100));
@@ -330,7 +330,7 @@ public class addMembersPage extends JFrame {
         returnButton5.addActionListener(e -> {
             cardLayout.previous(mainPanel);
             personalInfoLbl.setForeground(new Color(100, 100, 100));
-            medicalHistoryLbl.setForeground(new Color(56, 113, 193));
+            medicalHistoryLbl.setForeground(new Color(191, 155, 3));
             contactLbl.setForeground(new Color(100, 100, 100));
             familyComplbl.setForeground(new Color(100, 100, 100));
             medicationsLbl.setForeground(new Color(100, 100, 100));

@@ -1,6 +1,5 @@
 package pages.recordsPanel;
 
-import pages.attendancePage;
 import pages.mainPage;
 import pages.records_membersbtn.viewMembers_InfoPage;
 import dal.members.membersDAO;

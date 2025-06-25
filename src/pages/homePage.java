@@ -7,8 +7,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Path2D;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -58,7 +56,7 @@ public class homePage extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(0, 202, 238));
+                g2.setColor(new Color(254, 239, 25));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 super.paintComponent(g);
                 g2.dispose();
@@ -112,7 +110,7 @@ public class homePage extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(0, 202, 238));
+                g2.setColor(new Color(254, 239, 25));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 super.paintComponent(g);
                 g2.dispose();
@@ -169,7 +167,7 @@ public class homePage extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(0, 202, 238));
+                g2.setColor(new Color(254, 239, 25));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 super.paintComponent(g);
                 g2.dispose();
@@ -223,7 +221,7 @@ public class homePage extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(0, 202, 238));
+                g2.setColor(new Color(254, 239, 25));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 super.paintComponent(g);
                 g2.dispose();
@@ -271,7 +269,7 @@ public class homePage extends JPanel {
         quickAccessPanel.add(qaHeader);
 
         RoundedButton qaAddBtn = new RoundedButton("+ ADD MEMBER", new Color(73, 230, 127));
-        qaAddBtn.setBounds(50, 42, 142, 36);
+        qaAddBtn.setBounds(52, 42, 142, 36);
         quickAccessPanel.add(qaAddBtn);
         qaAddBtn.addActionListener(e -> {
             pages.records_membersbtn.addMembersPage.launch(null, this);
@@ -298,28 +296,8 @@ public class homePage extends JPanel {
         notifHeader.setFont(new Font("Trebuchet MS", Font.BOLD, 18));
         notifPane.add(notifHeader);
 
-        JPanel notifMissingMem = createRoundedPanel();
-        notifMissingMem.setBounds(23, 45, 345, 55);
-        notifPane.add(notifMissingMem);
-
-        ImageIcon incImg = new ImageIcon("imgs/incompleteMem.png");
-        JLabel incompleteImg = new JLabel(incImg);
-        incompleteImg.setBounds(10, 7, 40, 40);
-        notifMissingMem.add(incompleteImg);
-
-        JLabel MissingMemHeader = new JLabel("Incomplete Demographic Sheet");
-        MissingMemHeader.setBounds(55, 10, 300, 20);
-        MissingMemHeader.setFont(new Font("Trebuchet MS", Font.BOLD, 15));
-        notifMissingMem.add(MissingMemHeader);
-
-        JLabel MissingMemSub = new JLabel("Members with Incomplete Demographic Sheet");
-        MissingMemSub.setBounds(56, 24, 300, 20);
-        MissingMemSub.setForeground(new Color(90, 90, 90));
-        MissingMemSub.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
-        notifMissingMem.add(MissingMemSub);
-
         JPanel notifNewMem = createRoundedPanel();
-        notifNewMem.setBounds(23, 110, 345, 55);
+        notifNewMem.setBounds(23, 47, 345, 55);
         notifPane.add(notifNewMem);
 
         ImageIcon newMem = new ImageIcon("imgs/newMem.png");
@@ -328,15 +306,35 @@ public class homePage extends JPanel {
         notifNewMem.add(newImg);
 
         JLabel newMemHeader = new JLabel("New Members Added");
-        newMemHeader.setBounds(55, 10, 300, 20);
+        newMemHeader.setBounds(55, 11, 300, 20);
         newMemHeader.setFont(new Font("Trebuchet MS", Font.BOLD, 15));
         notifNewMem.add(newMemHeader);
 
         newMemSub = new JLabel("Newly Registered PWD Members");
-        newMemSub.setBounds(56, 24, 300, 20);
+        newMemSub.setBounds(56, 25, 300, 20);
         newMemSub.setForeground(new Color(90, 90, 90));
         newMemSub.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
         notifNewMem.add(newMemSub);
+
+        JPanel activeMemPanel = createRoundedPanel();
+        activeMemPanel.setBounds(23, 110, 345, 55);
+        notifPane.add(activeMemPanel);
+
+        ImageIcon activeImg = new ImageIcon("imgs/activeMem.png");
+        JLabel activeIMG = new JLabel(activeImg);
+        activeIMG.setBounds(10, 7, 40, 40);
+        activeMemPanel.add(activeIMG);
+
+        JLabel acitveMemHeader = new JLabel("Active Members");
+        acitveMemHeader.setBounds(55, 11, 300, 20);
+        acitveMemHeader.setFont(new Font("Trebuchet MS", Font.BOLD, 15));
+        activeMemPanel.add(acitveMemHeader);
+
+        JLabel MissingMemSub = new JLabel("Members that are Active in the Ceremony");
+        MissingMemSub.setBounds(56, 25, 300, 20);
+        MissingMemSub.setForeground(new Color(90, 90, 90));
+        MissingMemSub.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
+        activeMemPanel.add(MissingMemSub);
 
         JPanel notifInactiveMem = createRoundedPanel();
         notifInactiveMem.setBounds(23, 175, 345, 55);
@@ -348,12 +346,12 @@ public class homePage extends JPanel {
         notifInactiveMem.add(inactImg);
 
         JLabel inactiveMemHeader = new JLabel("Inactive Members");
-        inactiveMemHeader.setBounds(55, 10, 300, 20);
+        inactiveMemHeader.setBounds(55, 11, 300, 20);
         inactiveMemHeader.setFont(new Font("Trebuchet MS", Font.BOLD, 15));
         notifInactiveMem.add(inactiveMemHeader);
 
         JLabel inactiveMemSub = new JLabel("Members that are currently Inactive");
-        inactiveMemSub.setBounds(56, 24, 300, 20);
+        inactiveMemSub.setBounds(56, 25, 300, 20);
         inactiveMemSub.setForeground(new Color(90, 90, 90));
         inactiveMemSub.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
         notifInactiveMem.add(inactiveMemSub);

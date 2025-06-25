@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 public class mainPage extends JFrame {
     private JButton selectedButton = null;
@@ -88,17 +87,10 @@ public class mainPage extends JFrame {
         });
 
         JPanel topBar = new JPanel();
-        topBar.setBackground(new Color(0, 202, 238));
+        topBar.setBackground(new Color(254, 239, 25));
         topBar.setBounds(200, 30, 991, 115);
         contentPane.add(topBar);
         topBar.setLayout(null);
-
-        ImageIcon adminLogo = new ImageIcon("imgs/adminLogo.png");
-        Image scaled2 = adminLogo.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
-        ImageIcon resized2 = new ImageIcon(scaled2);
-        JLabel adLogo = new JLabel(resized2);
-        adLogo.setBounds(878, 34, 93, 52);
-        topBar.add(adLogo);
 
         JLabel headerText = new JLabel("Magandang Araw, Ka Barangay");
         headerText.setFont(new Font("Trebuchet MS", Font.BOLD, 32));
@@ -123,10 +115,8 @@ public class mainPage extends JFrame {
         recordPanel.setVisible(false);
 
         ImageIcon barangay = new ImageIcon("imgs/homeLogo.png");
-        Image scaled3 = barangay.getImage().getScaledInstance(142, 80, Image.SCALE_SMOOTH);
-        ImageIcon resized3 = new ImageIcon(scaled3);
-        JLabel brgyLogo = new JLabel(resized3);
-        brgyLogo.setBounds(11, 7, 180, 100);
+        JLabel brgyLogo = new JLabel(barangay);
+        brgyLogo.setBounds(29, 39, 142, 40);
         sideBar.add(brgyLogo);
 
         cardPanel = new JPanel(new CardLayout());
@@ -181,7 +171,7 @@ public class mainPage extends JFrame {
         recordsMembersPanel = new records_members();
         cardPanel.add(homePagePanel, "home");
         cardPanel.add(new attendancePage(), "attendance");
-        cardPanel.add(new records_attendancePage(), "recordAttendance");
+        cardPanel.add(new pages.recordsPanel.records_attendancePage(), "recordAttendance");
         cardPanel.add(recordsMembersPanel, "recordMembers");
 
         btnLogOut.addActionListener(e -> new logoutPage(this));
@@ -215,7 +205,7 @@ public class mainPage extends JFrame {
             selectedButton.setBackground(new Color(37, 37, 37));
             selectedButton.setForeground(new Color(150, 150, 150));
         }
-        button.setBackground(new Color(0, 202, 238));
+        button.setBackground(new Color(254, 239, 25));
         button.setForeground(new Color(37, 37, 37));
         selectedButton = button;
         if (isSubmenu) {
@@ -235,7 +225,7 @@ public class mainPage extends JFrame {
             selectedButton.setForeground(new Color(150, 150, 150));
         }
         // Highlight only the "Member List" button
-        btnDemoRecord.setBackground(new Color(0, 202, 238));
+        btnDemoRecord.setBackground(new Color(254, 239, 25));
         btnDemoRecord.setForeground(new Color(37, 37, 37));
         selectedButton = btnDemoRecord;
         // Ensure "Records" button is not highlighted
@@ -292,7 +282,7 @@ public class mainPage extends JFrame {
             selectedButton.setBackground(new Color(37, 37, 37));
             selectedButton.setForeground(new Color(150, 150, 150));
         }
-        buttonToSelect.setBackground(new Color(0, 202, 238));
+        buttonToSelect.setBackground(new Color(254, 239, 25));
         buttonToSelect.setForeground(new Color(37, 37, 37));
         selectedButton = buttonToSelect;
     }
