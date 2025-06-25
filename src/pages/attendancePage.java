@@ -350,7 +350,7 @@ public class attendancePage extends JPanel {
 
         JPanel totalPresentPane = createRoundedPanel();
         totalPresentPane.setBackground(new Color(51, 150, 51));
-        totalPresentPane.setBounds(35, 101, 210, 126);
+        totalPresentPane.setBounds(37, 101, 210, 126);
         add(totalPresentPane);
 
         presentNumLbl = new JLabel("0");
@@ -369,7 +369,7 @@ public class attendancePage extends JPanel {
 
         JPanel totalAbsentPane = createRoundedPanel();
         totalAbsentPane.setBackground(new Color(194, 40, 51));
-        totalAbsentPane.setBounds(35, 233, 210, 126);
+        totalAbsentPane.setBounds(37, 233, 210, 126);
         add(totalAbsentPane);
 
         absentNumLbl = new JLabel("0");
@@ -388,7 +388,7 @@ public class attendancePage extends JPanel {
 
         JPanel totalExcusedPane = createRoundedPanel();
         totalExcusedPane.setBackground(new Color(223, 199, 72));
-        totalExcusedPane.setBounds(35, 364, 210, 126);
+        totalExcusedPane.setBounds(37, 364, 210, 126);
         add(totalExcusedPane);
 
         excusedNumLbl = new JLabel("0");

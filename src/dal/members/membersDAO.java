@@ -255,7 +255,6 @@ public class membersDAO {
         return members;
     }
 
-    // New AttendanceEntry class
     public static class AttendanceEntry {
         public int memberId;
         public String status;
@@ -279,7 +278,6 @@ public class membersDAO {
         try {
             connection.setAutoCommit(false);
 
-            // Update members table
             String memberSql = "UPDATE members SET full_name = ?, pwd_id_number = ?, disability_type = ?, status = ?, " +
                     "birthdate = ?, age = ?, sex = ?, civil_status = ?, place_of_birth = ?, education_level = ?, " +
                     "occupation = ?, address = ?, mobile_number = ?, email = ?, fb_account_name = ?, guardian_name = ?, " +
@@ -308,14 +306,12 @@ public class membersDAO {
             pstmt.executeUpdate();
             pstmt.close();
 
-            // Delete existing household members
             String deleteHouseholdSql = "DELETE FROM members_household WHERE member_id = ?";
             pstmt = connection.prepareStatement(deleteHouseholdSql);
             pstmt.setInt(1, memberId);
             pstmt.executeUpdate();
             pstmt.close();
 
-            // Insert new household members
             if (householdMembers != null && !householdMembers.isEmpty()) {
                 String householdSql = "INSERT INTO members_household (member_id, name, relationship, age, birthdate, " +
                         "civil_status, education_level, occupation) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -344,14 +340,12 @@ public class membersDAO {
                 pstmt.close();
             }
 
-            // Delete existing medical conditions
             String deleteConditionsSql = "DELETE FROM members_conditions WHERE member_id = ?";
             pstmt = connection.prepareStatement(deleteConditionsSql);
             pstmt.setInt(1, memberId);
             pstmt.executeUpdate();
             pstmt.close();
 
-            // Insert new medical conditions
             String conditionsSql = "INSERT INTO members_conditions (member_id, diabetes, stroke, heart_problems, cancer, " +
                     "high_blood, lung_problems, arthritis, osteoporosis, epilepsy, kidney_problems, other_conditions) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -371,14 +365,12 @@ public class membersDAO {
             pstmt.executeUpdate();
             pstmt.close();
 
-            // Delete existing medications
             String deleteMedicationsSql = "DELETE FROM members_medications WHERE member_id = ?";
             pstmt = connection.prepareStatement(deleteMedicationsSql);
             pstmt.setInt(1, memberId);
             pstmt.executeUpdate();
             pstmt.close();
 
-            // Insert new medications
             if (medications != null && !medications.isEmpty()) {
                 String medicationsSql = "INSERT INTO members_medications (member_id, medication_name) VALUES (?, ?)";
                 pstmt = connection.prepareStatement(medicationsSql);
@@ -412,7 +404,6 @@ public class membersDAO {
         return success;
     }
 
-    // New method to add attendance records
     public void addAttendance(java.sql.Date attendanceDate, List<AttendanceEntry> entries) throws SQLException {
         String sql = "INSERT INTO attendance (member_id, attendance_date, status) VALUES (?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE status = VALUES(status)";
@@ -454,12 +445,12 @@ public class membersDAO {
 
     public List<AttendanceRecord> getAttendanceRecordsForYear(String year) throws SQLException {
         List<AttendanceRecord> records = new ArrayList<>();
-        String sql = "SELECT m.member_id, m.full_name, " +
+        String sql = "SELECT m.member_id, m.full_name, m.pwd_id_number, m.status, " +
                 "MAX(CASE WHEN a.status IN ('present', 'excused') THEN a.attendance_date ELSE NULL END) AS last_attendance_date, " +
                 "SUM(CASE WHEN a.status IN ('present', 'excused') THEN 1 ELSE 0 END) AS total_attendance " +
                 "FROM members m " +
                 "LEFT JOIN attendance a ON m.member_id = a.member_id AND YEAR(a.attendance_date) = ? " +
-                "GROUP BY m.member_id, m.full_name " +
+                "GROUP BY m.member_id, m.full_name, m.pwd_id_number, m.status " +
                 "ORDER BY m.full_name";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, Integer.parseInt(year));
@@ -468,6 +459,8 @@ public class membersDAO {
                     AttendanceRecord record = new AttendanceRecord();
                     record.memberId = rs.getInt("member_id");
                     record.fullName = rs.getString("full_name");
+                    record.pwdIdNumber = rs.getString("pwd_id_number");
+                    record.status = rs.getString("status");
                     record.lastAttendanceDate = rs.getDate("last_attendance_date");
                     record.totalAttendance = rs.getInt("total_attendance");
                     records.add(record);
@@ -480,6 +473,8 @@ public class membersDAO {
     public static class AttendanceRecord {
         public int memberId;
         public String fullName;
+        public String pwdIdNumber;
+        public String status;
         public java.sql.Date lastAttendanceDate;
         public int totalAttendance;
     }

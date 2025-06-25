@@ -126,7 +126,7 @@ public class viewMembers_InfoPage extends JFrame {
 
         ImageIcon incImg = new ImageIcon("imgs/memberProf.png");
         JLabel incompleteImg = new JLabel(incImg);
-        incompleteImg.setBounds(20, 40, 65, 65);
+        incompleteImg.setBounds(20, 38, 65, 65);
         topPanel.add(incompleteImg);
 
         fullName = new JTextField(memberData.fullName != null ? memberData.fullName : "");
@@ -185,8 +185,6 @@ public class viewMembers_InfoPage extends JFrame {
             }
         });
         topPanel.add(statusCombo);
-
-        System.out.println("statusCombo foreground: " + statusCombo.getForeground());
 
         editSaveBtn = new RoundedButton("EDIT 🖊", new Color(180, 180, 180));
         editSaveBtn.setFont(new Font(" ", Font.BOLD, 11));
@@ -804,12 +802,9 @@ public class viewMembers_InfoPage extends JFrame {
             civilStatusCombo.setFocusable(true);
             civilStatusCombo.setForeground(Color.BLACK);
 
-            System.out.println("statusCombo foreground: " + statusCombo.getForeground());
-
             JTable table = findHouseholdTable();
             if (table != null) {
                 table.setEnabled(true);
-                System.out.println("Table enabled"); // Debug
             }
 
             for (JCheckBox cb : medicalCheckboxes) {

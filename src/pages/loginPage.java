@@ -122,7 +122,6 @@ public class loginPage extends JFrame {
         Username.setColumns(10);
 
         passwordField = new JPasswordField();
-        //passwordField.setBounds(42, 167, 154, 26); // Position below Username field
         passwordField.setFont(new Font("Tahoma", Font.PLAIN, 10));
         passwordField.setBackground(new Color(37, 37, 37));
         passwordField.setForeground(Color.GRAY);
@@ -144,7 +143,6 @@ public class loginPage extends JFrame {
         ImageIcon resizedHideIcon = new ImageIcon(scaledSelectedImage);
 
         showPass = new JCheckBox();
-        //showPass.setBounds(170, 167, 20, 20); // Adjusted to appear on the right side of passwordField
         showPass.setIcon(resizedShowIcon);
         showPass.setSelectedIcon(resizedHideIcon);
         showPass.setBorderPainted(false);

@@ -128,15 +128,13 @@ public class mainPage extends JFrame {
         btnTransaction = createSidebarButton("\ud83d\udcc2 Records", 215, "recordSub");
         JButton btnAttendRecord = createSidebarButton("- Past Attendance", 255, "recordAttendance");
         btnDemoRecord = createSidebarButton("- Member List", 295, "recordMembers");
-        JButton btnSettings = createSidebarButton("\u2699 Settings", 485, "home");
-        JButton btnHelp = createSidebarButton("\u2753 Help", 535, "home");
+        JButton btnSupport = createSidebarButton("\u2699 Support", 535, "support");
         JButton btnLogOut = createSidebarButton("\ud83d\udeaa Log Out", 585, "");
 
         sideBar.add(btnHome);
         sideBar.add(btnAttendance);
         sideBar.add(btnTransaction);
-        sideBar.add(btnSettings);
-        sideBar.add(btnHelp);
+        sideBar.add(btnSupport);
         sideBar.add(btnLogOut);
 
         btnAttendRecord.setBounds(0, 0, 200, 40);
@@ -150,8 +148,7 @@ public class mainPage extends JFrame {
         sidebarButtons.add(btnHome);
         sidebarButtons.add(btnAttendance);
         sidebarButtons.add(btnTransaction);
-        sidebarButtons.add(btnSettings);
-        sidebarButtons.add(btnHelp);
+        sidebarButtons.add(btnSupport);
         sidebarButtons.add(btnLogOut);
         sidebarButtons.add(btnAttendRecord);
         sidebarButtons.add(btnDemoRecord);
@@ -161,7 +158,7 @@ public class mainPage extends JFrame {
         selectButton(btnHome);
 
         JSeparator separator = new JSeparator();
-        separator.setBounds(45, 482, 110, 2);
+        separator.setBounds(40, 533, 122, 2);
         separator.setForeground(new Color(150, 150, 150));
         sideBar.add(separator);
 
@@ -173,6 +170,7 @@ public class mainPage extends JFrame {
         cardPanel.add(new attendancePage(), "attendance");
         cardPanel.add(new pages.recordsPanel.records_attendancePage(), "recordAttendance");
         cardPanel.add(recordsMembersPanel, "recordMembers");
+        cardPanel.add(new supportPage(), "support");
 
         btnLogOut.addActionListener(e -> new logoutPage(this));
         CardLayout cl = (CardLayout)(cardPanel.getLayout());
