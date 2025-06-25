@@ -107,6 +107,8 @@ public class records_attendancePage extends JPanel {
             }
         });
 
+        allRows = new ArrayList<>();
+
         tableModel = new DefaultTableModel(
                 new String[]{" ", "Member Name", "Last Date Attended", "Total Present"}, 0
         );
@@ -192,6 +194,13 @@ public class records_attendancePage extends JPanel {
         });
     }
 
+    public void reloadAttendanceData() {
+        String selectedYear = (String) yearComboBox.getSelectedItem();
+        if (selectedYear != null) {
+            loadAttendanceData(selectedYear);
+        }
+    }
+
     private void loadAttendanceData(String year) {
         if (dao == null) return;
         try {
@@ -199,22 +208,17 @@ public class records_attendancePage extends JPanel {
             label.setText(year + " Attendance - " + uniqueDates + " in total");
 
             List<membersDAO.AttendanceRecord> records = dao.getAttendanceRecordsForYear(year);
-            tableModel.setRowCount(0); // Clear existing rows
-            allRows = new ArrayList<>(); // Initialize allRows
+            tableModel.setRowCount(0);
+            allRows.clear();
             for (int i = 0; i < records.size(); i++) {
                 membersDAO.AttendanceRecord record = records.get(i);
                 String lastDate = record.lastAttendanceDate != null ?
                         new SimpleDateFormat("MM/dd/yyyy").format(record.lastAttendanceDate) : "N/A";
-                Object[] row = new Object[]{
-                        String.valueOf(i + 1),
-                        record.fullName,
-                        lastDate,
-                        String.valueOf(record.totalAttendance)
-                };
+                Object[] row = new Object[]{String.valueOf(i + 1), record.fullName, lastDate, String.valueOf(record.totalAttendance)};
                 tableModel.addRow(row);
                 allRows.add(row);
             }
-            filterTable(); // Apply any existing search filter
+            if (search != null) filterTable();
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -237,6 +241,8 @@ public class records_attendancePage extends JPanel {
             }
         }
     }
+
+
 
     class TextAreaRenderer extends JTextArea implements TableCellRenderer {
         public TextAreaRenderer() {
@@ -328,4 +334,6 @@ public class records_attendancePage extends JPanel {
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
     }
+
+
 }

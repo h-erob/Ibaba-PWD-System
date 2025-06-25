@@ -15,8 +15,10 @@ public class mainPage extends JFrame {
     private JPanel cardPanel;
     private JPanel dimPanel;
     public static mainPage instance;
-    private homePage homePagePanel; // Add field for homePage
-    private records_members recordsMembersPanel; // Add field for records_members
+    private homePage homePagePanel;
+    private records_members recordsMembersPanel;
+    private attendancePage attendancePanel;
+    private records_attendancePage recordsAttendancePanel;
     private JButton btnTransaction;
     private JButton btnDemoRecord;
 
@@ -33,6 +35,8 @@ public class mainPage extends JFrame {
 
     public mainPage() {
         instance = this;
+        attendancePanel = new attendancePage();
+        recordsAttendancePanel = new records_attendancePage();
 
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -167,8 +171,8 @@ public class mainPage extends JFrame {
         homePagePanel = new homePage();
         recordsMembersPanel = new records_members();
         cardPanel.add(homePagePanel, "home");
-        cardPanel.add(new attendancePage(), "attendance");
-        cardPanel.add(new pages.recordsPanel.records_attendancePage(), "recordAttendance");
+        cardPanel.add(attendancePanel, "attendance");
+        cardPanel.add(recordsAttendancePanel, "recordAttendance");
         cardPanel.add(recordsMembersPanel, "recordMembers");
         cardPanel.add(new supportPage(), "support");
 
@@ -248,6 +252,18 @@ public class mainPage extends JFrame {
 
     public void hideDim() {
         dimPanel.setVisible(false);
+    }
+
+    public void refreshAttendancePage() {
+        if (attendancePanel != null) {
+            attendancePanel.reloadMembers();
+        }
+    }
+
+    public void refreshRecordsAttendancePage() {
+        if (recordsAttendancePanel != null) {
+            recordsAttendancePanel.reloadAttendanceData();
+        }
     }
 
     private JButton createSidebarButton(String text, int yPosition, String cardName) {

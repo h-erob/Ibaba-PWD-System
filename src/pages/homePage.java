@@ -13,6 +13,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Path2D;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,6 +24,7 @@ import java.util.List;
 public class homePage extends JPanel {
     private final DefaultTableModel bdModel;
     private final DefaultTableModel expModel;
+    private final DefaultTableModel fullExpModel;
     private final JLabel totalMemNum;
     private final JLabel womenLbl;
     private final JLabel menLbl;
@@ -147,7 +150,7 @@ public class homePage extends JPanel {
         fullBdScrollPane.setBounds(23, 55, 635, 375);
         fullBdDialog.add(fullBdScrollPane);
 
-        bdBtn.addActionListener(e ->{
+        bdBtn.addActionListener(e -> {
             mainPage.instance.showDim();
             fullBdDialog.setVisible(true);
             mainPage.instance.hideDim();
@@ -221,13 +224,13 @@ public class homePage extends JPanel {
         expiringMemPanel.add(expBtn);
 
         JDialog fullExpDialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Full Expiring and Expired Membership List", Dialog.ModalityType.APPLICATION_MODAL);
-        fullExpDialog.setSize(700, 500);
+        fullExpDialog.setSize(720, 500);
         fullExpDialog.setLayout(null);
         fullExpDialog.setLocationRelativeTo(this);
         fullExpDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         fullExpDialog.getContentPane().setBackground(new Color(238, 235, 235));
 
-        JLabel FullExpTableHeader = new JLabel("    NAME                                                             PWD ID NO.                         DATE") {
+        JLabel FullExpTableHeader = new JLabel("    NAME                                                   PWD ID NO.               DATE") {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
@@ -238,18 +241,20 @@ public class homePage extends JPanel {
                 g2.dispose();
             }
         };
-        FullExpTableHeader.setBounds(23, 15, 635, 30);
+        FullExpTableHeader.setBounds(23, 15, 655, 30);
         FullExpTableHeader.setOpaque(false);
         FullExpTableHeader.setForeground(Color.BLACK);
         FullExpTableHeader.setFont(new Font("Arial", Font.BOLD, 16));
         FullExpTableHeader.setHorizontalAlignment(SwingConstants.LEFT);
         fullExpDialog.add(FullExpTableHeader);
 
-        JTable fullExpTable = new JTable(expModel);
+        fullExpModel = new DefaultTableModel(new String[]{"name", "PWD ID No.", "Date", "Action"}, 0);
+        JTable fullExpTable = new JTable(fullExpModel);
         fullExpTable.setRowHeight(36);
-        fullExpTable.getColumnModel().getColumn(0).setPreferredWidth(280);
-        fullExpTable.getColumnModel().getColumn(1).setPreferredWidth(200);
-        fullExpTable.getColumnModel().getColumn(2).setPreferredWidth(60);
+        fullExpTable.getColumnModel().getColumn(0).setPreferredWidth(260);
+        fullExpTable.getColumnModel().getColumn(1).setPreferredWidth(195);
+        fullExpTable.getColumnModel().getColumn(2).setPreferredWidth(95);
+        fullExpTable.getColumnModel().getColumn(3).setPreferredWidth(100);
         fullExpTable.setTableHeader(null);
         fullExpTable.setShowGrid(false);
         fullExpTable.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
@@ -257,9 +262,11 @@ public class homePage extends JPanel {
         fullExpTable.setForeground(new Color(58, 58, 58));
         fullExpTable.setSelectionBackground(new Color(220, 240, 255));
         fullExpTable.setSelectionForeground(Color.BLACK);
+        fullExpTable.getColumnModel().getColumn(3).setCellRenderer(new ButtonRenderer());
+        fullExpTable.getColumnModel().getColumn(3).setCellEditor(new ButtonEditor());
 
         JScrollPane fullExpScrollPane = new RoundedScrollPane(fullExpTable);
-        fullExpScrollPane.setBounds(23, 55, 635, 375);
+        fullExpScrollPane.setBounds(23, 55, 655, 375);
         fullExpDialog.add(fullExpScrollPane);
 
         expBtn.addActionListener(e -> {
@@ -493,7 +500,7 @@ public class homePage extends JPanel {
         JTable fullActiveMemTable = new JTable(activeMemModel);
         fullActiveMemTable.setRowHeight(36);
         fullActiveMemTable.getColumnModel().getColumn(0).setPreferredWidth(220);
-        fullActiveMemTable.getColumnModel().getColumn(1).setPreferredWidth(240);
+        fullActiveMemTable.getColumnModel().getColumn(1).setPreferredWidth(225);
         fullActiveMemTable.getColumnModel().getColumn(2).setPreferredWidth(30);
         fullActiveMemTable.getColumnModel().getColumn(0).setResizable(false);
         fullActiveMemTable.getColumnModel().getColumn(1).setResizable(false);
@@ -546,7 +553,7 @@ public class homePage extends JPanel {
         JTable fullInactiveMemTable = new JTable(inactiveMemModel);
         fullInactiveMemTable.setRowHeight(36);
         fullInactiveMemTable.getColumnModel().getColumn(0).setPreferredWidth(220);
-        fullInactiveMemTable.getColumnModel().getColumn(1).setPreferredWidth(240);
+        fullInactiveMemTable.getColumnModel().getColumn(1).setPreferredWidth(225);
         fullInactiveMemTable.getColumnModel().getColumn(2).setPreferredWidth(30);
         fullInactiveMemTable.getColumnModel().getColumn(0).setResizable(false);
         fullInactiveMemTable.getColumnModel().getColumn(1).setResizable(false);
@@ -732,9 +739,21 @@ public class homePage extends JPanel {
             twoMonthsAgo.add(Calendar.MONTH, -2);
             String currentYear = String.valueOf(now.get(Calendar.YEAR));
 
+            // Update member statuses if ID has expired
+            Date currentDate = new Date();
+            for (membersDAO.MemberData member : members) {
+                if (member.status != null && (member.status.equals("Alive") || member.status.equals("Renewed"))) {
+                    if (member.idValidUntil != null && member.idValidUntil.before(currentDate)) {
+                        membersDAO.updateMemberStatus(member.memberId, "Expired");
+                        member.status = "Expired";
+                    }
+                }
+            }
+
             // Clear existing data
             bdModel.setRowCount(0);
             expModel.setRowCount(0);
+            fullExpModel.setRowCount(0);
 
             // Counters for statistics
             int totalMembers = 0;
@@ -744,7 +763,7 @@ public class homePage extends JPanel {
 
             // Process members
             for (membersDAO.MemberData member : members) {
-                if (member.status != null && !member.status.equals("Inactive")) {
+                if (member.status != null && !"Deceased".equals(member.status)) {
                     totalMembers++;
 
                     if ("Female".equals(member.sex)) {
@@ -770,10 +789,17 @@ public class homePage extends JPanel {
                         Calendar expiryCal = Calendar.getInstance();
                         expiryCal.setTime(member.idValidUntil);
                         if (!expiryCal.after(threeMonthsFromNow)) {
+                            boolean isExpired = member.idValidUntil.before(currentDate);
                             expModel.addRow(new Object[]{
                                     member.fullName,
                                     member.pwdIdNumber,
                                     sdf.format(member.idValidUntil)
+                            });
+                            fullExpModel.addRow(new Object[]{
+                                    member.fullName,
+                                    member.pwdIdNumber,
+                                    sdf.format(member.idValidUntil),
+                                    new ActionData(member.memberId, isExpired)
                             });
                         }
                     }
@@ -790,7 +816,7 @@ public class homePage extends JPanel {
             int activeCount = 0;
             int inactiveCount = 0;
             for (membersDAO.AttendanceRecord record : attendanceRecords) {
-                if ("Alive".equals(record.status)) {
+                if (!"Deceased".equals(record.status)) {
                     if (record.totalAttendance >= N - 1) {
                         activeCount++;
                     } else {
@@ -809,6 +835,36 @@ public class homePage extends JPanel {
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void renewMember(int memberId) {
+        try (Connection conn = database.getConnection()) {
+            membersDAO membersDAO = new membersDAO(conn);
+            String selectSql = "SELECT id_valid_until FROM members WHERE member_id = ?";
+            PreparedStatement selectPstmt = conn.prepareStatement(selectSql);
+            selectPstmt.setInt(1, memberId);
+            ResultSet rs = selectPstmt.executeQuery();
+            if (rs.next()) {
+                java.sql.Date currentValidUntil = rs.getDate("id_valid_until");
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentValidUntil);
+                cal.add(Calendar.YEAR, 5);
+                java.sql.Date newValidUntil = new java.sql.Date(cal.getTimeInMillis());
+
+                String updateSql = "UPDATE members SET status = 'Renewed', id_valid_until = ? WHERE member_id = ?";
+                PreparedStatement updatePstmt = conn.prepareStatement(updateSql);
+                updatePstmt.setDate(1, newValidUntil);
+                updatePstmt.setInt(2, memberId);
+                updatePstmt.executeUpdate();
+
+                reloadData();
+            }
+            rs.close();
+            selectPstmt.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error renewing member: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -843,7 +899,7 @@ public class homePage extends JPanel {
             int N = membersDAO.getUniqueAttendanceDatesCount(currentYear);
             List<membersDAO.AttendanceRecord> records = membersDAO.getAttendanceRecordsForYear(currentYear);
             for (membersDAO.AttendanceRecord record : records) {
-                if ("Alive".equals(record.status) && record.totalAttendance >= N - 1) {
+                if (!"Deceased".equals(record.status) && record.totalAttendance >= N - 1) {
                     activeMemModel.addRow(new Object[]{
                             record.fullName,
                             record.pwdIdNumber,
@@ -865,7 +921,7 @@ public class homePage extends JPanel {
             int N = membersDAO.getUniqueAttendanceDatesCount(currentYear);
             List<membersDAO.AttendanceRecord> records = membersDAO.getAttendanceRecordsForYear(currentYear);
             for (membersDAO.AttendanceRecord record : records) {
-                if ("Alive".equals(record.status) && record.totalAttendance < N - 1) {
+                if (!"Deceased".equals(record.status) && record.totalAttendance < N - 1) {
                     inactiveMemModel.addRow(new Object[]{
                             record.fullName,
                             record.pwdIdNumber,
@@ -955,9 +1011,77 @@ public class homePage extends JPanel {
         protected void paintBorder(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(getForeground());
+            g2.setColor(Color.BLACK);
             g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, radius, radius);
             g2.dispose();
+        }
+    }
+
+    private static class ActionData {
+        int memberId;
+        boolean isExpired;
+
+        ActionData(int memberId, boolean isExpired) {
+            this.memberId = memberId;
+            this.isExpired = isExpired;
+        }
+    }
+
+    private class ButtonRenderer extends JPanel implements javax.swing.table.TableCellRenderer {
+        private JButton button;
+
+        public ButtonRenderer() {
+            setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+            button = new RoundedButton("Renew", new Color(40, 40, 40));
+            button.setForeground(new Color(240,240,240));
+            add(button);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value instanceof ActionData) {
+                ActionData data = (ActionData) value;
+                button.setEnabled(data.isExpired);
+            } else {
+                button.setEnabled(false);
+            }
+            return this;
+        }
+    }
+
+    private class ButtonEditor extends javax.swing.AbstractCellEditor implements javax.swing.table.TableCellEditor {
+        private JPanel panel;
+        private JButton button;
+        private ActionData data;
+
+        public ButtonEditor() {
+            panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+            button = new RoundedButton("Renew", new Color(40, 40, 40));
+            button.setForeground(new Color(240,240,240));
+            panel.add(button);
+            button.addActionListener(e -> {
+                if (data != null && data.isExpired) {
+                    renewMember(data.memberId);
+                }
+                fireEditingStopped();
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            if (value instanceof ActionData) {
+                data = (ActionData) value;
+                button.setEnabled(data.isExpired);
+            } else {
+                data = null;
+                button.setEnabled(false);
+            }
+            return panel;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return data;
         }
     }
 }

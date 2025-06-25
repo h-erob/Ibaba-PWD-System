@@ -69,8 +69,7 @@ public class membersDAO {
             pstmt.close();
 
             if (householdMembers != null && !householdMembers.isEmpty()) {
-                String householdSql = "INSERT INTO members_household (member_id, name, relationship, age, birthdate, " +
-                        "civil_status, education_level, occupation) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                String householdSql = "INSERT INTO members_household (member_id, name, relationship, age, birthnell, birthdate, civil_status, education_level, occupation) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 pstmt = connection.prepareStatement(householdSql);
                 for (Map<String, Object> household : householdMembers) {
                     pstmt.setInt(1, memberId);
@@ -402,6 +401,15 @@ public class membersDAO {
             if (pstmt != null) try { pstmt.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return success;
+    }
+
+    public void updateMemberStatus(int memberId, String newStatus) throws SQLException {
+        String sql = "UPDATE members SET status = ? WHERE member_id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, newStatus);
+            pstmt.setInt(2, memberId);
+            pstmt.executeUpdate();
+        }
     }
 
     public void addAttendance(java.sql.Date attendanceDate, List<AttendanceEntry> entries) throws SQLException {

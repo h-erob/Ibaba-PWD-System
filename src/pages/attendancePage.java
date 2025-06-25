@@ -586,6 +586,27 @@ public class attendancePage extends JPanel {
         }
     }
 
+    public void reloadMembers() {
+        if (dao == null) return;
+        try {
+            List<membersDAO.MemberData> members = dao.getMembers();
+            members.sort(Comparator.comparing(m -> m.fullName.toLowerCase()));
+            allRows.clear();
+            tableModel.setRowCount(0);
+            for (int i = 0; i < members.size(); i++) {
+                membersDAO.MemberData member = members.get(i);
+                Object[] row = new Object[]{member.memberId, String.valueOf(i + 1), member.fullName, "Absent"};
+                tableModel.addRow(row);
+                allRows.add(row);
+            }
+            if (search != null) filterTable(); // Re-apply search filter if exists
+            if (presentNumLbl != null) updateCounts(); // Update counters if exists
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error reloading members: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private JPanel createRoundedPanel() {
         JPanel panel = new JPanel() {
             @Override

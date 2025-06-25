@@ -1281,14 +1281,20 @@ public class addMembersPage extends JFrame {
 
             if (success) {
                 JOptionPane.showMessageDialog(this, "Member added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                // Notify records_members to reload
+
                 if (recordsMembersPanel != null) {
                     recordsMembersPanel.loadMembers();
                 }
-                // Notify homePage to reload
+
                 if (homePagePanel != null) {
                     homePagePanel.reloadData();
                 }
+
+                if (mainPage.instance != null) {
+                    mainPage.instance.refreshAttendancePage();
+                    mainPage.instance.refreshRecordsAttendancePage();
+                }
+
                 dispose();
                 if (mainPage.instance != null) {
                     mainPage.instance.hideDim();

@@ -236,6 +236,7 @@ public class supportPage extends JPanel {
         dev1Img.setBounds(19, 6, 62, 60);
         dev1.add(dev1Img);
 
+
         JLabel dev1Name = new JLabel("AGUSTIN, JANA BEATRICE");
         dev1Name.setBounds(90, 18, 500, 22);
         dev1Name.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
@@ -252,7 +253,7 @@ public class supportPage extends JPanel {
         dev2.setLayout(null);
         contactPanel.add(dev2);
 
-        ImageIcon dev2Icon = new ImageIcon("imgs/devimg.png");
+        ImageIcon dev2Icon = new ImageIcon("imgs/dev2img.png");
         JLabel dev2Img = new JLabel(dev2Icon);
         dev2Img.setBounds(19, 6, 62, 60);
         dev2.add(dev2Img);
@@ -273,7 +274,7 @@ public class supportPage extends JPanel {
         dev3.setLayout(null);
         contactPanel.add(dev3);
 
-        ImageIcon dev3Icon = new ImageIcon("imgs/devimg.png");
+        ImageIcon dev3Icon = new ImageIcon("imgs/dev2img.png");
         JLabel dev3Img = new JLabel(dev3Icon);
         dev3Img.setBounds(19, 6, 62, 60);
         dev3.add(dev3Img);
@@ -294,7 +295,7 @@ public class supportPage extends JPanel {
         dev4.setLayout(null);
         contactPanel.add(dev4);
 
-        ImageIcon dev4Icon = new ImageIcon("imgs/devimg.png");
+        ImageIcon dev4Icon = new ImageIcon("imgs/dev2img.png");
         JLabel dev4Img = new JLabel(dev4Icon);
         dev4Img.setBounds(19, 6, 62, 60);
         dev4.add(dev4Img);
@@ -315,7 +316,7 @@ public class supportPage extends JPanel {
         dev5.setLayout(null);
         contactPanel.add(dev5);
 
-        ImageIcon dev5Icon = new ImageIcon("imgs/devimg.png");
+        ImageIcon dev5Icon = new ImageIcon("imgs/dev2img.png");
         JLabel dev5Img = new JLabel(dev5Icon);
         dev5Img.setBounds(19, 6, 62, 60);
         dev5.add(dev5Img);

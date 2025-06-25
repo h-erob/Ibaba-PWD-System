@@ -30,7 +30,7 @@ public class viewMembers_InfoPage extends JFrame {
     private JPanel topPanel;
     private static viewMembers_InfoPage instance;
     private DefaultTableModel tableModel;
-    private JTextField fullName, pwdIdNum, disabilityType, birthday, age, placeOfBirth, educationLevel, occupation, address, mobileNum,
+    private JTextField fullName, pwdIdNum, disabilityType, idValidity, birthday, age, placeOfBirth, educationLevel, occupation, address, mobileNum,
             fbName, email, guardianName, guardianRelation, guardianMobile;
     private JComboBox<String> statusCombo, civilStatusCombo, sexCombo;
     private JCheckBox[] medicalCheckboxes;
@@ -156,21 +156,35 @@ public class viewMembers_InfoPage extends JFrame {
         disabilityType.setBounds(107, 76, 200, 33);
         topPanel.add(disabilityType);
 
+        JLabel validDatelbl = new JLabel("ID validity:");
+        validDatelbl.setForeground(new Color(100, 100, 100));
+        validDatelbl.setFont(labelFont);
+        validDatelbl.setBounds(263, 61, 400, 30);
+        topPanel.add(validDatelbl);
+
+        idValidity = new JTextField(memberData.idValidUntil != null ? sdf.format(memberData.idValidUntil) : "");
+        idValidity.setFont(fieldFont);
+        idValidity.setBorder(null);
+        idValidity.setEditable(false);
+        idValidity.setFocusable(false);
+        idValidity.setOpaque(false);
+        idValidity.setBounds(263, 76, 150, 33);
+        topPanel.add(idValidity);
+
         JLabel statuslbl = new JLabel("Status:");
         statuslbl.setForeground(new Color(100, 100, 100));
         statuslbl.setFont(labelFont);
-        statuslbl.setBounds(263, 60, 400, 30);
+        statuslbl.setBounds(358, 60, 400, 30);
         topPanel.add(statuslbl);
 
-        // For statusCombo
         statusCombo = new JComboBox<>(new String[]{"Alive", "Deceased", "Expired", "Renewed"});
         statusCombo.setSelectedItem(memberData.status != null ? memberData.status : "Pending");
         statusCombo.setFont(fieldFont);
-        statusCombo.setBounds(260, 82, 95, 18);
+        statusCombo.setBounds(356, 84, 95, 18);
         statusCombo.setFocusable(false);
         statusCombo.setEnabled(false);
-        statusCombo.setForeground(Color.BLACK); // Explicitly black
-        statusCombo.setOpaque(true); // Avoid transparency
+        statusCombo.setForeground(Color.BLACK);
+        statusCombo.setOpaque(true);
         statusCombo.setBorder(null);
         statusCombo.setUI(new CustomComboBoxUI());
         statusCombo.setRenderer(new DefaultListCellRenderer() {
@@ -179,12 +193,18 @@ public class viewMembers_InfoPage extends JFrame {
                                                           boolean isSelected, boolean cellHasFocus) {
                 JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, false, false);
                 label.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-                label.setForeground(Color.BLACK); // Always black for dropdown
+                label.setForeground(Color.BLACK);
                 label.setBackground(isSelected ? list.getSelectionBackground() : Color.WHITE);
                 return label;
             }
         });
         topPanel.add(statusCombo);
+
+        JLabel expiredLabel = new JLabel();
+        expiredLabel.setFont(labelFont);
+        expiredLabel.setForeground(Color.RED);
+        expiredLabel.setBounds(460, 84, 150, 18);
+        topPanel.add(expiredLabel);
 
         editSaveBtn = new RoundedButton("EDIT 🖊", new Color(180, 180, 180));
         editSaveBtn.setFont(new Font(" ", Font.BOLD, 11));
@@ -254,8 +274,8 @@ public class viewMembers_InfoPage extends JFrame {
         sexCombo.setBounds(215, 52, 100, 18);
         sexCombo.setFocusable(false);
         sexCombo.setEnabled(false);
-        sexCombo.setForeground(Color.BLACK); // Explicitly black
-        sexCombo.setOpaque(true); // Avoid transparency
+        sexCombo.setForeground(Color.BLACK);
+        sexCombo.setOpaque(true);
         sexCombo.setBorder(null);
         sexCombo.setUI(new CustomComboBoxUI());
         sexCombo.setRenderer(new DefaultListCellRenderer() {
@@ -264,7 +284,7 @@ public class viewMembers_InfoPage extends JFrame {
                                                           boolean isSelected, boolean cellHasFocus) {
                 JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, false, false);
                 label.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-                label.setForeground(Color.BLACK); // Always black for dropdown
+                label.setForeground(Color.BLACK);
                 label.setBackground(isSelected ? list.getSelectionBackground() : Color.WHITE);
                 return label;
             }
@@ -283,8 +303,8 @@ public class viewMembers_InfoPage extends JFrame {
         civilStatusCombo.setBounds(215, 92, 100, 20);
         civilStatusCombo.setFocusable(false);
         civilStatusCombo.setEnabled(false);
-        civilStatusCombo.setForeground(Color.BLACK); // Explicitly black
-        civilStatusCombo.setOpaque(true); // Avoid transparency
+        civilStatusCombo.setForeground(Color.BLACK);
+        civilStatusCombo.setOpaque(true);
         civilStatusCombo.setBorder(null);
         civilStatusCombo.setUI(new CustomComboBoxUI());
         civilStatusCombo.setRenderer(new DefaultListCellRenderer() {
@@ -293,7 +313,7 @@ public class viewMembers_InfoPage extends JFrame {
                                                           boolean isSelected, boolean cellHasFocus) {
                 JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, false, false);
                 label.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-                label.setForeground(Color.BLACK); // Always black for dropdown
+                label.setForeground(Color.BLACK);
                 label.setBackground(isSelected ? list.getSelectionBackground() : Color.WHITE);
                 return label;
             }
@@ -751,7 +771,7 @@ public class viewMembers_InfoPage extends JFrame {
 
     private void adjustPanelAndFrameHeight() {
         int displayCount = isEditing ? 15 : (memberData.medications != null ? memberData.medications.size() : 0);
-        displayCount = Math.max(displayCount, 1); // Ensure at least one field
+        displayCount = Math.max(displayCount, 1);
         int medPanelHeight = displayCount * 35 + 20;
         medsPane.setPreferredSize(new Dimension(660, medPanelHeight));
 
@@ -834,11 +854,10 @@ public class viewMembers_InfoPage extends JFrame {
             repaint();
 
         } else {
-            // Saving logic remains the same
             String errorMessage = validateAllFields();
             if (!errorMessage.isEmpty()) {
                 JOptionPane.showMessageDialog(this, errorMessage, "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return; // Don't exit edit mode if validation fails
+                return;
             }
 
             try {
@@ -983,7 +1002,6 @@ public class viewMembers_InfoPage extends JFrame {
                         java.util.Date utilDate = sdf.parse(birthdateStr);
                         member.put("birthdate", new java.sql.Date(utilDate.getTime()));
                     } catch (ParseException e) {
-                        // Handle invalid date format; for now, set to null
                         member.put("birthdate", null);
                     }
                 } else {
@@ -1296,8 +1314,8 @@ public class viewMembers_InfoPage extends JFrame {
         @Override
         protected void installDefaults() {
             super.installDefaults();
-            comboBox.setForeground(Color.BLACK); // Ensure black text
-            comboBox.setOpaque(true); // Avoid transparency issues
+            comboBox.setForeground(Color.BLACK);
+            comboBox.setOpaque(true);
         }
 
         @Override
@@ -1307,7 +1325,6 @@ public class viewMembers_InfoPage extends JFrame {
 
             g2.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
-            // Paint the text in black, regardless of enabled state
             g2.setColor(Color.BLACK);
             g2.setFont(comboBox.getFont());
             FontMetrics fm = g2.getFontMetrics();
@@ -1340,5 +1357,4 @@ public class viewMembers_InfoPage extends JFrame {
         }
         return null;
     }
-
 }
