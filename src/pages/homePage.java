@@ -172,7 +172,7 @@ public class homePage extends JPanel {
         expiringMemPanel.add(expHeader);
 
         JLabel expSub = new JLabel("List of members whose PWD IDs are expired or nearing expiration");
-        expSub.setBounds(51, 38, 400, 22);
+        expSub.setBounds(51, 39, 400, 22);
         expSub.setFont(new Font("Trebuchet MS", Font.PLAIN, 13));
         expiringMemPanel.add(expSub);
 

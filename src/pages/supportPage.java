@@ -169,6 +169,18 @@ public class supportPage extends JPanel {
                 return;
             }
 
+            // Check for at least one uppercase letter
+            if (!newPassword.matches(".*[A-Z].*")) {
+                JOptionPane.showMessageDialog(this, "New password must contain at least one uppercase letter.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Check for at least one special character
+            if (!newPassword.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?].*")) {
+                JOptionPane.showMessageDialog(this, "New password must contain at least one special character.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             if (newPassword.equals(currentPass)) {
                 JOptionPane.showMessageDialog(this, "New password cannot be the same as the current password.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -235,7 +247,6 @@ public class supportPage extends JPanel {
         JLabel dev1Img = new JLabel(dev1Icon);
         dev1Img.setBounds(19, 6, 62, 60);
         dev1.add(dev1Img);
-
 
         JLabel dev1Name = new JLabel("AGUSTIN, JANA BEATRICE");
         dev1Name.setBounds(90, 18, 500, 22);

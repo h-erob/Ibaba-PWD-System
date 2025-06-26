@@ -103,7 +103,7 @@ public class records_members extends JPanel {
         table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
         table.getColumnModel().getColumn(5).setCellRenderer(centerRenderer);
 
-        table.getColumnModel().getColumn(0).setPreferredWidth(40);
+        table.getColumnModel().getColumn(0).setPreferredWidth(32);
         table.getColumnModel().getColumn(1).setPreferredWidth(283);
         table.getColumnModel().getColumn(2).setPreferredWidth(240);
         table.getColumnModel().getColumn(3).setPreferredWidth(128);

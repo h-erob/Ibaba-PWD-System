@@ -122,10 +122,10 @@ public class records_attendancePage extends JPanel {
         table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
         table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
 
-        table.getColumnModel().getColumn(0).setPreferredWidth(55);
+        table.getColumnModel().getColumn(0).setPreferredWidth(52);
         table.getColumnModel().getColumn(1).setPreferredWidth(420);
         table.getColumnModel().getColumn(2).setPreferredWidth(232);
-        table.getColumnModel().getColumn(3).setPreferredWidth(222);
+        table.getColumnModel().getColumn(3).setPreferredWidth(223);
 
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
@@ -171,7 +171,8 @@ public class records_attendancePage extends JPanel {
         table.setSelectionBackground(Color.WHITE);
 
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(30, 100, 930, 400);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBounds(32, 100, 935, 418);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         styleScrollBar(scrollPane);
         add(scrollPane);
