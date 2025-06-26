@@ -260,7 +260,7 @@ public class supportPage extends JPanel {
 
         JPanel dev2 = createRoundedPanel();
         dev2.setBackground(new Color(249,245,245));
-        dev2.setBounds(20, 147, 470, 72);
+        dev2.setBounds(20, 148, 470, 72);
         dev2.setLayout(null);
         contactPanel.add(dev2);
 
@@ -274,7 +274,7 @@ public class supportPage extends JPanel {
         dev2Name.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         dev2.add(dev2Name);
 
-        JLabel dev2Num = new JLabel("0995 364 9868");
+        JLabel dev2Num = new JLabel("0975 891 6089");
         dev2Num.setBounds(91, 37, 500, 14);
         dev2Num.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
         dev2.add(dev2Num);
@@ -285,7 +285,7 @@ public class supportPage extends JPanel {
         dev3.setLayout(null);
         contactPanel.add(dev3);
 
-        ImageIcon dev3Icon = new ImageIcon("imgs/dev2img.png");
+        ImageIcon dev3Icon = new ImageIcon("imgs/dev3img.png");
         JLabel dev3Img = new JLabel(dev3Icon);
         dev3Img.setBounds(19, 6, 62, 60);
         dev3.add(dev3Img);
@@ -295,7 +295,7 @@ public class supportPage extends JPanel {
         dev3Name.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         dev3.add(dev3Name);
 
-        JLabel dev3Num = new JLabel("0995 364 9868");
+        JLabel dev3Num = new JLabel("0992 621 0697");
         dev3Num.setBounds(91, 37, 500, 14);
         dev3Num.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
         dev3.add(dev3Num);
@@ -306,7 +306,7 @@ public class supportPage extends JPanel {
         dev4.setLayout(null);
         contactPanel.add(dev4);
 
-        ImageIcon dev4Icon = new ImageIcon("imgs/dev2img.png");
+        ImageIcon dev4Icon = new ImageIcon("imgs/dev4img.png");
         JLabel dev4Img = new JLabel(dev4Icon);
         dev4Img.setBounds(19, 6, 62, 60);
         dev4.add(dev4Img);
@@ -316,7 +316,7 @@ public class supportPage extends JPanel {
         dev4Name.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         dev4.add(dev4Name);
 
-        JLabel dev4Num = new JLabel("0995 364 9868");
+        JLabel dev4Num = new JLabel("0960 412 3893");
         dev4Num.setBounds(91, 37, 500, 14);
         dev4Num.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
         dev4.add(dev4Num);
@@ -327,7 +327,7 @@ public class supportPage extends JPanel {
         dev5.setLayout(null);
         contactPanel.add(dev5);
 
-        ImageIcon dev5Icon = new ImageIcon("imgs/dev2img.png");
+        ImageIcon dev5Icon = new ImageIcon("imgs/dev5img.png");
         JLabel dev5Img = new JLabel(dev5Icon);
         dev5Img.setBounds(19, 6, 62, 60);
         dev5.add(dev5Img);
@@ -337,7 +337,7 @@ public class supportPage extends JPanel {
         dev5Name.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         dev5.add(dev5Name);
 
-        JLabel dev5Num = new JLabel("0995 364 9868");
+        JLabel dev5Num = new JLabel("0921 436 5488");
         dev5Num.setBounds(91, 37, 500, 14);
         dev5Num.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
         dev5.add(dev5Num);
@@ -365,11 +365,6 @@ public class supportPage extends JPanel {
         } else {
             confNewPass.setEchoChar('•'); // Mask password
         }
-    }
-
-    private String getCurrentUsername() {
-        // Can be changed to session base if ever magkaroon na ng ibang users
-        return "admin";
     }
 
     private JPanel createRoundedPanel() {

@@ -1,16 +1,14 @@
 package db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class databaseInitializer {
     public static void initialize() {
         try (Connection conn = database.getConnection();
              Statement stmt = conn.createStatement()) {
-
-            // Schema
-            stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS membership_system");
-            stmt.executeUpdate("USE membership_system");
 
             // Tables
             stmt.executeUpdate("""
@@ -21,6 +19,23 @@ public class databaseInitializer {
                     PRIMARY KEY (id)
                 );
             """);
+
+            try (PreparedStatement check = conn.prepareStatement(
+                    "SELECT * FROM admins WHERE username = ?")) {
+                check.setString(1, "admin");
+                ResultSet rs = check.executeQuery();
+
+                if (!rs.next()) {
+                    try (PreparedStatement insert = conn.prepareStatement(
+                            "INSERT INTO admins (username, password) VALUES (?, ?)")) {
+                        insert.setString(1, "admin");
+                        insert.setString(2, "1234");
+                        insert.executeUpdate();
+                    }
+                } else {
+
+                }
+            }
 
             stmt.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS members (
@@ -114,11 +129,8 @@ public class databaseInitializer {
                 GROUP BY member_id, YEAR(attendance_date);
             """);
 
-            System.out.println("Database and tables created successfully.");
-
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Database initialization failed.");
         }
     }
 }

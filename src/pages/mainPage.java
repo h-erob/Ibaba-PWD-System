@@ -114,7 +114,7 @@ public class mainPage extends JFrame {
 
         recordPanel = new JPanel();
         recordPanel.setBackground(new Color(37, 37, 37));
-        recordPanel.setBounds(0, 265, 200, 85);
+        recordPanel.setBounds(0, 267, 200, 85);
         recordPanel.setLayout(null);
         recordPanel.setVisible(false);
 

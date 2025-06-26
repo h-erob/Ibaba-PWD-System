@@ -599,8 +599,11 @@ public class attendancePage extends JPanel {
                 tableModel.addRow(row);
                 allRows.add(row);
             }
-            if (search != null) filterTable(); // Re-apply search filter if exists
-            if (presentNumLbl != null) updateCounts(); // Update counters if exists
+            if (search != null) filterTable();
+            if (presentNumLbl != null) updateCounts();
+            // Force table UI update
+            table.revalidate();
+            table.repaint();
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error reloading members: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

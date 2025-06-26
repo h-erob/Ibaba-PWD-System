@@ -20,17 +20,11 @@ public class adminDAO {
             st.setString(1, trimmedUsername);
             st.setString(2, trimmedPassword);
 
-            // Debug logging
-            System.out.println("Executing query with username: " + trimmedUsername);
-            System.out.println("Executing query with password: " + trimmedPassword);
-
             ResultSet rs = st.executeQuery();
             boolean exists = rs.next();
-            System.out.println("Admin exists: " + exists);
             return exists;
 
         } catch (SQLException sqlException) {
-            System.err.println("SQL Exception in checkIfAdminExists: " + sqlException.getMessage());
             sqlException.printStackTrace();
             return false;
         }

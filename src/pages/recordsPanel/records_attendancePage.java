@@ -199,6 +199,9 @@ public class records_attendancePage extends JPanel {
         String selectedYear = (String) yearComboBox.getSelectedItem();
         if (selectedYear != null) {
             loadAttendanceData(selectedYear);
+            // Force table UI update
+            table.revalidate();
+            table.repaint();
         }
     }
 
@@ -220,6 +223,9 @@ public class records_attendancePage extends JPanel {
                 allRows.add(row);
             }
             if (search != null) filterTable();
+            // Force table UI update
+            table.revalidate();
+            table.repaint();
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

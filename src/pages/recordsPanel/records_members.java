@@ -200,8 +200,10 @@ public class records_members extends JPanel {
                         member.status
                 });
             }
-
             memberLabel.setText("Total Members: " + memberDataList.size());
+            // Force table UI update
+            table.revalidate();
+            table.repaint();
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading members: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

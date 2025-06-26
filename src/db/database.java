@@ -1,23 +1,31 @@
 package db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class database {
-    private static final String URL = "jdbc:mysql://127.0.0.1:3306/members_system";
+    private static final String DB_NAME = "members_system";
+    private static final String URL_WITHOUT_DB = "jdbc:mysql://localhost:3306/";
+    private static final String URL_WITH_DB = "jdbc:mysql://localhost:3306/" + DB_NAME;
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "123";
+    private static final String PASSWORD = "123"; // <-- change this if needed
 
     static {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // Load the JDBC driver
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("MySQL JDBC driver not found", e);
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            try (Connection conn = DriverManager.getConnection(URL_WITHOUT_DB, USERNAME, PASSWORD);
+                 Statement stmt = conn.createStatement()) {
+                // Creates a database if it doesn't exist
+                stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS " + DB_NAME);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("⚠️ Failed to initialize database.");
         }
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        return DriverManager.getConnection(URL_WITH_DB, USERNAME, PASSWORD);
     }
 }

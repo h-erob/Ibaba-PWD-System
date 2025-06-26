@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class Main {
     public static void main(String[] args) {
         databaseInitializer.initialize();
-        SwingUtilities.invokeLater(mainPage::launch);
-        //SwingUtilities.invokeLater(loginPage::launch);
+        //SwingUtilities.invokeLater(mainPage::launch);
+        SwingUtilities.invokeLater(loginPage::launch);
     }
 }

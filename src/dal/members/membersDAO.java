@@ -69,7 +69,7 @@ public class membersDAO {
             pstmt.close();
 
             if (householdMembers != null && !householdMembers.isEmpty()) {
-                String householdSql = "INSERT INTO members_household (member_id, name, relationship, age, birthnell, birthdate, civil_status, education_level, occupation) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                String householdSql = "INSERT INTO members_household (member_id, name, relationship, age, birthdate, civil_status, education_level, occupation) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 pstmt = connection.prepareStatement(householdSql);
                 for (Map<String, Object> household : householdMembers) {
                     pstmt.setInt(1, memberId);
