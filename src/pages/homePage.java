@@ -293,7 +293,7 @@ public class homePage extends JPanel {
         quickAccessPanel.add(qaHeader);
 
         RoundedButton qaAddBtn = new RoundedButton("+ ADD MEMBER", new Color(73, 230, 127));
-        qaAddBtn.setBounds(52, 42, 142, 36);
+        qaAddBtn.setBounds(49, 42, 145, 36);
         quickAccessPanel.add(qaAddBtn);
         qaAddBtn.addActionListener(e -> {
             pages.records_membersbtn.addMembersPage.launch(null, this);
