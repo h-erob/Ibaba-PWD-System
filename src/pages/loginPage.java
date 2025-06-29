@@ -94,17 +94,13 @@ public class loginPage extends JFrame {
         bgPanel.setLayout(null);
 
         ImageIcon brgyLogo = new ImageIcon("imgs/loginLogo.png");
-        //Image size = brgyLogo.getImage().getScaledInstance(173, 100, Image.SCALE_SMOOTH);
-        //ImageIcon resize1 = new ImageIcon(size);
         JLabel BRGYLogo = new JLabel(brgyLogo);
         BRGYLogo.setBounds(30, 52, 173, 55);
         contentPane.add(BRGYLogo);
 
         ImageIcon bgLogo = new ImageIcon("imgs/loginBg.png");
-        Image bgsize = bgLogo.getImage().getScaledInstance(484, 423, Image.SCALE_SMOOTH);
-        ImageIcon resize = new ImageIcon(bgsize);
-        JLabel BGLogo = new JLabel(resize);
-        BGLogo.setBounds(0, 0, 400, 390);
+        JLabel BGLogo = new JLabel(bgLogo);
+        BGLogo.setBounds(0, 0, 484, 423);
         bgPanel.add(BGLogo);
 
         Username = new JTextField();

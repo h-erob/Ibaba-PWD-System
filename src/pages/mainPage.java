@@ -1,10 +1,14 @@
 package pages;
 
+import com.sun.tools.javac.Main;
 import pages.recordsPanel.*;
+import pages.records_membersbtn.viewMembers_InfoPage;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.List;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -21,6 +25,7 @@ public class mainPage extends JFrame {
     private records_attendancePage recordsAttendancePanel;
     private JButton btnTransaction;
     private JButton btnDemoRecord;
+    private List<viewMembers_InfoPage> openMemberPages = new ArrayList<>();
 
     public static void launch() {
         try {
@@ -41,6 +46,9 @@ public class mainPage extends JFrame {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1190, 690);
+
+        ImageIcon logo = new ImageIcon("imgs/bipdaLogo.png");
+        setIconImage(logo.getImage());
 
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setBounds(0, 0, 1200, 700);
@@ -91,17 +99,17 @@ public class mainPage extends JFrame {
         });
 
         JPanel topBar = new JPanel();
-        topBar.setBackground(new Color(254, 239, 25));
+        topBar.setBackground(new Color(255, 228, 113));
         topBar.setBounds(200, 30, 991, 115);
         contentPane.add(topBar);
         topBar.setLayout(null);
 
-        JLabel headerText = new JLabel("Magandang Araw, Ka Barangay");
+        JLabel headerText = new JLabel("Magandang Araw, Ka Baranggay");
         headerText.setFont(new Font("Trebuchet MS", Font.BOLD, 32));
         headerText.setBounds(30, 27, 479, 40);
         topBar.add(headerText);
 
-        JLabel headerSubText = new JLabel("Isang barangay, Isang komunidad, Sama-sama sa kaunlaran");
+        JLabel headerSubText = new JLabel("Isang baranggay, Isang komunidad, Sama-sama sa kaunlaran");
         headerSubText.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
         headerSubText.setBounds(30, 60, 435, 27);
         topBar.add(headerSubText);
@@ -207,7 +215,7 @@ public class mainPage extends JFrame {
             selectedButton.setBackground(new Color(37, 37, 37));
             selectedButton.setForeground(new Color(150, 150, 150));
         }
-        button.setBackground(new Color(254, 239, 25));
+        button.setBackground(new Color(255, 228, 113));
         button.setForeground(new Color(37, 37, 37));
         selectedButton = button;
         if (isSubmenu) {
@@ -227,7 +235,7 @@ public class mainPage extends JFrame {
             selectedButton.setForeground(new Color(150, 150, 150));
         }
         // Highlight only the "Member List" button
-        btnDemoRecord.setBackground(new Color(254, 239, 25));
+        btnDemoRecord.setBackground(new Color(255, 228, 113));
         btnDemoRecord.setForeground(new Color(37, 37, 37));
         selectedButton = btnDemoRecord;
         // Ensure "Records" button is not highlighted
@@ -266,6 +274,39 @@ public class mainPage extends JFrame {
         }
     }
 
+    public void refreshHomePage() {
+        if (homePagePanel != null) {
+            homePagePanel.reloadData();
+        }
+    }
+
+    public void setRecordsMembersPanel(records_members panel) {
+        this.recordsMembersPanel = panel;
+    }
+
+    public void refreshRecordsMembers() {
+        if (recordsMembersPanel != null) {
+            recordsMembersPanel.loadMembers();
+            recordsMembersPanel.clearSearchField();
+        }
+    }
+
+    public void addOpenMemberPage(viewMembers_InfoPage page) {
+        openMemberPages.add(page);
+    }
+
+    public void removeOpenMemberPage(viewMembers_InfoPage page) {
+        openMemberPages.remove(page);
+    }
+
+    public void refreshOpenMemberPages(int memberId) {
+        for (viewMembers_InfoPage page : openMemberPages) {
+            if (page.getMemberId() == memberId) {
+                page.reloadData();
+            }
+        }
+    }
+
     private JButton createSidebarButton(String text, int yPosition, String cardName) {
         JButton button = new JButton(text);
         button.setBounds(0, yPosition, 201, 50);
@@ -296,7 +337,7 @@ public class mainPage extends JFrame {
             selectedButton.setBackground(new Color(37, 37, 37));
             selectedButton.setForeground(new Color(150, 150, 150));
         }
-        buttonToSelect.setBackground(new Color(254, 239, 25));
+        buttonToSelect.setBackground(new Color(255, 228, 113));
         buttonToSelect.setForeground(new Color(37, 37, 37));
         selectedButton = buttonToSelect;
     }

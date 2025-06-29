@@ -32,8 +32,6 @@ public class databaseInitializer {
                         insert.setString(2, "1234");
                         insert.executeUpdate();
                     }
-                } else {
-
                 }
             }
 
@@ -43,6 +41,7 @@ public class databaseInitializer {
                     full_name VARCHAR(100),
                     pwd_id_number VARCHAR(50),
                     disability_type VARCHAR(100),
+                    fill_up_date DATE,
                     date_issued DATE,
                     id_valid_until DATE,
                     birthdate DATE,

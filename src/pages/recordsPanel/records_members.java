@@ -12,6 +12,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableRowSorter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
@@ -19,6 +22,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class records_members extends JPanel {
     private final JTable table;
@@ -26,6 +30,7 @@ public class records_members extends JPanel {
     private final JTextField search;
     private final List<membersDAO.MemberData> memberDataList;
     private final JLabel memberLabel;
+    private TableRowSorter<DefaultTableModel> sorter;
 
     public records_members() {
         setLayout(null);
@@ -73,7 +78,6 @@ public class records_members extends JPanel {
             }
         });
 
-
         RoundedButton addBtn = new RoundedButton("ADD  +", new Color(73, 230, 127));
         addBtn.setBounds(865, 58, 90, 35);
         addBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
@@ -94,8 +98,10 @@ public class records_members extends JPanel {
 
         table = new JTable(memberModel);
 
-        LabelCellRenderer centerRenderer = new LabelCellRenderer();
+        sorter = new TableRowSorter<>(memberModel);
+        table.setRowSorter(sorter);
 
+        LabelCellRenderer centerRenderer = new LabelCellRenderer();
         table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
         table.getColumnModel().getColumn(1).setCellRenderer(new TextAreaRenderer());
         table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
@@ -160,18 +166,40 @@ public class records_members extends JPanel {
         add(scrollPane);
 
         loadMembers();
-
         adjustRowHeights();
+
+        // Initialize TableRowSorter
+        sorter = new TableRowSorter<>(memberModel);
+        table.setRowSorter(sorter);
+
+        // Add DocumentListener to search field
+        search.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filterTable();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filterTable();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filterTable();
+            }
+        });
 
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1) {
-                    int row = table.rowAtPoint(e.getPoint());
-                    if (row >= 0) {
-                        table.setRowSelectionInterval(row, row);
-                        membersDAO.MemberData memberData = memberDataList.get(row);
-                        viewMembers_InfoPage.launch(memberData);
+                    int viewRow = table.rowAtPoint(e.getPoint());
+                    if (viewRow >= 0) {
+                        int modelRow = table.convertRowIndexToModel(viewRow);
+                        table.setRowSelectionInterval(viewRow, viewRow);
+                        membersDAO.MemberData memberData = memberDataList.get(modelRow);
+                        viewMembers_InfoPage.launch(memberData, records_members.this, mainPage.instance.getHomePagePanel());
                         mainPage.instance.showDim();
                     }
                 }
@@ -186,6 +214,7 @@ public class records_members extends JPanel {
             memberDataList.clear();
             memberDataList.addAll(members);
             memberModel.setRowCount(0);
+            sorter.setRowFilter(null); // Clear any existing filters
             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
             for (int i = 0; i < members.size(); i++) {
@@ -201,13 +230,33 @@ public class records_members extends JPanel {
                 });
             }
             memberLabel.setText("Total Members: " + memberDataList.size());
-            // Force table UI update
+            sorter.modelStructureChanged(); // Notify sorter of significant data change
             table.revalidate();
             table.repaint();
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading members: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void filterTable() {
+        String searchText = search.getText().trim();
+        if (searchText.isEmpty() || searchText.equals("Search")) {
+            sorter.setRowFilter(null);
+        } else {
+            String regex = "(?i).*" + Pattern.quote(searchText) + ".*";
+            RowFilter<DefaultTableModel, Object> nameFilter = RowFilter.regexFilter(regex, 1); // Member Name column
+            RowFilter<DefaultTableModel, Object> idFilter = RowFilter.regexFilter(regex, 2);   // PWD ID No. column
+            List<RowFilter<DefaultTableModel, Object>> filters = new ArrayList<>();
+            filters.add(nameFilter);
+            filters.add(idFilter);
+            RowFilter<DefaultTableModel, Object> combinedFilter = RowFilter.orFilter(filters);
+            sorter.setRowFilter(combinedFilter);
+        }
+    }
+
+    public void clearSearchField() {
+        search.setText("");
     }
 
     class TextAreaRenderer extends JTextArea implements TableCellRenderer {

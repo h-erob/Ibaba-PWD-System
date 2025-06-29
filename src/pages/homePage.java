@@ -66,7 +66,7 @@ public class homePage extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(254, 239, 25));
+                g2.setColor(new Color(255, 228, 113));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 super.paintComponent(g);
                 g2.dispose();
@@ -108,7 +108,7 @@ public class homePage extends JPanel {
         bdBtn.setOpaque(true);
         birthdayPanel.add(bdBtn);
 
-        JDialog fullBdDialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Full Birthday List", Dialog.ModalityType.APPLICATION_MODAL);
+        JDialog fullBdDialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Birthday List", Dialog.ModalityType.APPLICATION_MODAL);
         fullBdDialog.setSize(700, 500);
         fullBdDialog.setLayout(null);
         fullBdDialog.setLocationRelativeTo(this);
@@ -120,7 +120,7 @@ public class homePage extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(254, 239, 25));
+                g2.setColor(new Color(255, 228, 113));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 super.paintComponent(g);
                 g2.dispose();
@@ -148,6 +148,7 @@ public class homePage extends JPanel {
 
         JScrollPane fullBdScrollPane = new RoundedScrollPane(fullBdTable);
         fullBdScrollPane.setBounds(23, 55, 635, 375);
+        styleScrollBar(fullBdScrollPane);
         fullBdDialog.add(fullBdScrollPane);
 
         bdBtn.addActionListener(e -> {
@@ -181,7 +182,7 @@ public class homePage extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(254, 239, 25));
+                g2.setColor(new Color(255, 228, 113));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 super.paintComponent(g);
                 g2.dispose();
@@ -223,7 +224,7 @@ public class homePage extends JPanel {
         expBtn.setOpaque(true);
         expiringMemPanel.add(expBtn);
 
-        JDialog fullExpDialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Full Expiring and Expired Membership List", Dialog.ModalityType.APPLICATION_MODAL);
+        JDialog fullExpDialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Expiring and Expired Membership List", Dialog.ModalityType.APPLICATION_MODAL);
         fullExpDialog.setSize(720, 500);
         fullExpDialog.setLayout(null);
         fullExpDialog.setLocationRelativeTo(this);
@@ -235,7 +236,7 @@ public class homePage extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(254, 239, 25));
+                g2.setColor(new Color(255, 228, 113));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 super.paintComponent(g);
                 g2.dispose();
@@ -266,6 +267,7 @@ public class homePage extends JPanel {
         fullExpTable.getColumnModel().getColumn(3).setCellEditor(new ButtonEditor());
 
         JScrollPane fullExpScrollPane = new RoundedScrollPane(fullExpTable);
+        styleScrollBar(fullExpScrollPane);
         fullExpScrollPane.setBounds(23, 55, 655, 375);
         fullExpDialog.add(fullExpScrollPane);
 
@@ -334,7 +336,7 @@ public class homePage extends JPanel {
         newMemHeader.setFont(new Font("Trebuchet MS", Font.BOLD, 15));
         notifNewMem.add(newMemHeader);
 
-        newMemSub = new JLabel("0 New Members");
+        newMemSub = new JLabel("0 New Member(s)");
         newMemSub.setBounds(56, 25, 300, 20);
         newMemSub.setForeground(new Color(90, 90, 90));
         newMemSub.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
@@ -430,7 +432,7 @@ public class homePage extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(254, 239, 25));
+                g2.setColor(new Color(255, 228, 113));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 super.paintComponent(g);
                 g2.dispose();
@@ -443,7 +445,7 @@ public class homePage extends JPanel {
         fullNewMemTableHeader.setHorizontalAlignment(SwingConstants.LEFT);
         fullNewMemDialog.add(fullNewMemTableHeader);
 
-        newMemModel = new DefaultTableModel(new String[]{"Name", "PWD ID No.", "Date Issued"}, 0);
+        newMemModel = new DefaultTableModel(new String[]{"Name", "PWD ID No.", "Fill Up Date"}, 0);
         JTable fullNewMemTable = new JTable(newMemModel);
         fullNewMemTable.setRowHeight(36);
         fullNewMemTable.getColumnModel().getColumn(0).setPreferredWidth(215);
@@ -461,6 +463,7 @@ public class homePage extends JPanel {
         fullNewMemTable.setSelectionForeground(Color.BLACK);
 
         JScrollPane fullNewMemScrollPane = new RoundedScrollPane(fullNewMemTable);
+        styleScrollBar(fullNewMemScrollPane);
         fullNewMemScrollPane.setBounds(23, 55, 635, 375);
         fullNewMemDialog.add(fullNewMemScrollPane);
 
@@ -483,7 +486,7 @@ public class homePage extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(254, 239, 25));
+                g2.setColor(new Color(255, 228, 113));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 super.paintComponent(g);
                 g2.dispose();
@@ -514,6 +517,7 @@ public class homePage extends JPanel {
         fullActiveMemTable.setSelectionForeground(Color.BLACK);
 
         JScrollPane fullActiveMemScrollPane = new RoundedScrollPane(fullActiveMemTable);
+        styleScrollBar(fullActiveMemScrollPane);
         fullActiveMemScrollPane.setBounds(23, 55, 635, 375);
         fullActiveMemDialog.add(fullActiveMemScrollPane);
 
@@ -536,7 +540,7 @@ public class homePage extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(254, 239, 25));
+                g2.setColor(new Color(255, 228, 113));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 super.paintComponent(g);
                 g2.dispose();
@@ -567,13 +571,14 @@ public class homePage extends JPanel {
         fullInactiveMemTable.setSelectionForeground(Color.BLACK);
 
         JScrollPane fullInactiveMemScrollPane = new RoundedScrollPane(fullInactiveMemTable);
+        styleScrollBar(fullInactiveMemScrollPane);
         fullInactiveMemScrollPane.setBounds(23, 55, 635, 375);
         fullInactiveMemDialog.add(fullInactiveMemScrollPane);
 
-        // Add MouseListeners to make panels clickable
         notifNewMem.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                mainPage.instance.showDim();
                 populateNewMembersTable();
                 fullNewMemDialog.setVisible(true);
             }
@@ -582,6 +587,7 @@ public class homePage extends JPanel {
         activeMemPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                mainPage.instance.showDim();
                 populateActiveMembersTable();
                 fullActiveMemDialog.setVisible(true);
             }
@@ -590,12 +596,13 @@ public class homePage extends JPanel {
         notifInactiveMem.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                mainPage.instance.showDim();
                 populateInactiveMembersTable();
                 fullInactiveMemDialog.setVisible(true);
             }
         });
 
-        // Add ActionListeners to buttons
+        // Add ActionListeners to buttons (unchanged)
         newMemBtn.addActionListener(e -> {
             mainPage.instance.showDim();
             populateNewMembersTable();
@@ -732,12 +739,11 @@ public class homePage extends JPanel {
             List<membersDAO.MemberData> members = membersDAO.getMembers();
             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yy");
             Calendar now = Calendar.getInstance();
-            int currentMonth = now.get(Calendar.MONTH) + 1;
+            int currentMonth = now.get(Calendar.MONTH) + 1; // 0-based to 1-based
+            int currentYear = now.get(Calendar.YEAR);
             Calendar threeMonthsFromNow = Calendar.getInstance();
             threeMonthsFromNow.add(Calendar.MONTH, 3);
-            Calendar twoMonthsAgo = Calendar.getInstance();
-            twoMonthsAgo.add(Calendar.MONTH, -2);
-            String currentYear = String.valueOf(now.get(Calendar.YEAR));
+            String currentYearStr = String.valueOf(now.get(Calendar.YEAR));
 
             // Update member statuses if ID has expired
             Date currentDate = new Date();
@@ -756,22 +762,22 @@ public class homePage extends JPanel {
             fullExpModel.setRowCount(0);
 
             // Counters for statistics
-            int totalMembers = 0;
+            int totalMembers = members.size(); // Include all members, including Deceased
             int femaleCount = 0;
             int maleCount = 0;
             int newMembersCount = 0;
 
-            // Process members
+            // Process members for panels and sex counts
             for (membersDAO.MemberData member : members) {
+                // Count all members for sex population, including Deceased
+                if ("Female".equals(member.sex)) {
+                    femaleCount++;
+                } else if ("Male".equals(member.sex)) {
+                    maleCount++;
+                }
+
+                // Exclude Deceased from panels
                 if (member.status != null && !"Deceased".equals(member.status)) {
-                    totalMembers++;
-
-                    if ("Female".equals(member.sex)) {
-                        femaleCount++;
-                    } else if ("Male".equals(member.sex)) {
-                        maleCount++;
-                    }
-
                     if (member.birthdate != null) {
                         Calendar birthCal = Calendar.getInstance();
                         birthCal.setTime(member.birthdate);
@@ -804,19 +810,25 @@ public class homePage extends JPanel {
                         }
                     }
 
-                    if (member.dateIssued != null && member.dateIssued.after(twoMonthsAgo.getTime())) {
-                        newMembersCount++;
+                    if (member.fillUpDate != null) {
+                        Calendar fillUpCal = Calendar.getInstance();
+                        fillUpCal.setTime(member.fillUpDate);
+                        int fillUpMonth = fillUpCal.get(Calendar.MONTH) + 1;
+                        int fillUpYear = fillUpCal.get(Calendar.YEAR);
+                        if (fillUpYear == currentYear && fillUpMonth == currentMonth) {
+                            newMembersCount++;
+                        }
                     }
                 }
             }
 
-            // Active and Inactive Counts
-            int N = membersDAO.getUniqueAttendanceDatesCount(currentYear);
-            List<membersDAO.AttendanceRecord> attendanceRecords = membersDAO.getAttendanceRecordsForYear(currentYear);
+            // Active and Inactive Counts: Only Alive or Renewed
+            int N = membersDAO.getUniqueAttendanceDatesCount(currentYearStr);
+            List<membersDAO.AttendanceRecord> attendanceRecords = membersDAO.getAttendanceRecordsForYear(currentYearStr);
             int activeCount = 0;
             int inactiveCount = 0;
             for (membersDAO.AttendanceRecord record : attendanceRecords) {
-                if (!"Deceased".equals(record.status)) {
+                if ("Alive".equals(record.status) || "Renewed".equals(record.status)) {
                     if (record.totalAttendance >= N - 1) {
                         activeCount++;
                     } else {
@@ -847,8 +859,15 @@ public class homePage extends JPanel {
             ResultSet rs = selectPstmt.executeQuery();
             if (rs.next()) {
                 java.sql.Date currentValidUntil = rs.getDate("id_valid_until");
+                java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
                 Calendar cal = Calendar.getInstance();
-                cal.setTime(currentValidUntil);
+                if (currentValidUntil.before(currentDate)) {
+                    // Expired: add 5 years to current date
+                    cal.setTime(currentDate);
+                } else {
+                    // Near expiration: add 5 years to current id_valid_until
+                    cal.setTime(currentValidUntil);
+                }
                 cal.add(Calendar.YEAR, 5);
                 java.sql.Date newValidUntil = new java.sql.Date(cal.getTimeInMillis());
 
@@ -859,6 +878,8 @@ public class homePage extends JPanel {
                 updatePstmt.executeUpdate();
 
                 reloadData();
+                mainPage.instance.refreshRecordsMembers();
+                mainPage.instance.refreshOpenMemberPages(memberId);
             }
             rs.close();
             selectPstmt.close();
@@ -874,15 +895,23 @@ public class homePage extends JPanel {
             membersDAO membersDAO = new membersDAO(conn);
             List<membersDAO.MemberData> members = membersDAO.getMembers();
             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yy");
-            Calendar twoMonthsAgo = Calendar.getInstance();
-            twoMonthsAgo.add(Calendar.MONTH, -2);
+            Calendar now = Calendar.getInstance();
+            int currentMonth = now.get(Calendar.MONTH) + 1;
+            int currentYear = now.get(Calendar.YEAR);
+
             for (membersDAO.MemberData member : members) {
-                if (member.dateIssued != null && member.dateIssued.after(twoMonthsAgo.getTime())) {
-                    newMemModel.addRow(new Object[]{
-                            member.fullName,
-                            member.pwdIdNumber,
-                            sdf.format(member.dateIssued)
-                    });
+                if (member.fillUpDate != null) {
+                    Calendar fillUpCal = Calendar.getInstance();
+                    fillUpCal.setTime(member.fillUpDate);
+                    int fillUpMonth = fillUpCal.get(Calendar.MONTH) + 1;
+                    int fillUpYear = fillUpCal.get(Calendar.YEAR);
+                    if (fillUpYear == currentYear && fillUpMonth == currentMonth) {
+                        newMemModel.addRow(new Object[]{
+                                member.fullName,
+                                member.pwdIdNumber,
+                                sdf.format(member.fillUpDate)
+                        });
+                    }
                 }
             }
         } catch (SQLException ex) {
@@ -899,7 +928,7 @@ public class homePage extends JPanel {
             int N = membersDAO.getUniqueAttendanceDatesCount(currentYear);
             List<membersDAO.AttendanceRecord> records = membersDAO.getAttendanceRecordsForYear(currentYear);
             for (membersDAO.AttendanceRecord record : records) {
-                if (!"Deceased".equals(record.status) && record.totalAttendance >= N - 1) {
+                if (("Alive".equals(record.status) || "Renewed".equals(record.status)) && record.totalAttendance >= N - 1) {
                     activeMemModel.addRow(new Object[]{
                             record.fullName,
                             record.pwdIdNumber,
@@ -921,7 +950,7 @@ public class homePage extends JPanel {
             int N = membersDAO.getUniqueAttendanceDatesCount(currentYear);
             List<membersDAO.AttendanceRecord> records = membersDAO.getAttendanceRecordsForYear(currentYear);
             for (membersDAO.AttendanceRecord record : records) {
-                if (!"Deceased".equals(record.status) && record.totalAttendance < N - 1) {
+                if (("Alive".equals(record.status) || "Renewed".equals(record.status)) && record.totalAttendance < N - 1) {
                     inactiveMemModel.addRow(new Object[]{
                             record.fullName,
                             record.pwdIdNumber,
@@ -1040,8 +1069,7 @@ public class homePage extends JPanel {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             if (value instanceof ActionData) {
-                ActionData data = (ActionData) value;
-                button.setEnabled(data.isExpired);
+                button.setEnabled(true);
             } else {
                 button.setEnabled(false);
             }
@@ -1053,25 +1081,61 @@ public class homePage extends JPanel {
         private JPanel panel;
         private JButton button;
         private ActionData data;
+        private JTable table;
+        private int row;
 
         public ButtonEditor() {
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
             button = new RoundedButton("Renew", new Color(40, 40, 40));
-            button.setForeground(new Color(240,240,240));
+            button.setForeground(new Color(240, 240, 240));
             panel.add(button);
             button.addActionListener(e -> {
-                if (data != null && data.isExpired) {
-                    renewMember(data.memberId);
+                if (data != null && table != null && row < table.getRowCount()) {
+                    try (Connection conn = database.getConnection()) {
+                        membersDAO membersDAO = new membersDAO(conn);
+                        String selectSql = "SELECT id_valid_until FROM members WHERE member_id = ?";
+                        PreparedStatement selectPstmt = conn.prepareStatement(selectSql);
+                        selectPstmt.setInt(1, data.memberId);
+                        ResultSet rs = selectPstmt.executeQuery();
+                        if (rs.next()) {
+                            java.sql.Date currentValidUntil = rs.getDate("id_valid_until");
+                            java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
+                            Calendar cal = Calendar.getInstance();
+                            if (currentValidUntil.before(currentDate)) {
+                                cal.setTime(currentDate);
+                            } else {
+                                cal.setTime(currentValidUntil);
+                            }
+                            cal.add(Calendar.YEAR, 5);
+                            java.sql.Date newValidUntil = new java.sql.Date(cal.getTimeInMillis());
+
+                            String updateSql = "UPDATE members SET status = 'Renewed', id_valid_until = ? WHERE member_id = ?";
+                            PreparedStatement updatePstmt = conn.prepareStatement(updateSql);
+                            updatePstmt.setDate(1, newValidUntil);
+                            updatePstmt.setInt(2, data.memberId);
+                            updatePstmt.executeUpdate();
+                        }
+                        rs.close();
+                        selectPstmt.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(homePage.this, "Error renewing member: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    fireEditingStopped();
+                    reloadData();
+                    mainPage.instance.refreshRecordsMembers();
+                    mainPage.instance.refreshOpenMemberPages(data.memberId);
                 }
-                fireEditingStopped();
             });
         }
 
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            this.table = table;
+            this.row = row;
             if (value instanceof ActionData) {
                 data = (ActionData) value;
-                button.setEnabled(data.isExpired);
+                button.setEnabled(true);
             } else {
                 data = null;
                 button.setEnabled(false);
@@ -1083,5 +1147,50 @@ public class homePage extends JPanel {
         public Object getCellEditorValue() {
             return data;
         }
+    }
+
+    private void styleScrollBar(JScrollPane scrollPane) {
+        JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
+        verticalScrollBar.setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = new Color(150, 150, 150);
+                this.thumbDarkShadowColor = new Color(150, 150, 150);
+                this.thumbHighlightColor = new Color(150, 150, 150);
+                this.thumbLightShadowColor = new Color(150, 150, 150);
+                this.trackColor = new Color(245, 245, 245);
+            }
+
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                return createZeroButton();
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                return createZeroButton();
+            }
+
+            private JButton createZeroButton() {
+                JButton button = new JButton();
+                button.setPreferredSize(new Dimension(0, 0));
+                button.setMinimumSize(new Dimension(0, 0));
+                button.setMaximumSize(new Dimension(0, 0));
+                return button;
+            }
+
+            @Override
+            protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setPaint(thumbColor);
+                g2.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, 10, 10);
+                g2.dispose();
+            }
+        });
+
+        verticalScrollBar.setPreferredSize(new Dimension(8, Integer.MAX_VALUE));
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
     }
 }

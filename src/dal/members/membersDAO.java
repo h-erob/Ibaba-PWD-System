@@ -18,7 +18,7 @@ public class membersDAO {
     }
 
     public boolean addMember(
-            String fullName, String pwdIdNumber, String disabilityType, Date dateIssued, Date idValidUntil,
+            String fullName, String pwdIdNumber, String disabilityType, Date fillUpDate, Date dateIssued, Date idValidUntil,
             Date birthdate, int age, String sex, String civilStatus, String placeOfBirth, String educationLevel,
             String occupation, String address, String mobileNumber, String email, String fbAccountName,
             String guardianName, String guardianRelation, String guardianMobile, boolean takesMedications,
@@ -31,31 +31,32 @@ public class membersDAO {
         try {
             connection.setAutoCommit(false);
 
-            String memberSql = "INSERT INTO members (full_name, pwd_id_number, disability_type, date_issued, id_valid_until, " +
+            String memberSql = "INSERT INTO members (full_name, pwd_id_number, disability_type, fill_up_date, date_issued, id_valid_until, " +
                     "birthdate, age, sex, civil_status, place_of_birth, education_level, occupation, address, mobile_number, " +
                     "email, fb_account_name, guardian_name, guardian_relation, guardian_mobile, takes_medications, status) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Alive')";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Alive')";
             pstmt = connection.prepareStatement(memberSql, PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, fullName);
             pstmt.setString(2, pwdIdNumber);
             pstmt.setString(3, disabilityType);
-            pstmt.setDate(4, dateIssued);
-            pstmt.setDate(5, idValidUntil);
-            pstmt.setDate(6, birthdate);
-            pstmt.setInt(7, age);
-            pstmt.setString(8, sex);
-            pstmt.setString(9, civilStatus);
-            pstmt.setString(10, placeOfBirth);
-            pstmt.setString(11, educationLevel);
-            pstmt.setString(12, occupation);
-            pstmt.setString(13, address);
-            pstmt.setString(14, mobileNumber);
-            pstmt.setString(15, email != null ? email : "");
-            pstmt.setString(16, fbAccountName != null ? fbAccountName : "");
-            pstmt.setString(17, guardianName);
-            pstmt.setString(18, guardianRelation);
-            pstmt.setString(19, guardianMobile);
-            pstmt.setBoolean(20, takesMedications);
+            pstmt.setDate(4, fillUpDate);
+            pstmt.setDate(5, dateIssued);
+            pstmt.setDate(6, idValidUntil);
+            pstmt.setDate(7, birthdate);  // Added birthdate parameter
+            pstmt.setInt(8, age);
+            pstmt.setString(9, sex);
+            pstmt.setString(10, civilStatus);
+            pstmt.setString(11, placeOfBirth);
+            pstmt.setString(12, educationLevel);
+            pstmt.setString(13, occupation);
+            pstmt.setString(14, address);
+            pstmt.setString(15, mobileNumber);
+            pstmt.setString(16, email != null ? email : "");
+            pstmt.setString(17, fbAccountName != null ? fbAccountName : "");
+            pstmt.setString(18, guardianName);
+            pstmt.setString(19, guardianRelation);
+            pstmt.setString(20, guardianMobile);
+            pstmt.setBoolean(21, takesMedications);
             pstmt.executeUpdate();
 
             rs = pstmt.getGeneratedKeys();
@@ -159,7 +160,7 @@ public class membersDAO {
         ResultSet rsMedications = null;
 
         try {
-            String memberSql = "SELECT * FROM members";
+            String memberSql = "SELECT * FROM members ORDER BY full_name ASC";
             pstmtMembers = connection.prepareStatement(memberSql);
             rsMembers = pstmtMembers.executeQuery();
 
@@ -169,6 +170,7 @@ public class membersDAO {
                 member.fullName = rsMembers.getString("full_name");
                 member.pwdIdNumber = rsMembers.getString("pwd_id_number");
                 member.disabilityType = rsMembers.getString("disability_type");
+                member.fillUpDate = rsMembers.getDate("fill_up_date");
                 member.dateIssued = rsMembers.getDate("date_issued");
                 member.idValidUntil = rsMembers.getDate("id_valid_until");
                 member.birthdate = rsMembers.getDate("birthdate");
@@ -265,7 +267,7 @@ public class membersDAO {
     }
 
     public boolean updateMember(
-            int memberId, String fullName, String pwdIdNumber, String disabilityType, String status,
+            int memberId, String fullName, String pwdIdNumber, String disabilityType,String status,
             Date dateIssued, Date idValidUntil, Date birthdate, int age, String sex, String civilStatus,
             String placeOfBirth, String educationLevel, String occupation, String address, String mobileNumber,
             String email, String fbAccountName, String guardianName, String guardianRelation, String guardianMobile,
@@ -455,9 +457,10 @@ public class membersDAO {
         List<AttendanceRecord> records = new ArrayList<>();
         String sql = "SELECT m.member_id, m.full_name, m.pwd_id_number, m.status, " +
                 "MAX(CASE WHEN a.status IN ('present', 'excused') THEN a.attendance_date ELSE NULL END) AS last_attendance_date, " +
-                "SUM(CASE WHEN a.status IN ('present', 'excused') THEN 1 ELSE 0 END) AS total_attendance " +
+                "COALESCE(SUM(CASE WHEN a.status IN ('present', 'excused') THEN 1 ELSE 0 END), 0) AS total_attendance " +
                 "FROM members m " +
                 "LEFT JOIN attendance a ON m.member_id = a.member_id AND YEAR(a.attendance_date) = ? " +
+                "WHERE m.status IN ('Alive', 'Renewed') " +
                 "GROUP BY m.member_id, m.full_name, m.pwd_id_number, m.status " +
                 "ORDER BY m.full_name";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -478,6 +481,19 @@ public class membersDAO {
         return records;
     }
 
+    public boolean hasAttendanceForDate(java.sql.Date date) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM attendance WHERE attendance_date = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setDate(1, date);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
     public static class AttendanceRecord {
         public int memberId;
         public String fullName;
@@ -492,6 +508,7 @@ public class membersDAO {
         public String fullName;
         public String pwdIdNumber;
         public String disabilityType;
+        public Date fillUpDate;
         public Date dateIssued;
         public Date idValidUntil;
         public Date birthdate;

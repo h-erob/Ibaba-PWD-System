@@ -354,6 +354,8 @@ public class addMembersPage extends JFrame {
         panel.add(datelbl);
 
         fillUpDate = new JTextField(20);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        fillUpDate.setText(sdf.format(new java.util.Date())); // Default to current date
         fillUpDate.setBounds(563, 7, 120, 16);
         fillUpDate.setHorizontalAlignment(JTextField.CENTER);
         fillUpDate.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
@@ -1197,9 +1199,12 @@ public class addMembersPage extends JFrame {
         try (Connection conn = database.getConnection()) {
             membersDAO membersDAO = new membersDAO(conn);
             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-            records_members records = new records_members();
 
             // Page 1: Personal Info
+            String fillUpDateText = fillUpDate.getText().trim();
+            Date fillUpDateSql = fillUpDateText.isEmpty() ?
+                    new Date(new java.util.Date().getTime()) : // Default to current date if empty
+                    new Date(sdf.parse(fillUpDateText).getTime());
             String fullNameText = fullName.getText().trim();
             String pwdIdText = pwdIdNo.getText().trim();
             String disabilityText = disabilityType.getText().trim();
@@ -1270,9 +1275,9 @@ public class addMembersPage extends JFrame {
                 }
             }
 
-            // Call addMember
+            // Call addMember with fillUpDate
             boolean success = membersDAO.addMember(
-                    fullNameText, pwdIdText, disabilityText, dateIssuedDate, idValidUntilDate,
+                    fullNameText, pwdIdText, disabilityText, fillUpDateSql, dateIssuedDate, idValidUntilDate,
                     birthdateDate, ageValue, sex, civilStatus, placeOfBirthText, educationLevel,
                     occupationText, addressText, mobileNumber, emailText, fbAccount,
                     guardianNameText, guardianRelation, guardianMobile, takesMedications,
@@ -1284,10 +1289,15 @@ public class addMembersPage extends JFrame {
 
                 if (recordsMembersPanel != null) {
                     recordsMembersPanel.loadMembers();
+                    recordsMembersPanel.clearSearchField();
                 }
 
                 if (homePagePanel != null) {
                     homePagePanel.reloadData();
+                }
+
+                if (mainPage.instance != null) {
+                    mainPage.instance.refreshRecordsMembers();
                 }
 
                 if (mainPage.instance != null) {

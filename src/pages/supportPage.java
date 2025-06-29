@@ -41,11 +41,11 @@ public class supportPage extends JPanel {
 
         ImageIcon passIcon = new ImageIcon("imgs/lockIcon.png");
         JLabel passImg = new JLabel(passIcon);
-        passImg.setBounds(174, 30, 40, 40);
+        passImg.setBounds(180, 30, 40, 40);
         passwordPanel.add(passImg);
 
         JLabel passwordHeader = new JLabel("UPDATE PASSWORD");
-        passwordHeader.setBounds(108, 75, 500, 22);
+        passwordHeader.setBounds(110, 75, 500, 22);
         passwordHeader.setFont(new Font("Trebuchet MS", Font.BOLD, 20));
         passwordPanel.add(passwordHeader);
 
@@ -211,11 +211,142 @@ public class supportPage extends JPanel {
             }
         });
 
+        JPanel faqPanel = createRoundedPanel();
+        faqPanel.setBackground(new Color(249,245,245));
+        faqPanel.setBounds(450, 72, 510, 460);
+        faqPanel.setLayout(null);
+        add(faqPanel);
+
+        ImageIcon faqIcon = new ImageIcon("imgs/faqIcon.png");
+        JLabel faqImg = new JLabel(faqIcon);
+        faqImg.setBounds(21, 13, 40, 40);
+        faqPanel.add(faqImg);
+
+        JLabel faqHeader = new JLabel("Frequently Asked Questions");
+        faqHeader.setBounds(70, 15, 500, 22);
+        faqHeader.setFont(new Font("Arial", Font.BOLD, 19));
+        faqPanel.add(faqHeader);
+
+        JLabel faqSubHeader = new JLabel("Helping you understand the CARES system better");
+        faqSubHeader.setBounds(70, 36, 500, 14);
+            faqSubHeader.setFont(new Font("Arial", Font.PLAIN, 13));
+        faqPanel.add(faqSubHeader);
+
+        JPanel innerFaq = createRoundedPanel();
+        innerFaq.setBackground(new Color(249,245,245));
+        innerFaq.setBounds(10, 60, 490, 390);
+        innerFaq.setLayout(null);
+        faqPanel.add(innerFaq);
+
+        JLabel faq1 = new JLabel("Q1: The member I added isn’t showing up in the list.");
+        faq1.setBounds(17, 23, 500, 20);
+        faq1.setFont(new Font("Arial", Font.BOLD, 16));
+        innerFaq.add(faq1);
+
+        JTextArea ans1 = new JTextArea("A: Try restarting the program or exiting and reopening it. This will refresh\n     the member list display.");
+        ans1.setBounds(18, 44, 500, 32);
+        ans1.setEditable(false);
+        ans1.setOpaque(false);
+        ans1.setFont(new Font("Arial", Font.PLAIN, 14));
+        innerFaq.add(ans1);
+
+        JSeparator faqseparator1 = new JSeparator();
+        faqseparator1.setForeground(new Color(100, 100, 100));
+        faqseparator1.setBounds(18, 85, 450, 2);
+        innerFaq.add(faqseparator1);
+
+        JLabel faq2 = new JLabel("Q2: I can’t find a specific member.");
+        faq2.setBounds(14, 94, 500, 20);
+        faq2.setFont(new Font("Arial", Font.BOLD, 16));
+        innerFaq.add(faq2);
+
+        JTextArea ans2 = new JTextArea("A: Use the search bar and double-check for spelling errors or typos in the\n    name. Partial name and ID number searches are supported.");
+        ans2.setBounds(15, 115, 500, 32);
+        ans2.setEditable(false);
+        ans2.setOpaque(false);
+        ans2.setFont(new Font("Arial", Font.PLAIN, 14));
+        innerFaq.add(ans2);
+
+        JSeparator faqseparator2 = new JSeparator();
+        faqseparator2.setForeground(new Color(100, 100, 100));
+        faqseparator2.setBounds(18, 158, 450, 2);
+        innerFaq.add(faqseparator2);
+
+        JLabel faq3 = new JLabel("Q3: Some member information is incorrect.");
+        faq3.setBounds(14, 168, 500, 20);
+        faq3.setFont(new Font("Arial", Font.BOLD, 16));
+        innerFaq.add(faq3);
+
+        JTextArea ans3 = new JTextArea("A: You can edit member details from the Members List. Click the Edit button\n      on the top right of the member’s profile, make the changes, then click\n      Save in the same location.");
+        ans3.setBounds(15, 189, 500, 48);
+        ans3.setEditable(false);
+        ans3.setOpaque(false);
+        ans3.setFont(new Font("Arial", Font.PLAIN, 14));
+        innerFaq.add(ans3);
+
+        JSeparator faqseparator3 = new JSeparator();
+        faqseparator3.setForeground(new Color(100, 100, 100));
+        faqseparator3.setBounds(18, 250, 450, 2);
+        innerFaq.add(faqseparator3);
+
+        JLabel faq4 = new JLabel("Q4: I can’t click the “Save” button in the Attendance page.");
+        faq4.setBounds(14, 263, 500, 19);
+        faq4.setFont(new Font("Arial", Font.BOLD, 16));
+        innerFaq.add(faq4);
+
+        JTextArea ans4 = new JTextArea("A: You may have already submitted attendance for today. Each member’s \n     attendance can only be saved once per day.");
+        ans4.setBounds(16, 284, 500, 32);
+        ans4.setEditable(false);
+        ans4.setOpaque(false);
+        ans4.setFont(new Font("Arial", Font.PLAIN, 14));
+        innerFaq.add(ans4);
+
+        JSeparator faqseparator4 = new JSeparator();
+        faqseparator4.setForeground(new Color(100, 100, 100));
+        faqseparator4.setBounds(18, 332, 450, 2);
+        innerFaq.add(faqseparator4);
+
+        JLabel contlbl = new JLabel("If problems persist, please contact the development team ");
+        contlbl.setForeground(new Color(80,80,80));
+        contlbl.setBounds(37, 341, 500, 19);
+        contlbl.setFont(new Font(" ", Font.BOLD, 15));
+        innerFaq.add(contlbl);
+
+        JLabel contlbl1 = new JLabel("using the contact information provided");
+        contlbl1.setForeground(new Color(80,80,80));
+        contlbl1.setBounds(79, 360, 500, 19);
+        contlbl1.setFont(new Font(" ", Font.BOLD, 15));
+        innerFaq.add(contlbl1);
+
+        JButton contactBtn = new JButton("<html><u>here.</u></html>");
+        contactBtn.setBounds(353, 354, 80, 30);
+        contactBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 15));
+        contactBtn.setForeground(new Color(56, 117, 186));
+        contactBtn.setBackground(new Color(249,245,245));
+        contactBtn.setBorderPainted(false);
+        contactBtn.setContentAreaFilled(false);
+        contactBtn.setFocusPainted(false);
+        contactBtn.setOpaque(false);
+        innerFaq.add(contactBtn);
+
+        JDialog contactDialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Contact List", Dialog.ModalityType.APPLICATION_MODAL);
+        contactDialog.setSize(545, 510);
+        contactDialog.setLayout(null);
+        contactDialog.setLocationRelativeTo(this);
+        contactDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        contactDialog.getContentPane().setBackground(new Color(238, 235, 235));
+
+        contactBtn.addActionListener(e -> {
+            mainPage.instance.showDim();
+            contactDialog.setVisible(true);
+            mainPage.instance.hideDim();
+        });
+
         JPanel contactPanel = createRoundedPanel();
         contactPanel.setBackground(new Color(249,245,245));
-        contactPanel.setBounds(450, 72, 510, 460);
+        contactPanel.setBounds(10, 5, 505, 460);
         contactPanel.setLayout(null);
-        add(contactPanel);
+        contactDialog.add(contactPanel);
 
         ImageIcon contactIcon = new ImageIcon("imgs/contactIcon.png");
         JLabel contactImg = new JLabel(contactIcon);
@@ -396,7 +527,7 @@ public class supportPage extends JPanel {
             super(text);
             this.bgColor = bgColor;
             setFont(new Font("Trebuchet MS", Font.BOLD, 14));
-            setForeground(new Color(254, 239, 25));
+            setForeground(new Color(255, 228, 113));
             setFocusPainted(false);
             setContentAreaFilled(false);
             setOpaque(false);

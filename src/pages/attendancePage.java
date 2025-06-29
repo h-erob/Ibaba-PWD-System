@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors; // Added import for stream filtering
 import java.sql.SQLException;
 import dal.members.membersDAO;
 import db.database;
@@ -26,13 +27,13 @@ public class attendancePage extends JPanel {
     private JLabel absentNumLbl;
     private JLabel excusedNumLbl;
     private membersDAO dao;
-    private List<Object[]> allRows; // Store all rows for filtering
+    private List<Object[]> allRows;
+    private RoundedButton saveBtn;
 
     public attendancePage() {
         setLayout(null);
         setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // Initialize DAO
         try {
             dao = new membersDAO(database.getConnection());
         } catch (SQLException e) {
@@ -40,7 +41,6 @@ public class attendancePage extends JPanel {
             dao = null;
         }
 
-        // Top bar container
         JPanel topBar = new JPanel();
         topBar.setBackground(new Color(210, 210, 210));
         topBar.setBounds(0, 0, 991, 50);
@@ -76,7 +76,6 @@ public class attendancePage extends JPanel {
         totalMemSub.setFont(new Font("Arial", Font.PLAIN, 13));
         datePane.add(totalMemSub);
 
-        // Header label
         JLabel label = new JLabel("BARANGAY IBABA: PWD ATTENDANCE MONITORING SHEET");
         label.setFont(new Font("Trebuchet MS", Font.BOLD, 22));
         label.setBounds(32, 63, 900, 30);
@@ -111,7 +110,6 @@ public class attendancePage extends JPanel {
             }
         });
 
-        // Add key listener for search functionality
         search.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -119,7 +117,6 @@ public class attendancePage extends JPanel {
             }
         });
 
-        // Table model with Member ID
         tableModel = new DefaultTableModel(
                 new String[]{"Member ID", " ", "Member Name", "Status"}, 0
         ) {
@@ -136,13 +133,15 @@ public class attendancePage extends JPanel {
             }
         };
 
-        // Populate table with database data, sorted alphabetically
         allRows = new ArrayList<>();
         if (dao != null) {
             try {
                 List<membersDAO.MemberData> members = dao.getMembers();
-                // Sort members by fullName
-                members.sort(Comparator.comparing(m -> m.fullName.toLowerCase()));
+                // Filter out members with "Deceased" status
+                members = members.stream()
+                        .filter(m -> !"Deceased".equals(m.status) && !"Expired".equals(m.status))
+                        .sorted(Comparator.comparing(m -> m.fullName.toLowerCase()))
+                        .collect(Collectors.toList());
                 for (int i = 0; i < members.size(); i++) {
                     membersDAO.MemberData member = members.get(i);
                     Object[] row = new Object[]{member.memberId, String.valueOf(i + 1), member.fullName, "Absent"};
@@ -244,7 +243,7 @@ public class attendancePage extends JPanel {
 
         TableCellEditor radioEditor = new RadioEditor();
 
-        table.removeColumn(table.getColumnModel().getColumn(0)); // Hide Member ID column
+        table.removeColumn(table.getColumnModel().getColumn(0));
 
         table.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {{
             setHorizontalAlignment(SwingConstants.CENTER);
@@ -313,7 +312,6 @@ public class attendancePage extends JPanel {
                     int row = e.getFirstRow();
                     String status = (String) tableModel.getValueAt(row, 3);
                     updateCounts();
-                    // Update allRows to reflect the new status
                     for (Object[] rowData : allRows) {
                         if (rowData[0].equals(tableModel.getValueAt(row, 0))) {
                             rowData[3] = status;
@@ -324,9 +322,28 @@ public class attendancePage extends JPanel {
             }
         });
 
-        RoundedButton saveBtn = new RoundedButton("SAVE", new Color(73, 230, 127));
+        saveBtn = new RoundedButton("SAVE", new Color(73, 230, 127));
         saveBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         saveBtn.setBounds(854, 505, 90, 35);
+
+        java.sql.Date today = new java.sql.Date(System.currentTimeMillis());
+        boolean hasAttendanceToday = false;
+        if (dao != null) {
+            try {
+                hasAttendanceToday = dao.hasAttendanceForDate(today);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (hasAttendanceToday) {
+            saveBtn.setEnabled(false);
+            saveBtn.setToolTipText("Attendance already saved for today.");
+        } else {
+            saveBtn.setEnabled(true);
+            saveBtn.setToolTipText(null);
+        }
+
         saveBtn.addActionListener(e -> {
             if (dao != null) {
                 java.sql.Date attendanceDate = new java.sql.Date(System.currentTimeMillis());
@@ -339,7 +356,10 @@ public class attendancePage extends JPanel {
                 try {
                     dao.addAttendance(attendanceDate, entries);
                     JOptionPane.showMessageDialog(this, "Attendance saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    resetAttendanceTable(); // Reset the table after successful save
+                    resetAttendanceTable();
+                    mainPage.instance.refreshRecordsAttendancePage();
+                    mainPage.instance.refreshHomePage();
+                    saveBtn.setEnabled(false);
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(this, "Error saving attendance: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -428,12 +448,11 @@ public class attendancePage extends JPanel {
             for (int i = 0; i < tableModel.getRowCount(); i++) {
                 tableModel.setValueAt("Absent", i, 3);
             }
-            // Update allRows to reflect reset
             for (Object[] row : allRows) {
                 row[3] = "Absent";
             }
             updateCounts();
-            filterTable(); // Re-apply search filter
+            filterTable();
         });
     }
 
@@ -441,8 +460,7 @@ public class attendancePage extends JPanel {
         String searchText = search.getText().trim().toLowerCase();
         if (searchText.equals("search")) searchText = "";
 
-        tableModel.setRowCount(0); // Clear current rows
-        // Sort filtered rows alphabetically by member name (index 2)
+        tableModel.setRowCount(0);
         List<Object[]> filteredRows = new ArrayList<>();
         for (Object[] row : allRows) {
             String memberName = ((String) row[2]).toLowerCase();
@@ -452,11 +470,10 @@ public class attendancePage extends JPanel {
         }
         filteredRows.sort(Comparator.comparing(row -> ((String) row[2]).toLowerCase()));
 
-        // Add sorted rows to table
         int rowIndex = 1;
         for (Object[] row : filteredRows) {
             Object[] newRow = row.clone();
-            newRow[1] = String.valueOf(rowIndex++); // Update index
+            newRow[1] = String.valueOf(rowIndex++);
             tableModel.addRow(newRow);
         }
     }
@@ -590,7 +607,11 @@ public class attendancePage extends JPanel {
         if (dao == null) return;
         try {
             List<membersDAO.MemberData> members = dao.getMembers();
-            members.sort(Comparator.comparing(m -> m.fullName.toLowerCase()));
+            // Filter out "Deceased" and "Expired" members
+            members = members.stream()
+                    .filter(m -> !"Deceased".equals(m.status) && !"Expired".equals(m.status))
+                    .sorted(Comparator.comparing(m -> m.fullName.toLowerCase()))
+                    .collect(Collectors.toList());
             allRows.clear();
             tableModel.setRowCount(0);
             for (int i = 0; i < members.size(); i++) {
@@ -601,7 +622,6 @@ public class attendancePage extends JPanel {
             }
             if (search != null) filterTable();
             if (presentNumLbl != null) updateCounts();
-            // Force table UI update
             table.revalidate();
             table.repaint();
         } catch (SQLException e) {

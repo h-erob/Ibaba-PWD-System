@@ -6,10 +6,13 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Map;
+
 import dal.members.membersDAO;
 import db.database;
 
@@ -211,19 +214,31 @@ public class records_attendancePage extends JPanel {
             int uniqueDates = dao.getUniqueAttendanceDatesCount(year);
             label.setText(year + " Attendance - " + uniqueDates + " in total");
 
-            List<membersDAO.AttendanceRecord> records = dao.getAttendanceRecordsForYear(year);
+            // Fetch all members
+            List<membersDAO.MemberData> allMembers = dao.getMembers();
+            // Fetch attendance records for the year
+            List<membersDAO.AttendanceRecord> attendanceRecords = dao.getAttendanceRecordsForYear(year);
+
+            // Create a map for quick lookup of attendance records by member ID
+            Map<Integer, membersDAO.AttendanceRecord> attendanceMap = new HashMap<>();
+            for (membersDAO.AttendanceRecord record : attendanceRecords) {
+                attendanceMap.put(record.memberId, record);
+            }
+
             tableModel.setRowCount(0);
             allRows.clear();
-            for (int i = 0; i < records.size(); i++) {
-                membersDAO.AttendanceRecord record = records.get(i);
-                String lastDate = record.lastAttendanceDate != null ?
+            for (int i = 0; i < allMembers.size(); i++) {
+                membersDAO.MemberData member = allMembers.get(i);
+                membersDAO.AttendanceRecord record = attendanceMap.get(member.memberId);
+                String lastDate = (record != null && record.lastAttendanceDate != null) ?
                         new SimpleDateFormat("MM/dd/yyyy").format(record.lastAttendanceDate) : "N/A";
-                Object[] row = new Object[]{String.valueOf(i + 1), record.fullName, lastDate, String.valueOf(record.totalAttendance)};
+                String totalPresent = record != null ? String.valueOf(record.totalAttendance) : "0";
+                Object[] row = new Object[]{String.valueOf(i + 1), member.fullName, lastDate, totalPresent};
                 tableModel.addRow(row);
                 allRows.add(row);
             }
+
             if (search != null) filterTable();
-            // Force table UI update
             table.revalidate();
             table.repaint();
         } catch (SQLException e) {

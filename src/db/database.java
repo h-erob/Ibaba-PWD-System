@@ -7,7 +7,7 @@ public class database {
     private static final String URL_WITHOUT_DB = "jdbc:mysql://localhost:3306/";
     private static final String URL_WITH_DB = "jdbc:mysql://localhost:3306/" + DB_NAME;
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "123"; // <-- change this if needed
+    private static final String PASSWORD = "1234"; // <-- change this if needed
 
     static {
         try {

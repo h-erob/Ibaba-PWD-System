@@ -1,12 +1,12 @@
 package pages.records_membersbtn;
 
 import dal.members.membersDAO;
+import pages.homePage;
 import pages.mainPage;
-import pages.recordsPanel.records_members;
 import db.database;
+import pages.recordsPanel.records_members;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.DocumentEvent;
 
 public class viewMembers_InfoPage extends JFrame {
     private JPanel topPanel;
@@ -42,14 +40,14 @@ public class viewMembers_InfoPage extends JFrame {
     private boolean isEditing = false;
     private membersDAO.MemberData memberData;
     private JScrollPane scrollPane;
-    private Border originalBorder = BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(Color.BLACK, 1),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    private int memberId;
+    private records_members recordsMembers;
+    private homePage homePagePanel;
 
-    public static void launch(membersDAO.MemberData memberData) {
+    public static void launch(membersDAO.MemberData memberData, records_members recordsMembers, homePage homePage) {
         try {
             if (instance == null || !instance.isDisplayable()) {
-                instance = new viewMembers_InfoPage(memberData);
+                instance = new viewMembers_InfoPage(memberData, recordsMembers, homePage);
                 instance.setTitle("Membership Forms");
                 instance.setResizable(false);
                 instance.setLocationRelativeTo(null);
@@ -62,8 +60,11 @@ public class viewMembers_InfoPage extends JFrame {
         }
     }
 
-    public viewMembers_InfoPage(membersDAO.MemberData memberData) {
+    public viewMembers_InfoPage(membersDAO.MemberData memberData, records_members recordsMembers, homePage homePage) {
+        this.memberId = memberData.memberId;
         this.memberData = memberData;
+        this.recordsMembers = recordsMembers;
+        this.homePagePanel = homePage;
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(750, 670);
@@ -153,7 +154,7 @@ public class viewMembers_InfoPage extends JFrame {
         disabilityType.setEditable(false);
         disabilityType.setFocusable(false);
         disabilityType.setOpaque(false);
-        disabilityType.setBounds(107, 76, 200, 33);
+        disabilityType.setBounds(107, 76, 150, 33);
         topPanel.add(disabilityType);
 
         JLabel validDatelbl = new JLabel("ID validity:");
@@ -168,7 +169,7 @@ public class viewMembers_InfoPage extends JFrame {
         idValidity.setEditable(false);
         idValidity.setFocusable(false);
         idValidity.setOpaque(false);
-        idValidity.setBounds(263, 76, 150, 33);
+        idValidity.setBounds(263, 79, 150, 33);
         topPanel.add(idValidity);
 
         JLabel statuslbl = new JLabel("Status:");
@@ -767,6 +768,14 @@ public class viewMembers_InfoPage extends JFrame {
         notTakingMeds.addItemListener(visibilityListener);
 
         adjustPanelAndFrameHeight();
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                mainPage.instance.removeOpenMemberPage(viewMembers_InfoPage.this);
+            }
+        });
+        mainPage.instance.addOpenMemberPage(this);
     }
 
     private void adjustPanelAndFrameHeight() {
@@ -800,7 +809,7 @@ public class viewMembers_InfoPage extends JFrame {
         if (!isEditing) {
             isEditing = true;
             editSaveBtn.setText("SAVE +");
-            editSaveBtn.setBackgroundColor(new Color(254, 239, 25));
+            editSaveBtn.setBackgroundColor(new Color(255, 228, 113));
             editSaveBtn.setBorderColor(null);
             editSaveBtn.repaint();
 
@@ -921,6 +930,17 @@ public class viewMembers_InfoPage extends JFrame {
 
                 JOptionPane.showMessageDialog(this, "Changes saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
+                if (recordsMembers != null) {
+                    recordsMembers.loadMembers();
+                }
+
+                if (homePagePanel != null) {
+                    homePagePanel.reloadData();
+                }
+
+                if (mainPage.instance != null) {
+                    mainPage.instance.refreshAttendancePage();
+                }
             } catch (SQLException | ParseException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -1113,25 +1133,100 @@ public class viewMembers_InfoPage extends JFrame {
         }
     }
 
-    private String calculateAge(String birthdate) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-            sdf.setLenient(false);
-            java.util.Date birthDate = sdf.parse(birthdate);
-            java.util.Calendar birthCal = java.util.Calendar.getInstance();
-            birthCal.setTime(birthDate);
+    public int getMemberId() {
+        return memberId;
+    }
 
-            java.util.Calendar currentCal = java.util.Calendar.getInstance();
-            currentCal.set(2025, java.util.Calendar.JUNE, 25);
-
-            int age = currentCal.get(java.util.Calendar.YEAR) - birthCal.get(java.util.Calendar.YEAR);
-            if (currentCal.get(java.util.Calendar.DAY_OF_YEAR) < birthCal.get(java.util.Calendar.DAY_OF_YEAR)) {
-                age--;
+    public void reloadData() {
+        try (Connection conn = database.getConnection()) {
+            membersDAO membersDAO = new membersDAO(conn);
+            List<membersDAO.MemberData> members = membersDAO.getMembers();
+            for (membersDAO.MemberData member : members) {
+                if (member.memberId == memberId) {
+                    this.memberData = member;
+                    updateUIWithMemberData();
+                    break;
+                }
             }
-            return String.valueOf(age);
-        } catch (Exception e) {
-            return "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error reloading member data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void updateUIWithMemberData() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        fullName.setText(memberData.fullName != null ? memberData.fullName : "");
+        pwdIdNum.setText(memberData.pwdIdNumber != null ? memberData.pwdIdNumber : "");
+        disabilityType.setText(memberData.disabilityType != null ? memberData.disabilityType : "");
+        idValidity.setText(memberData.idValidUntil != null ? sdf.format(memberData.idValidUntil) : "");
+        statusCombo.setSelectedItem(memberData.status != null ? memberData.status : "Pending");
+        birthday.setText(memberData.birthdate != null ? sdf.format(memberData.birthdate) : "");
+        age.setText(String.valueOf(memberData.age));
+        sexCombo.setSelectedItem(memberData.sex != null ? memberData.sex : "Other");
+        civilStatusCombo.setSelectedItem(memberData.civilStatus != null ? memberData.civilStatus : "Single");
+        placeOfBirth.setText(memberData.placeOfBirth != null ? memberData.placeOfBirth : "");
+        educationLevel.setText(memberData.educationLevel != null ? memberData.educationLevel : "");
+        occupation.setText(memberData.occupation != null ? memberData.occupation : "");
+        address.setText(memberData.address != null ? memberData.address : "");
+        mobileNum.setText(memberData.mobileNumber != null ? memberData.mobileNumber : "");
+        fbName.setText(memberData.fbAccountName != null ? memberData.fbAccountName : "");
+        email.setText(memberData.email != null ? memberData.email : "");
+        guardianName.setText(memberData.guardianName != null ? memberData.guardianName : "");
+        guardianRelation.setText(memberData.guardianRelation != null ? memberData.guardianRelation : "");
+        guardianMobile.setText(memberData.guardianMobile != null ? memberData.guardianMobile : "");
+
+        tableModel.setRowCount(0);
+        if (memberData.householdMembers != null) {
+            for (Map<String, Object> household : memberData.householdMembers) {
+                tableModel.addRow(new Object[]{
+                        household.get("name") != null ? household.get("name") : "",
+                        household.get("relationship") != null ? household.get("relationship") : "",
+                        household.get("age") != null ? household.get("age") : "",
+                        household.get("birthdate") != null ? sdf.format(household.get("birthdate")) : "",
+                        household.get("civilStatus") != null ? household.get("civilStatus") : "",
+                        household.get("education") != null ? household.get("education") : "",
+                        household.get("occupation") != null ? household.get("occupation") : ""
+                });
+            }
+        }
+
+        if (memberData.medicalConditions != null) {
+            medicalCheckboxes[0].setSelected(memberData.medicalConditions.getOrDefault("diabetes", false));
+            medicalCheckboxes[1].setSelected(memberData.medicalConditions.getOrDefault("stroke", false));
+            medicalCheckboxes[2].setSelected(memberData.medicalConditions.getOrDefault("heart_problems", false));
+            medicalCheckboxes[3].setSelected(memberData.medicalConditions.getOrDefault("cancer", false));
+            medicalCheckboxes[4].setSelected(memberData.medicalConditions.getOrDefault("high_blood", false));
+            medicalCheckboxes[5].setSelected(memberData.medicalConditions.getOrDefault("lung_problems", false));
+            medicalCheckboxes[6].setSelected(memberData.medicalConditions.getOrDefault("arthritis", false));
+            medicalCheckboxes[7].setSelected(memberData.medicalConditions.getOrDefault("osteoporosis", false));
+            medicalCheckboxes[8].setSelected(memberData.medicalConditions.getOrDefault("epilepsy", false));
+            medicalCheckboxes[9].setSelected(memberData.medicalConditions.getOrDefault("kidney_problems", false));
+        }
+        otherMedHis.setText(memberData.otherConditions != null ? memberData.otherConditions : "");
+
+        takingMeds.setSelected(memberData.takesMedications);
+        notTakingMeds.setSelected(!memberData.takesMedications);
+        medsPane.removeAll();
+        int medCount = memberData.medications != null ? memberData.medications.size() : 0;
+        int displayCount = isEditing ? 15 : Math.max(1, medCount);
+        for (int i = 0; i < displayCount; i++) {
+            JLabel medNum = new JLabel((i + 1) + ".");
+            medNum.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+            medNum.setBounds(10, 15 + i * 35, 30, 25);
+            medsPane.add(medNum);
+
+            medFields[i].setText((memberData.medications != null && i < memberData.medications.size()) ? memberData.medications.get(i) : "");
+            if (!isEditing) {
+                medFields[i].setBorder(null);
+                medFields[i].setEditable(false);
+                medFields[i].setFocusable(false);
+            }
+            medsPane.add(medFields[i]);
+        }
+        adjustPanelAndFrameHeight();
+        revalidate();
+        repaint();
     }
 
     private void styleScrollBar(JScrollPane scrollPane) {
