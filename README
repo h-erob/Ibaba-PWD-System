@@ -3,96 +3,90 @@
 A Java + MySQL-based system to manage demographic records, track monthly attendance, and monitor membership validity for community members.
 
 > ⚠️ **Note:** This program is currently under development.
-> There is **no executable `.jar` file** included.
-> It is **recommended to open and run the program through IntelliJ IDEA** for full functionality.
 
 ---
 
 ## 📂 Project Structure
 
-- `src/` – Java source files
-- `pwdCares_MockData.sql` – MySQL schema + sample/mock data *(used both for structure and sample data)*
+* `MembershipSystem.jar` – Executable JAR file
+* `db_config.properties` – Database configuration file
+* `pwdCares_MockData.sql` – SQL script for mock data (optional)
 
 ---
 
 ## 🛠️ Features
 
-- Member registration with complete demographic and household information
-- Medical history and medication tracking
-- Attendance tracking per member per day
-- Yearly attendance summaries
-- Membership status tracking (`Expired`, `Renewed`, `Deceased`, `Alive`)
-- ID validity checks and renewal system
-- Auto-initialization of the database (no need for manual SQL imports)
-- Default admin account created on first run
+* Member registration with complete demographic and household information
+* Medical history and medication tracking
+* Attendance tracking per member per day
+* Yearly attendance summaries
+* Membership status tracking (Expired, Renewed, Deceased, Alive)
+* ID validity checks and renewal system
+* Auto-initialization of the database (no need for manual SQL imports)
+* Default admin account created on first run
 
 ---
 
-## 🗃️ Database Schema
+## 🗓️ Database Setup
 
-The system auto-generates the database and tables via `DatabaseInitializer.java`.
-If you prefer manual setup or mock data, use the `pwdCares.sql` script.
+The system requires **MySQL** to be installed and running.
+The database is **automatically created and initialized** when you run the JAR file.
 
-### Tables:
-- `admins` – Admin login credentials
-- `members` – Main profile sheet
-- `members_household` – Family composition
-- `members_conditions` – Health conditions (checkboxes)
-- `members_medications` – Up to 15 meds per member
-- `attendance` – Per date member attendance
+### Configuration
+**Database Credentials:**
+* The system uses a configuration file `db_config.properties` to connect to MySQL.
+* If your MySQL credentials differ from the defaults (`root/1234`), edit `db_config.properties`:
 
----
+  db.username=your_mysql_username
+  db.password=your_mysql_password
 
-## 💾 Default Database Credentials
+* The default database name is `members_system`, and it connects to `localhost:3306`.
+  Modify `db.url_without_db` or `db.name` if needed.
 
-The system uses the following default MySQL credentials:
-
-- **Username**: `root`
-- **Password**: `1234`
-
-> 🔧 **Custom MySQL Setup?**
-> If your local MySQL username/password differs, open `src/db/database.java` and update:
-```java
-private static final String USERNAME = "your_mysql_username";
-private static final String PASSWORD = "your_mysql_password";
+**Mock Data:**
+* If `load_mock_data=true` in `db_config.properties` and the database is empty, sample data from `pwdCares_MockData.sql` will be loaded.
+* Set `load_mock_data=false` to skip this.
 
 ---
 
-## ⚙️ Java Setup Instructions
+## ⚙️ Running the Application
 
-### 1. Prerequisites
-- Java 8 or higher (Java 24 recommended)
-- IntelliJ IDEA (recommended for editing and running the system)
-- MySQL Server (MySQL Workbench is optional)
+### Prerequisites
+* Java 8 or higher installed (**Java 24 recommended**)
+* MySQL Server installed and running
 
-### 2. Running the Program
-- Clone the project and open it in IntelliJ
-- Insert the default admin user:
-   Username: admin
-   Password: 1234
+### Steps
+**1. Download the Files:**
+* Obtain `MembershipSystem.jar`, `db_config.properties`, and `pwdCares_MockData.sql` (optional for mock data).
+
+**2. Place Files:**
+* Put all files in the same directory.
+
+**3. Configure Database (Optional):**
+* If your MySQL username or password isn’t `root/1234`, edit `db_config.properties` with your credentials.
+
+**4. Run the JAR:**
+* Double-click `MembershipSystem.jar` to launch.
+* Or use the command line:
+  java -jar MembershipSystem.jar
 
 ---
 
-## 🧪 Importing Mock Data (Optional)
-
-⚠️ This step is optional if you're using the auto-initializer.
-It is helpful for previewing existing sample data during development.
-
-1. Open MySQL Workbench
-2. Go to Server > Data Import
-3. Choose Import from Self-Contained File
-   - Select pwdCares_MockData.sql
-4. Target Schema: membership_system
-5. Click Start Import
+## 🔓 Login
+Use the default admin account:
+* **Username:** `admin`
+* **Password:** `1234`
 
 ---
 
 ## 📌 Usage Notes
-- `status`, `civilStatus`,and `sex` columns are `ENUM`, synced with GUI dropdowns
-- Attendance dropdown is dynamically populated from distinct attendance years
-- Only one attendance record can be added per member per day
-- Auto-expiration and renewal logic are handled in SQL or Java
-- Editing and deleting member data respects foreign key constraints
+* The application creates the database and tables automatically on first run.
+* Mock data loads only if the database is empty and `load_mock_data=true`.
+* If errors occur (e.g., wrong MySQL credentials), a dialog box will display the issue.
+
+---
 
 ## 📬 Feedback
 Pull requests, bug reports, and feature suggestions are welcome!
+
+---

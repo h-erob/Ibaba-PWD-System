@@ -314,12 +314,12 @@ public class supportPage extends JPanel {
 
         JLabel contlbl1 = new JLabel("using the contact information provided");
         contlbl1.setForeground(new Color(80,80,80));
-        contlbl1.setBounds(79, 360, 500, 19);
+        contlbl1.setBounds(78, 359, 500, 19);
         contlbl1.setFont(new Font(" ", Font.BOLD, 15));
         innerFaq.add(contlbl1);
 
         JButton contactBtn = new JButton("<html><u>here.</u></html>");
-        contactBtn.setBounds(353, 354, 80, 30);
+        contactBtn.setBounds(340, 353, 65, 30);
         contactBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 15));
         contactBtn.setForeground(new Color(56, 117, 186));
         contactBtn.setBackground(new Color(249,245,245));

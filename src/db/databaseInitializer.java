@@ -103,7 +103,7 @@ public class databaseInitializer {
                 CREATE TABLE IF NOT EXISTS members_medications (
                     med_id INT NOT NULL AUTO_INCREMENT,
                     member_id INT,
-                    medication_name VARCHAR(100),
+                    med_name VARCHAR(100),
                     PRIMARY KEY (med_id),
                     FOREIGN KEY (member_id) REFERENCES members(member_id)
                 );
@@ -127,6 +127,14 @@ public class databaseInitializer {
                 WHERE status = 'present'
                 GROUP BY member_id, YEAR(attendance_date);
             """);
+
+            // Load mock data if enabled
+            if (database.LOAD_MOCK_DATA) {
+                System.out.println("Attempting to load mock data...");
+                mockDataLoader.loadMockData(conn);
+            } else {
+                System.out.println("Mock data loading is disabled.");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

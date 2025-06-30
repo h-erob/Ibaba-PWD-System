@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ibabaproject:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ibabaproject_jar</output-path>
+    <root id="archive" name="ibabaproject.jar">
+      <element id="module-output" name="ibabaproject" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/mysql-connector-j-9.3.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
