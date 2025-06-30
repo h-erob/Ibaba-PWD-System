@@ -42,7 +42,7 @@ public class membersDAO {
             pstmt.setDate(4, fillUpDate);
             pstmt.setDate(5, dateIssued);
             pstmt.setDate(6, idValidUntil);
-            pstmt.setDate(7, birthdate);  // Added birthdate parameter
+            pstmt.setDate(7, birthdate);
             pstmt.setInt(8, age);
             pstmt.setString(9, sex);
             pstmt.setString(10, civilStatus);
@@ -116,7 +116,7 @@ public class membersDAO {
             pstmt.close();
 
             if (medications != null && !medications.isEmpty()) {
-                String medicationsSql = "INSERT INTO members_medications (member_id, medication_name) VALUES (?, ?)";
+                String medicationsSql = "INSERT INTO members_medications (member_id, med_name) VALUES (?, ?)";
                 pstmt = connection.prepareStatement(medicationsSql);
                 for (String medication : medications) {
                     if (!medication.trim().isEmpty()) {
@@ -236,7 +236,7 @@ public class membersDAO {
                 rsMedications = pstmtMedications.executeQuery();
                 member.medications = new ArrayList<>();
                 while (rsMedications.next()) {
-                    member.medications.add(rsMedications.getString("medication_name"));
+                    member.medications.add(rsMedications.getString("med_name"));
                 }
                 rsMedications.close();
                 pstmtMedications.close();
@@ -373,7 +373,7 @@ public class membersDAO {
             pstmt.close();
 
             if (medications != null && !medications.isEmpty()) {
-                String medicationsSql = "INSERT INTO members_medications (member_id, medication_name) VALUES (?, ?)";
+                String medicationsSql = "INSERT INTO members_medications (member_id, med_name) VALUES (?, ?)";
                 pstmt = connection.prepareStatement(medicationsSql);
                 for (String medication : medications) {
                     if (!medication.trim().isEmpty()) {

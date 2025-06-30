@@ -2,7 +2,7 @@
 
 A Java + MySQL-based system to manage demographic records, track monthly attendance, and monitor membership validity for community members.
 
-> ⚠️ **Note:** This program is currently under development.
+⚠️ Note: This program is currently under development.
 
 ---
 
@@ -29,8 +29,8 @@ A Java + MySQL-based system to manage demographic records, track monthly attenda
 
 ## 🗓️ Database Setup
 
-The system requires **MySQL** to be installed and running.
-The database is **automatically created and initialized** when you run the JAR file.
+The system requires MySQL to be installed and running.
+The database is automatically created and initialized when you run the JAR file.
 
 ### Configuration
 **Database Credentials:**
@@ -57,7 +57,7 @@ The database is **automatically created and initialized** when you run the JAR f
 
 ### Steps
 **1. Download the Files:**
-* Obtain `MembershipSystem.jar`, `db_config.properties`, and `pwdCares_MockData.sql` (optional for mock data).
+* Obtain `PwdCares.jar`, `db_config.properties`, and `pwdCares_MockData.sql` (optional for mock data).
 
 **2. Place Files:**
 * Put all files in the same directory.
@@ -66,9 +66,9 @@ The database is **automatically created and initialized** when you run the JAR f
 * If your MySQL username or password isn’t `root/1234`, edit `db_config.properties` with your credentials.
 
 **4. Run the JAR:**
-* Double-click `MembershipSystem.jar` to launch.
+* Double-click `PwdCares.jar` to launch.
 * Or use the command line:
-  java -jar MembershipSystem.jar
+  java -jar PwdCares.jar
 
 ---
 

@@ -50,6 +50,8 @@ public class mainPage extends JFrame {
         ImageIcon logo = new ImageIcon("imgs/bipdaLogo.png");
         setIconImage(logo.getImage());
 
+
+
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setBounds(0, 0, 1200, 700);
         setContentPane(layeredPane);
