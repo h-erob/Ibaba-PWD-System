@@ -168,11 +168,9 @@ public class records_members extends JPanel {
         loadMembers();
         adjustRowHeights();
 
-        // Initialize TableRowSorter
         sorter = new TableRowSorter<>(memberModel);
         table.setRowSorter(sorter);
 
-        // Add DocumentListener to search field
         search.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -214,7 +212,7 @@ public class records_members extends JPanel {
             memberDataList.clear();
             memberDataList.addAll(members);
             memberModel.setRowCount(0);
-            sorter.setRowFilter(null); // Clear any existing filters
+            sorter.setRowFilter(null);
             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
             for (int i = 0; i < members.size(); i++) {
@@ -230,7 +228,7 @@ public class records_members extends JPanel {
                 });
             }
             memberLabel.setText("Total Members: " + memberDataList.size());
-            sorter.modelStructureChanged(); // Notify sorter of significant data change
+            sorter.modelStructureChanged();
             table.revalidate();
             table.repaint();
         } catch (SQLException e) {
@@ -245,8 +243,8 @@ public class records_members extends JPanel {
             sorter.setRowFilter(null);
         } else {
             String regex = "(?i).*" + Pattern.quote(searchText) + ".*";
-            RowFilter<DefaultTableModel, Object> nameFilter = RowFilter.regexFilter(regex, 1); // Member Name column
-            RowFilter<DefaultTableModel, Object> idFilter = RowFilter.regexFilter(regex, 2);   // PWD ID No. column
+            RowFilter<DefaultTableModel, Object> nameFilter = RowFilter.regexFilter(regex, 1);
+            RowFilter<DefaultTableModel, Object> idFilter = RowFilter.regexFilter(regex, 2);
             List<RowFilter<DefaultTableModel, Object>> filters = new ArrayList<>();
             filters.add(nameFilter);
             filters.add(idFilter);

@@ -50,8 +50,6 @@ public class mainPage extends JFrame {
         ImageIcon logo = new ImageIcon("imgs/bipdaLogo.png");
         setIconImage(logo.getImage());
 
-
-
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setBounds(0, 0, 1200, 700);
         setContentPane(layeredPane);
@@ -176,8 +174,6 @@ public class mainPage extends JFrame {
         separator.setForeground(new Color(150, 150, 150));
         sideBar.add(separator);
 
-
-        // Initialize and add pages to cardPanel
         homePagePanel = new homePage();
         recordsMembersPanel = new records_members();
         cardPanel.add(homePagePanel, "home");
@@ -229,21 +225,19 @@ public class mainPage extends JFrame {
     }
 
     public void selectMemberListButton() {
-        // Show the records submenu
         recordPanel.setVisible(true);
-        // Reset the previously selected button
         if (selectedButton != null) {
             selectedButton.setBackground(new Color(37, 37, 37));
             selectedButton.setForeground(new Color(150, 150, 150));
         }
-        // Highlight only the "Member List" button
         btnDemoRecord.setBackground(new Color(255, 228, 113));
         btnDemoRecord.setForeground(new Color(37, 37, 37));
+
         selectedButton = btnDemoRecord;
-        // Ensure "Records" button is not highlighted
+
         btnTransaction.setBackground(new Color(37, 37, 37));
         btnTransaction.setForeground(new Color(150, 150, 150));
-        // Switch to records_members panel
+
         CardLayout cl = (CardLayout) (cardPanel.getLayout());
         cl.show(cardPanel, "recordMembers");
     }

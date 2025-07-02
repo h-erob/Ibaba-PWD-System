@@ -17,10 +17,8 @@ public class database {
 
     static {
         try {
-            // Load MySQL driver
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            // Load properties
             Properties props = new Properties();
             File configFile = new File(CONFIG_FILE);
             if (!configFile.exists()) {
@@ -30,7 +28,6 @@ public class database {
                 props.load(in);
             }
 
-            // Get values from config
             DB_NAME = props.getProperty("db.name", "members_system");
             USERNAME = props.getProperty("db.username", "root");
             PASSWORD = props.getProperty("db.password", "1234");
@@ -38,7 +35,6 @@ public class database {
             URL_WITH_DB = URL_WITHOUT_DB + DB_NAME;
             LOAD_MOCK_DATA = Boolean.parseBoolean(props.getProperty("load_mock_data", "true"));
 
-            // Ensures DB exists
             try (Connection conn = DriverManager.getConnection(URL_WITHOUT_DB, USERNAME, PASSWORD);
                  Statement stmt = conn.createStatement()) {
                 stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS " + DB_NAME);

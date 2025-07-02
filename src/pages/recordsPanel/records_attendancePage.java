@@ -23,7 +23,7 @@ public class records_attendancePage extends JPanel {
     private JLabel label;
     private JComboBox<String> yearComboBox;
     private membersDAO dao;
-    private List<Object[]> allRows; // Store all rows for filtering
+    private List<Object[]> allRows;
 
     public records_attendancePage() {
         setLayout(null);
@@ -60,7 +60,6 @@ public class records_attendancePage extends JPanel {
         });
         topBar.add(yearComboBox);
 
-        // Add action listener to yearComboBox
         yearComboBox.addActionListener(e -> {
             String selectedYear = (String) yearComboBox.getSelectedItem();
             if (selectedYear != null) {
@@ -102,7 +101,6 @@ public class records_attendancePage extends JPanel {
             }
         });
 
-        // Add key listener for search functionality
         search.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -112,9 +110,12 @@ public class records_attendancePage extends JPanel {
 
         allRows = new ArrayList<>();
 
-        tableModel = new DefaultTableModel(
-                new String[]{" ", "Member Name", "Last Date Attended", "Total Present"}, 0
-        );
+        tableModel = new DefaultTableModel(new String[]{" ", "Member Name", "Last Date Attended", "Total Present"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
         table = new JTable(tableModel);
 
@@ -180,7 +181,6 @@ public class records_attendancePage extends JPanel {
         styleScrollBar(scrollPane);
         add(scrollPane);
 
-        // Defer combo box population and initial selection
         SwingUtilities.invokeLater(() -> {
             if (dao != null) {
                 try {
@@ -189,7 +189,7 @@ public class records_attendancePage extends JPanel {
                         yearComboBox.addItem(year);
                     }
                     if (!years.isEmpty()) {
-                        yearComboBox.setSelectedIndex(0); // Triggers loadAttendanceData
+                        yearComboBox.setSelectedIndex(0);
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -202,7 +202,6 @@ public class records_attendancePage extends JPanel {
         String selectedYear = (String) yearComboBox.getSelectedItem();
         if (selectedYear != null) {
             loadAttendanceData(selectedYear);
-            // Force table UI update
             table.revalidate();
             table.repaint();
         }
@@ -214,12 +213,9 @@ public class records_attendancePage extends JPanel {
             int uniqueDates = dao.getUniqueAttendanceDatesCount(year);
             label.setText(year + " Attendance - " + uniqueDates + " in total");
 
-            // Fetch all members
             List<membersDAO.MemberData> allMembers = dao.getMembers();
-            // Fetch attendance records for the year
             List<membersDAO.AttendanceRecord> attendanceRecords = dao.getAttendanceRecordsForYear(year);
 
-            // Create a map for quick lookup of attendance records by member ID
             Map<Integer, membersDAO.AttendanceRecord> attendanceMap = new HashMap<>();
             for (membersDAO.AttendanceRecord record : attendanceRecords) {
                 attendanceMap.put(record.memberId, record);
@@ -251,12 +247,11 @@ public class records_attendancePage extends JPanel {
         String searchText = search.getText().trim().toLowerCase();
         if (searchText.equals("search")) searchText = "";
 
-        tableModel.setRowCount(0); // Clear current rows
+        tableModel.setRowCount(0);
         int rowIndex = 1;
         for (Object[] row : allRows) {
             String memberName = ((String) row[1]).toLowerCase();
             if (searchText.isEmpty() || memberName.contains(searchText)) {
-                // Update the index for the first column
                 Object[] newRow = row.clone();
                 newRow[0] = String.valueOf(rowIndex++);
                 tableModel.addRow(newRow);

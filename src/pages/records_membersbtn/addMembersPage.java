@@ -70,7 +70,6 @@ public class addMembersPage extends JFrame {
         setSize(715, 590);
         setLayout(new BorderLayout());
 
-        // Container for top section
         JPanel topPanel = new JPanel(null);
         topPanel.setPreferredSize(new Dimension(715, 80));
         topPanel.setBackground(Color.WHITE);
@@ -103,6 +102,14 @@ public class addMembersPage extends JFrame {
             dispose();
             if (mainPage.instance != null) {
                 mainPage.instance.hideDim();
+            }
+        });
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (mainPage.instance != null) {
+                    mainPage.instance.hideDim();
+                }
             }
         });
         titleBar.add(closeButton);
@@ -192,13 +199,12 @@ public class addMembersPage extends JFrame {
         separator.setBounds(20, 42, 675, 2);
         stepBarPanel.add(separator);
 
-        // Main panel with CardLayout
+        // Main panel
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
         mainPanel.setPreferredSize(new Dimension(715, 510));
         add(mainPanel, BorderLayout.CENTER);
 
-        // Initialize pages
         page1 = createPage1();
         page2 = createPage2();
         page3 = createPage3();
@@ -211,7 +217,6 @@ public class addMembersPage extends JFrame {
         mainPanel.add(page4, "Page4");
         mainPanel.add(page5, "Page5");
 
-        // Navigation buttons
         RoundedButton nextButton = new RoundedButton("Next        >", new Color(50, 50, 50));
         nextButton.setBounds(566, 462, 115, 34);
         page1.add(nextButton);
@@ -355,7 +360,7 @@ public class addMembersPage extends JFrame {
 
         fillUpDate = new JTextField(20);
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-        fillUpDate.setText(sdf.format(new java.util.Date())); // Default to current date
+        fillUpDate.setText(sdf.format(new java.util.Date()));
         fillUpDate.setBounds(563, 7, 120, 16);
         fillUpDate.setHorizontalAlignment(JTextField.CENTER);
         fillUpDate.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
@@ -453,7 +458,6 @@ public class addMembersPage extends JFrame {
         idValidity.setBorder(fieldBorder);
         panel.add(idValidity);
 
-        // Add DocumentListener for dateIssued to validate and update idValidity
         dateIssued.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) { updateIdValidity(); }
@@ -477,7 +481,6 @@ public class addMembersPage extends JFrame {
             }
         });
 
-        // Add DocumentListener for idValidity to validate format
         idValidity.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) { validateIdValidity(); }
@@ -507,7 +510,6 @@ public class addMembersPage extends JFrame {
         birthdate.setBorder(fieldBorder);
         panel.add(birthdate);
 
-        // Add DocumentListener for birthdate to calculate age
         birthdate.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) { updateAge(); }
@@ -814,7 +816,6 @@ public class addMembersPage extends JFrame {
         occupationField.setBounds(30, 240, 290, 30);
         panel.add(occupationField);
 
-        // Add Button
         JButton addButton = new JButton("Add");
         addButton.setFont(buttonFont);
         addButton.setBackground(new Color(90,90,90));
@@ -824,7 +825,6 @@ public class addMembersPage extends JFrame {
         addButton.setBounds(600, 237, 80, 33);
         panel.add(addButton);
 
-        // Table for Display
         String[] columnNames = {"Name", "Relationship", "Age", "Birthdate", "Civil Status", "Education", "Occupation"};
         tableModel = new DefaultTableModel(columnNames, 0);
         JTable displayTable = new JTable(tableModel);
@@ -834,7 +834,6 @@ public class addMembersPage extends JFrame {
         displayTable.setShowGrid(true);
         displayTable.setBackground(Color.WHITE);
 
-        // Custom renderer for text wrapping and center alignment
         class WrappingCellRenderer extends DefaultTableCellRenderer {
             private final JTextArea textArea;
 
@@ -1072,14 +1071,12 @@ public class addMembersPage extends JFrame {
             }
             String warningMessage = checkOptionalFields();
             if (!warningMessage.isEmpty()) {
-                // Save current UIManager settings
                 Object originalButtonUI = UIManager.get("ButtonUI");
                 Object originalButtonBackground = UIManager.get("Button.background");
                 Object originalButtonForeground = UIManager.get("Button.foreground");
                 Object originalButtonBorder = UIManager.get("Button.border");
                 Object originalButtonFont = UIManager.get("Button.font");
 
-                // Set custom UIManager settings for dialog buttons
                 UIManager.put("ButtonUI", MinimalButtonUI.class.getName());
                 UIManager.put("Button.background", new Color(50, 50, 50));
                 UIManager.put("Button.foreground", Color.WHITE);
@@ -1098,18 +1095,15 @@ public class addMembersPage extends JFrame {
                 dialog.setVisible(true);
                 Object choice = optionPane.getValue();
 
-                // Restore original UIManager settings
                 UIManager.put("ButtonUI", originalButtonUI);
                 UIManager.put("Button.background", originalButtonBackground);
                 UIManager.put("Button.foreground", originalButtonForeground);
                 UIManager.put("Button.border", originalButtonBorder);
                 UIManager.put("Button.font", originalButtonFont);
 
-                // Handle dialog choice
                 if (choice != null && choice.equals("Proceed")) {
                     submitForm();
                 }
-                // If "Go Back" or dialog is closed, do nothing (stay on form)
             } else {
                 submitForm();
             }
@@ -1121,11 +1115,9 @@ public class addMembersPage extends JFrame {
         return panel;
     }
 
-    // Helper method to validate all required fields
     private String validateAllFields() {
         StringBuilder errors = new StringBuilder();
 
-        // Page 1 validation
         if (fillUpDate.getText().trim().isEmpty()) {
             errors.append("Fill Up Date is required.\n");
         } else if (!isValidDate(fillUpDate.getText().trim())) {
@@ -1171,7 +1163,6 @@ public class addMembersPage extends JFrame {
             errors.append("Civil Status is required.\n");
         }
 
-        // Page 2 validation
         if (mobileNum.getText().trim().isEmpty()) {
             errors.append("Mobile Number is required.\n");
         }
@@ -1200,10 +1191,9 @@ public class addMembersPage extends JFrame {
             membersDAO membersDAO = new membersDAO(conn);
             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
-            // Page 1: Personal Info
             String fillUpDateText = fillUpDate.getText().trim();
             Date fillUpDateSql = fillUpDateText.isEmpty() ?
-                    new Date(new java.util.Date().getTime()) : // Default to current date if empty
+                    new Date(new java.util.Date().getTime()) :
                     new Date(sdf.parse(fillUpDateText).getTime());
             String fullNameText = fullName.getText().trim();
             String pwdIdText = pwdIdNo.getText().trim();
@@ -1218,7 +1208,6 @@ public class addMembersPage extends JFrame {
             String educationLevel = educAttainment.getText().trim();
             String occupationText = occupation.getText().trim();
 
-            // Page 2: Contact
             String mobileNumber = mobileNum.getText().trim();
             String emailText = emailAdd.getText().trim();
             String fbAccount = fbName.getText().trim();
@@ -1227,7 +1216,6 @@ public class addMembersPage extends JFrame {
             String guardianRelation = relationToMem.getText().trim();
             String guardianMobile = guardianMobileNum.getText().trim();
 
-            // Page 3: Family Composition
             List<Map<String, Object>> householdMembers = new ArrayList<>();
             for (int i = 0; i < tableModel.getRowCount(); i++) {
                 Map<String, Object> member = new HashMap<>();
@@ -1236,7 +1224,6 @@ public class addMembersPage extends JFrame {
                 member.put("age", tableModel.getValueAt(i, 2).toString());
                 String birthdateStr = tableModel.getValueAt(i, 3).toString();
                 if (!birthdateStr.isEmpty()) {
-                    // Convert MM/dd/yyyy to yyyy-MM-dd for SQL
                     String[] parts = birthdateStr.split("/");
                     if (parts.length == 3) {
                         birthdateStr = parts[2] + "-" + parts[0] + "-" + parts[1];
@@ -1249,7 +1236,6 @@ public class addMembersPage extends JFrame {
                 householdMembers.add(member);
             }
 
-            // Page 4: Medical History
             Map<String, Boolean> medicalConditions = new HashMap<>();
             medicalConditions.put("diabetes", medicalCheckboxes[0].isSelected());
             medicalConditions.put("stroke", medicalCheckboxes[1].isSelected());
@@ -1263,7 +1249,6 @@ public class addMembersPage extends JFrame {
             medicalConditions.put("kidney_problems", medicalCheckboxes[9].isSelected());
             String otherConditions = otherMedHis.getText().trim();
 
-            // Page 5: Medications
             boolean takesMedications = takingMeds.isSelected();
             List<String> medications = new ArrayList<>();
             if (takesMedications) {
@@ -1275,7 +1260,6 @@ public class addMembersPage extends JFrame {
                 }
             }
 
-            // Call addMember with fillUpDate
             boolean success = membersDAO.addMember(
                     fullNameText, pwdIdText, disabilityText, fillUpDateSql, dateIssuedDate, idValidUntilDate,
                     birthdateDate, ageValue, sex, civilStatus, placeOfBirthText, educationLevel,
@@ -1321,16 +1305,13 @@ public class addMembersPage extends JFrame {
         }
     }
 
-    // Helper method to check optional fields on Pages 3–5
     private String checkOptionalFields() {
         StringBuilder warnings = new StringBuilder();
 
-        // Page 3: Family Composition
         if (tableModel.getRowCount() == 0) {
             warnings.append("- No family members added in Family Composition.\n");
         }
 
-        // Page 4: Medical History
         boolean anyCheckboxSelected = false;
         for (JCheckBox checkbox : medicalCheckboxes) {
             if (checkbox.isSelected()) {
@@ -1342,7 +1323,6 @@ public class addMembersPage extends JFrame {
             warnings.append("- No medical history conditions specified.\n");
         }
 
-        // Page 5: Medications
         if (takingMeds.isSelected()) {
             boolean anyMedicationFilled = false;
             for (JTextField medField : medFields) {
@@ -1359,7 +1339,6 @@ public class addMembersPage extends JFrame {
         return warnings.toString();
     }
 
-    // Helper method to validate date format (MM/DD/YYYY)
     private boolean isValidDate(String date) {
         if (date == null || !date.matches("\\d{2}/\\d{2}/\\d{4}")) {
             return false;
@@ -1381,7 +1360,6 @@ public class addMembersPage extends JFrame {
         }
     }
 
-    // Helper method to calculate age from birthdate
     private String calculateAge(String birthdate) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -1390,7 +1368,6 @@ public class addMembersPage extends JFrame {
             java.util.Calendar birthCal = java.util.Calendar.getInstance();
             birthCal.setTime(birthDate);
 
-            // Use current date (June 23, 2025)
             java.util.Calendar currentCal = java.util.Calendar.getInstance();
             currentCal.set(2025, java.util.Calendar.JUNE, 23);
 
@@ -1404,7 +1381,6 @@ public class addMembersPage extends JFrame {
         }
     }
 
-    // Helper method to add years to a date
     private String addYearsToDate(String date, int years) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -1420,10 +1396,10 @@ public class addMembersPage extends JFrame {
     private static class RoundedButton extends JButton {
         private final int radius = 30;
         private final Color bgColor;
-        private Color borderColor; // Null means no border
+        private Color borderColor;
 
         public RoundedButton(String text, Color bgColor) {
-            this(text, bgColor, null); // No border by default
+            this(text, bgColor, null);
         }
 
         public RoundedButton(String text, Color bgColor, Color borderColor) {
@@ -1435,7 +1411,7 @@ public class addMembersPage extends JFrame {
             setFocusPainted(false);
             setContentAreaFilled(false);
             setOpaque(false);
-            setBorderPainted(borderColor != null); // Enable border only if borderColor is set
+            setBorderPainted(borderColor != null);
             setMargin(new Insets(5, 10, 7, 10));
         }
 
@@ -1461,7 +1437,6 @@ public class addMembersPage extends JFrame {
         }
     }
 
-    // Custom Button UI
     private static class MinimalButtonUI extends BasicButtonUI {
         private final int radius = 20;
 
@@ -1486,12 +1461,10 @@ public class addMembersPage extends JFrame {
             int height = button.getHeight();
             String text = button.getText();
 
-            // Use black background for both buttons
-            g2.setColor(new Color(50, 50, 50)); // Solid black
+            g2.setColor(new Color(50, 50, 50));
             g2.fillRoundRect(0, 0, width, height, radius, radius);
-            g2.setColor(Color.WHITE); // White text
+            g2.setColor(Color.WHITE);
 
-            // Draw text
             FontMetrics fm = g2.getFontMetrics();
             int textX = (width - fm.stringWidth(text)) / 2;
             int textY = (height - fm.getHeight()) / 2 + fm.getAscent();
@@ -1505,7 +1478,7 @@ public class addMembersPage extends JFrame {
             AbstractButton button = (AbstractButton) c;
             FontMetrics fm = c.getFontMetrics(c.getFont());
             String text = button.getText();
-            int width = fm.stringWidth(text) + 30; // Add padding
+            int width = fm.stringWidth(text) + 30;
             int height = fm.getHeight() + 10;
             return new Dimension(width, height);
         }

@@ -79,7 +79,12 @@ public class homePage extends JPanel {
         bdTableHeader.setHorizontalAlignment(SwingConstants.LEFT);
         birthdayPanel.add(bdTableHeader);
 
-        bdModel = new DefaultTableModel(new String[]{"name", "PWD ID No.", "Date"}, 0);
+        bdModel = new DefaultTableModel(new String[]{"name", "PWD ID No.", "Date"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         JTable table = new JTable(bdModel);
         table.setRowHeight(36);
         table.getColumnModel().getColumn(0).setPreferredWidth(190);
@@ -90,8 +95,10 @@ public class homePage extends JPanel {
         table.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         table.setBackground(new Color(238, 235, 235));
         table.setForeground(new Color(58, 58, 58));
-        table.setSelectionBackground(new Color(220, 240, 255));
-        table.setSelectionForeground(Color.BLACK);
+        table.setRowSelectionAllowed(false);
+        table.setColumnSelectionAllowed(false);
+        table.setCellSelectionEnabled(false);
+        table.setFocusable(false);
 
         JScrollPane scrollPane = new RoundedScrollPane(table);
         scrollPane.setBounds(22, 108, 480, 98);
@@ -143,8 +150,10 @@ public class homePage extends JPanel {
         fullBdTable.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         fullBdTable.setBackground(new Color(238, 235, 235));
         fullBdTable.setForeground(new Color(58, 58, 58));
-        fullBdTable.setSelectionBackground(new Color(220, 240, 255));
-        fullBdTable.setSelectionForeground(Color.BLACK);
+        fullBdTable.setRowSelectionAllowed(false);
+        fullBdTable.setColumnSelectionAllowed(false);
+        fullBdTable.setCellSelectionEnabled(false);
+        fullBdTable.setFocusable(false);
 
         JScrollPane fullBdScrollPane = new RoundedScrollPane(fullBdTable);
         fullBdScrollPane.setBounds(23, 55, 635, 375);
@@ -195,7 +204,12 @@ public class homePage extends JPanel {
         expTableHeader.setHorizontalAlignment(SwingConstants.LEFT);
         expiringMemPanel.add(expTableHeader);
 
-        expModel = new DefaultTableModel(new String[]{"name", "PWD ID No.", "Date"}, 0);
+        expModel = new DefaultTableModel(new String[]{"name", "PWD ID No.", "Date"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         JTable expTable = new JTable(expModel);
         expTable.setRowHeight(39);
         expTable.getColumnModel().getColumn(0).setPreferredWidth(190);
@@ -206,8 +220,10 @@ public class homePage extends JPanel {
         expTable.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         expTable.setBackground(new Color(238, 235, 235));
         expTable.setForeground(new Color(58, 58, 58));
-        expTable.setSelectionBackground(new Color(220, 240, 255));
-        expTable.setSelectionForeground(Color.BLACK);
+        expTable.setRowSelectionAllowed(false);
+        expTable.setColumnSelectionAllowed(false);
+        expTable.setCellSelectionEnabled(false);
+        expTable.setFocusable(false);
 
         JScrollPane expScrollPane = new RoundedScrollPane(expTable);
         expScrollPane.setBounds(22, 103, 480, 98);
@@ -241,6 +257,10 @@ public class homePage extends JPanel {
                 super.paintComponent(g);
                 g2.dispose();
             }
+
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
         FullExpTableHeader.setBounds(23, 15, 655, 30);
         FullExpTableHeader.setOpaque(false);
@@ -249,7 +269,12 @@ public class homePage extends JPanel {
         FullExpTableHeader.setHorizontalAlignment(SwingConstants.LEFT);
         fullExpDialog.add(FullExpTableHeader);
 
-        fullExpModel = new DefaultTableModel(new String[]{"name", "PWD ID No.", "Date", "Action"}, 0);
+        fullExpModel = new DefaultTableModel(new String[]{"name", "PWD ID No.", "Date", "Action"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         JTable fullExpTable = new JTable(fullExpModel);
         fullExpTable.setRowHeight(36);
         fullExpTable.getColumnModel().getColumn(0).setPreferredWidth(260);
@@ -261,8 +286,10 @@ public class homePage extends JPanel {
         fullExpTable.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         fullExpTable.setBackground(new Color(238, 235, 235));
         fullExpTable.setForeground(new Color(58, 58, 58));
-        fullExpTable.setSelectionBackground(new Color(220, 240, 255));
-        fullExpTable.setSelectionForeground(Color.BLACK);
+        fullExpTable.setRowSelectionAllowed(false);
+        fullExpTable.setColumnSelectionAllowed(false);
+        fullExpTable.setCellSelectionEnabled(false);
+        fullExpTable.setFocusable(false);
         fullExpTable.getColumnModel().getColumn(3).setCellRenderer(new ButtonRenderer());
         fullExpTable.getColumnModel().getColumn(3).setCellEditor(new ButtonEditor());
 
@@ -445,7 +472,12 @@ public class homePage extends JPanel {
         fullNewMemTableHeader.setHorizontalAlignment(SwingConstants.LEFT);
         fullNewMemDialog.add(fullNewMemTableHeader);
 
-        newMemModel = new DefaultTableModel(new String[]{"Name", "PWD ID No.", "Fill Up Date"}, 0);
+        newMemModel = new DefaultTableModel(new String[]{"Name", "PWD ID No.", "Fill Up Date"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         JTable fullNewMemTable = new JTable(newMemModel);
         fullNewMemTable.setRowHeight(36);
         fullNewMemTable.getColumnModel().getColumn(0).setPreferredWidth(215);
@@ -459,8 +491,10 @@ public class homePage extends JPanel {
         fullNewMemTable.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         fullNewMemTable.setBackground(new Color(238, 235, 235));
         fullNewMemTable.setForeground(new Color(58, 58, 58));
-        fullNewMemTable.setSelectionBackground(new Color(220, 240, 255));
-        fullNewMemTable.setSelectionForeground(Color.BLACK);
+        fullNewMemTable.setRowSelectionAllowed(false);
+        fullNewMemTable.setColumnSelectionAllowed(false);
+        fullNewMemTable.setCellSelectionEnabled(false);
+        fullNewMemTable.setFocusable(false);
 
         JScrollPane fullNewMemScrollPane = new RoundedScrollPane(fullNewMemTable);
         styleScrollBar(fullNewMemScrollPane);
@@ -499,7 +533,12 @@ public class homePage extends JPanel {
         fullActiveMemTableHeader.setHorizontalAlignment(SwingConstants.LEFT);
         fullActiveMemDialog.add(fullActiveMemTableHeader);
 
-        activeMemModel = new DefaultTableModel(new String[]{"Name", "PWD ID No.", "Total Attendance"}, 0);
+        activeMemModel = new DefaultTableModel(new String[]{"Name", "PWD ID No.", "Total Attendance"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         JTable fullActiveMemTable = new JTable(activeMemModel);
         fullActiveMemTable.setRowHeight(36);
         fullActiveMemTable.getColumnModel().getColumn(0).setPreferredWidth(220);
@@ -513,8 +552,10 @@ public class homePage extends JPanel {
         fullActiveMemTable.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         fullActiveMemTable.setBackground(new Color(238, 235, 235));
         fullActiveMemTable.setForeground(new Color(58, 58, 58));
-        fullActiveMemTable.setSelectionBackground(new Color(220, 240, 255));
-        fullActiveMemTable.setSelectionForeground(Color.BLACK);
+        fullActiveMemTable.setRowSelectionAllowed(false);
+        fullActiveMemTable.setColumnSelectionAllowed(false);
+        fullActiveMemTable.setCellSelectionEnabled(false);
+        fullActiveMemTable.setFocusable(false);
 
         JScrollPane fullActiveMemScrollPane = new RoundedScrollPane(fullActiveMemTable);
         styleScrollBar(fullActiveMemScrollPane);
@@ -553,7 +594,12 @@ public class homePage extends JPanel {
         fullInactiveMemTableHeader.setHorizontalAlignment(SwingConstants.LEFT);
         fullInactiveMemDialog.add(fullInactiveMemTableHeader);
 
-        inactiveMemModel = new DefaultTableModel(new String[]{"Name", "PWD ID No.", "Total Attendance"}, 0);
+        inactiveMemModel = new DefaultTableModel(new String[]{"Name", "PWD ID No.", "Total Attendance"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         JTable fullInactiveMemTable = new JTable(inactiveMemModel);
         fullInactiveMemTable.setRowHeight(36);
         fullInactiveMemTable.getColumnModel().getColumn(0).setPreferredWidth(220);
@@ -567,8 +613,10 @@ public class homePage extends JPanel {
         fullInactiveMemTable.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         fullInactiveMemTable.setBackground(new Color(238, 235, 235));
         fullInactiveMemTable.setForeground(new Color(58, 58, 58));
-        fullInactiveMemTable.setSelectionBackground(new Color(220, 240, 255));
-        fullInactiveMemTable.setSelectionForeground(Color.BLACK);
+        fullInactiveMemTable.setRowSelectionAllowed(false);
+        fullInactiveMemTable.setColumnSelectionAllowed(false);
+        fullInactiveMemTable.setCellSelectionEnabled(false);
+        fullInactiveMemTable.setFocusable(false);
 
         JScrollPane fullInactiveMemScrollPane = new RoundedScrollPane(fullInactiveMemTable);
         styleScrollBar(fullInactiveMemScrollPane);
@@ -602,7 +650,6 @@ public class homePage extends JPanel {
             }
         });
 
-        // Add ActionListeners to buttons (unchanged)
         newMemBtn.addActionListener(e -> {
             mainPage.instance.showDim();
             populateNewMembersTable();
@@ -729,7 +776,6 @@ public class homePage extends JPanel {
         menLbl.setHorizontalTextPosition(SwingConstants.RIGHT);
         sexPopuPane.add(menLbl);
 
-        // Load initial data
         reloadData();
     }
 
@@ -739,13 +785,12 @@ public class homePage extends JPanel {
             List<membersDAO.MemberData> members = membersDAO.getMembers();
             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yy");
             Calendar now = Calendar.getInstance();
-            int currentMonth = now.get(Calendar.MONTH) + 1; // 0-based to 1-based
+            int currentMonth = now.get(Calendar.MONTH) + 1;
             int currentYear = now.get(Calendar.YEAR);
             Calendar threeMonthsFromNow = Calendar.getInstance();
             threeMonthsFromNow.add(Calendar.MONTH, 3);
             String currentYearStr = String.valueOf(now.get(Calendar.YEAR));
 
-            // Update member statuses if ID has expired
             Date currentDate = new Date();
             for (membersDAO.MemberData member : members) {
                 if (member.status != null && (member.status.equals("Alive") || member.status.equals("Renewed"))) {
@@ -756,27 +801,23 @@ public class homePage extends JPanel {
                 }
             }
 
-            // Clear existing data
+
             bdModel.setRowCount(0);
             expModel.setRowCount(0);
             fullExpModel.setRowCount(0);
 
-            // Counters for statistics
-            int totalMembers = members.size(); // Include all members, including Deceased
+            int totalMembers = members.size();
             int femaleCount = 0;
             int maleCount = 0;
             int newMembersCount = 0;
 
-            // Process members for panels and sex counts
             for (membersDAO.MemberData member : members) {
-                // Count all members for sex population, including Deceased
                 if ("Female".equals(member.sex)) {
                     femaleCount++;
                 } else if ("Male".equals(member.sex)) {
                     maleCount++;
                 }
 
-                // Exclude Deceased from panels
                 if (member.status != null && !"Deceased".equals(member.status)) {
                     if (member.birthdate != null) {
                         Calendar birthCal = Calendar.getInstance();
@@ -822,7 +863,6 @@ public class homePage extends JPanel {
                 }
             }
 
-            // Active and Inactive Counts: Only Alive or Renewed
             int N = membersDAO.getUniqueAttendanceDatesCount(currentYearStr);
             List<membersDAO.AttendanceRecord> attendanceRecords = membersDAO.getAttendanceRecordsForYear(currentYearStr);
             int activeCount = 0;
@@ -837,7 +877,6 @@ public class homePage extends JPanel {
                 }
             }
 
-            // Update UI components
             totalMemNum.setText(String.valueOf(totalMembers));
             womenLbl.setText(String.valueOf(femaleCount));
             menLbl.setText(String.valueOf(maleCount));
@@ -862,10 +901,8 @@ public class homePage extends JPanel {
                 java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
                 Calendar cal = Calendar.getInstance();
                 if (currentValidUntil.before(currentDate)) {
-                    // Expired: add 5 years to current date
                     cal.setTime(currentDate);
                 } else {
-                    // Near expiration: add 5 years to current id_valid_until
                     cal.setTime(currentValidUntil);
                 }
                 cal.add(Calendar.YEAR, 5);

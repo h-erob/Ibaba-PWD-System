@@ -56,17 +56,16 @@ public class loginPage extends JFrame {
         closeButton.setBounds(605, 0, 40, 25); // now it won't spill over
         closeButton.setBackground(new Color(200, 50, 50));
         closeButton.setForeground(Color.WHITE);
-        closeButton.setFont(new Font("Arial", Font.BOLD, 14)); // Explicit smaller font
+        closeButton.setFont(new Font("Arial", Font.BOLD, 14));
         closeButton.setFocusPainted(false);
-        closeButton.setMargin(new Insets(0, 0, 0, 0)); // Remove internal padding
-        closeButton.setBorderPainted(false); // Optional: flat button look
-        closeButton.setContentAreaFilled(true); // Make sure background is shown
+        closeButton.setMargin(new Insets(0, 0, 0, 0));
+        closeButton.setBorderPainted(false);
+        closeButton.setContentAreaFilled(true);
         closeButton.addActionListener(e -> {
             dispose();
         });
         titleBar.add(closeButton);
 
-        // Allow dragging the window
         final Point[] mousePoint = {null};
         titleBar.addMouseListener(new MouseAdapter() {
             @Override
@@ -81,6 +80,9 @@ public class loginPage extends JFrame {
                 setLocation(currPoint.x - mousePoint[0].x, currPoint.y - mousePoint[0].y);
             }
         });
+
+        ImageIcon logo = new ImageIcon("imgs/bipdaLogo.png");
+        setIconImage(logo.getImage());
 
         JTextField dummy = new JTextField();
         dummy.setBounds(0, 0, 0, 0);
@@ -112,7 +114,7 @@ public class loginPage extends JFrame {
         Username.setCaretColor(new Color(255, 255, 255));
         Username.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY, 1),
-                BorderFactory.createEmptyBorder(0, 7, 0, 0) // top, left, bottom, right
+                BorderFactory.createEmptyBorder(0, 7, 0, 0)
         ));
         contentPane.add(Username);
         Username.setColumns(10);
@@ -126,7 +128,7 @@ public class loginPage extends JFrame {
         passwordField.setEchoChar((char) 0);
         passwordField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY, 1),
-                BorderFactory.createEmptyBorder(0, 7, 0, 0) // top, left, bottom, right
+                BorderFactory.createEmptyBorder(0, 7, 0, 0)
         ));
         contentPane.add(passwordField);
 
@@ -150,9 +152,9 @@ public class loginPage extends JFrame {
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setBounds(42, 197, 154, 26);
         passwordField.setBounds(0, 0, 154, 26);
-        showPass.setBounds(130, 3, 20, 20); // Inside passwordField, right-aligned
+        showPass.setBounds(130, 3, 20, 20);
         layeredPane.add(passwordField, JLayeredPane.DEFAULT_LAYER);
-        layeredPane.add(showPass, JLayeredPane.PALETTE_LAYER); // Higher layer
+        layeredPane.add(showPass, JLayeredPane.PALETTE_LAYER);
         contentPane.add(layeredPane);
 
         JLabel signInTXT = new JLabel("Sign In");
@@ -207,9 +209,9 @@ public class loginPage extends JFrame {
                 }
 
                 if (showPass.isSelected()) {
-                    passwordField.setEchoChar((char) 0); // show password
+                    passwordField.setEchoChar((char) 0);
                 } else {
-                    passwordField.setEchoChar('•'); // mask password
+                    passwordField.setEchoChar('•');
                 }
             }
 
@@ -218,7 +220,7 @@ public class loginPage extends JFrame {
                 String input = new String(passwordField.getPassword());
                 if (input.isEmpty()) {
                     passwordField.setText("Password");
-                    passwordField.setEchoChar((char) 0); // Show plain text
+                    passwordField.setEchoChar((char) 0);
                     passwordField.setForeground(Color.GRAY);
                 }
             }
@@ -257,9 +259,9 @@ public class loginPage extends JFrame {
             passwordField.setEchoChar((char) 0);
         } else {
             if (selected) {
-                passwordField.setEchoChar((char) 0); // Show real password
+                passwordField.setEchoChar((char) 0);
             } else {
-                passwordField.setEchoChar('•'); // Mask real password
+                passwordField.setEchoChar('•');
             }
         }
     }

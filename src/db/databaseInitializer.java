@@ -10,7 +10,6 @@ public class databaseInitializer {
         try (Connection conn = database.getConnection();
              Statement stmt = conn.createStatement()) {
 
-            // Tables
             stmt.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS admins (
                     id INT NOT NULL AUTO_INCREMENT,
@@ -128,9 +127,8 @@ public class databaseInitializer {
                 GROUP BY member_id, YEAR(attendance_date);
             """);
 
-            // Load mock data if enabled
             if (database.LOAD_MOCK_DATA) {
-                System.out.println("Attempting to load mock data...");
+                System.out.println("Attempting to load mock data");
                 mockDataLoader.loadMockData(conn);
             } else {
                 System.out.println("Mock data loading is disabled.");

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors; // Added import for stream filtering
+import java.util.stream.Collectors;
 import java.sql.SQLException;
 import dal.members.membersDAO;
 import db.database;
@@ -137,7 +137,6 @@ public class attendancePage extends JPanel {
         if (dao != null) {
             try {
                 List<membersDAO.MemberData> members = dao.getMembers();
-                // Filter out members with "Deceased" status
                 members = members.stream()
                         .filter(m -> !"Deceased".equals(m.status) && !"Expired".equals(m.status))
                         .sorted(Comparator.comparing(m -> m.fullName.toLowerCase()))
@@ -158,6 +157,7 @@ public class attendancePage extends JPanel {
         table.setCellSelectionEnabled(true);
         table.setRowSelectionAllowed(false);
         table.setColumnSelectionAllowed(false);
+        table.setFocusable(false);
 
         TableCellRenderer radioRenderer = new TableCellRenderer() {
             private final JPanel cellPanel = new JPanel(new GridBagLayout());
@@ -607,7 +607,6 @@ public class attendancePage extends JPanel {
         if (dao == null) return;
         try {
             List<membersDAO.MemberData> members = dao.getMembers();
-            // Filter out "Deceased" and "Expired" members
             members = members.stream()
                     .filter(m -> !"Deceased".equals(m.status) && !"Expired".equals(m.status))
                     .sorted(Comparator.comparing(m -> m.fullName.toLowerCase()))

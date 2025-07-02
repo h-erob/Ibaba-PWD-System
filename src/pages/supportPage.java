@@ -10,9 +10,9 @@ public class supportPage extends JPanel {
     private final JCheckBox showPass;
     private final JCheckBox showNewPass;
     private final JCheckBox showConfPass;
-    private final JPasswordField password; // Moved to class level
-    private final JPasswordField newPass; // Moved to class level
-    private final JPasswordField confNewPass; // Moved to class level
+    private final JPasswordField password;
+    private final JPasswordField newPass;
+    private final JPasswordField confNewPass;
 
     public supportPage() {
         setLayout(null);
@@ -145,15 +145,8 @@ public class supportPage extends JPanel {
             String currentPass = new String(password.getPassword()).trim();
             String newPassword = new String(newPass.getPassword()).trim();
             String confirmPass = new String(confNewPass.getPassword()).trim();
-            String currentUsername = "admin"; // Fixed username for testing
+            String currentUsername = "admin";
 
-            // Debug logging
-            System.out.println("Current Username: " + currentUsername);
-            System.out.println("Current Password (input): " + currentPass);
-            System.out.println("New Password: " + newPassword);
-            System.out.println("Confirm Password: " + confirmPass);
-
-            // Input validation
             if (currentPass.isEmpty() || newPassword.isEmpty() || confirmPass.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please fill in all password fields.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -169,13 +162,11 @@ public class supportPage extends JPanel {
                 return;
             }
 
-            // Check for at least one uppercase letter
             if (!newPassword.matches(".*[A-Z].*")) {
                 JOptionPane.showMessageDialog(this, "New password must contain at least one uppercase letter.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Check for at least one special character
             if (!newPassword.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};:'\",.<>?].*")) {
                 JOptionPane.showMessageDialog(this, "New password must contain at least one special character.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -191,15 +182,12 @@ public class supportPage extends JPanel {
                 return;
             }
 
-            // Verify current password
             boolean isValid = adminDao.checkIfAdminExists(currentUsername, currentPass);
-            System.out.println("Password validation result: " + isValid);
             if (!isValid) {
                 JOptionPane.showMessageDialog(this, "Current password is incorrect.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Update password
             boolean updated = adminDao.updatePassword(currentUsername, newPassword);
             if (updated) {
                 JOptionPane.showMessageDialog(this, "Password updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -478,23 +466,23 @@ public class supportPage extends JPanel {
     private void showPassword() {
         // Handle current password field
         if (showPass.isSelected()) {
-            password.setEchoChar((char) 0); // Show password
+            password.setEchoChar((char) 0);
         } else {
-            password.setEchoChar('•'); // Mask password
+            password.setEchoChar('•');
         }
 
         // Handle new password field
         if (showNewPass.isSelected()) {
-            newPass.setEchoChar((char) 0); // Show password
+            newPass.setEchoChar((char) 0);
         } else {
-            newPass.setEchoChar('•'); // Mask password
+            newPass.setEchoChar('•');
         }
 
         // Handle confirm new password field
         if (showConfPass.isSelected()) {
-            confNewPass.setEchoChar((char) 0); // Show password
+            confNewPass.setEchoChar((char) 0);
         } else {
-            confNewPass.setEchoChar('•'); // Mask password
+            confNewPass.setEchoChar('•');
         }
     }
 
