@@ -52,7 +52,7 @@ public class homePage extends JPanel {
         birthdayPanel.add(bdIcon);
 
         JLabel bdHeader = new JLabel("This Month's Birthday Celebrant");
-        bdHeader.setBounds(50, 20, 300, 22);
+        bdHeader.setBounds(50, 20, 400, 22);
         bdHeader.setFont(new Font("Trebuchet MS", Font.BOLD, 20));
         birthdayPanel.add(bdHeader);
 

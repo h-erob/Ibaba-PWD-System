@@ -6,18 +6,16 @@ import javax.swing.table.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.sql.SQLException;
 import dal.members.membersDAO;
 import db.database;
+import java.time.LocalDate;
+import java.time.YearMonth;
 
 public class attendancePage extends JPanel {
     private final JTable table;
@@ -29,6 +27,9 @@ public class attendancePage extends JPanel {
     private membersDAO dao;
     private List<Object[]> allRows;
     private RoundedButton saveBtn;
+    private LocalDate selectedDate;
+    private JLabel dateLabel;
+    private boolean isEditable; // Added field to track editability
 
     public attendancePage() {
         setLayout(null);
@@ -41,6 +42,13 @@ public class attendancePage extends JPanel {
             dao = null;
         }
 
+        selectedDate = LocalDate.now();
+        int currentYear = selectedDate.getYear();
+        int currentMonth = selectedDate.getMonthValue();
+        int currentDay = selectedDate.getDayOfMonth();
+        YearMonth currentYearMonth = YearMonth.of(currentYear, currentMonth);
+        int daysInMonth = currentYearMonth.lengthOfMonth();
+
         JPanel topBar = new JPanel();
         topBar.setBackground(new Color(210, 210, 210));
         topBar.setBounds(0, 0, 991, 50);
@@ -48,10 +56,6 @@ public class attendancePage extends JPanel {
         add(topBar);
 
         Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
-
-        SimpleDateFormat wholeDate = new SimpleDateFormat("MM/dd/yyyy");
-        Date now = new Date();
-        String wholeDateText = wholeDate.format(now);
 
         JPanel datePane = new JPanel();
         datePane.setBackground(new Color(240, 240, 240));
@@ -70,11 +74,18 @@ public class attendancePage extends JPanel {
         totalMemHeader.setFont(new Font("Arial", Font.BOLD, 13));
         datePane.add(totalMemHeader);
 
-        JLabel totalMemSub = new JLabel(wholeDateText);
-        totalMemSub.setBounds(39, 16, 100, 22);
-        totalMemSub.setForeground(new Color(70, 70, 70));
-        totalMemSub.setFont(new Font("Arial", Font.PLAIN, 13));
-        datePane.add(totalMemSub);
+        dateLabel = new JLabel(String.format("%02d/%02d/%d", currentMonth, currentDay, currentYear));
+        dateLabel.setBounds(39, 16, 100, 22);
+        dateLabel.setForeground(new Color(70, 70, 70));
+        dateLabel.setFont(new Font("Arial", Font.PLAIN, 13));
+        datePane.add(dateLabel);
+
+        datePane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                showDaySelectionDialog();
+            }
+        });
 
         JLabel label = new JLabel("BARANGAY IBABA: PWD ATTENDANCE MONITORING SHEET");
         label.setFont(new Font("Trebuchet MS", Font.BOLD, 22));
@@ -92,9 +103,9 @@ public class attendancePage extends JPanel {
         ));
         add(search);
 
-        search.addFocusListener(new java.awt.event.FocusAdapter() {
+        search.addFocusListener(new FocusAdapter() {
             @Override
-            public void focusGained(java.awt.event.FocusEvent evt) {
+            public void focusGained(FocusEvent evt) {
                 if (search.getText().equals("Search")) {
                     search.setText("");
                     search.setForeground(Color.BLACK);
@@ -102,7 +113,7 @@ public class attendancePage extends JPanel {
             }
 
             @Override
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            public void focusLost(FocusEvent evt) {
                 if (search.getText().isEmpty()) {
                     search.setText("Search");
                     search.setForeground(Color.GRAY);
@@ -129,7 +140,7 @@ public class attendancePage extends JPanel {
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 3;
+                return column == 3 && isEditable; // Only editable if isEditable is true
             }
         };
 
@@ -325,48 +336,35 @@ public class attendancePage extends JPanel {
         saveBtn = new RoundedButton("SAVE", new Color(73, 230, 127));
         saveBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         saveBtn.setBounds(854, 505, 90, 35);
-
-        java.sql.Date today = new java.sql.Date(System.currentTimeMillis());
-        boolean hasAttendanceToday = false;
-        if (dao != null) {
-            try {
-                hasAttendanceToday = dao.hasAttendanceForDate(today);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (hasAttendanceToday) {
-            saveBtn.setEnabled(false);
-            saveBtn.setToolTipText("Attendance already saved for today.");
-        } else {
-            saveBtn.setEnabled(true);
-            saveBtn.setToolTipText(null);
-        }
+        add(saveBtn);
 
         saveBtn.addActionListener(e -> {
             if (dao != null) {
-                java.sql.Date attendanceDate = new java.sql.Date(System.currentTimeMillis());
+                java.sql.Date attendanceDate = java.sql.Date.valueOf(selectedDate);
                 List<membersDAO.AttendanceEntry> entries = new ArrayList<>();
                 for (int i = 0; i < tableModel.getRowCount(); i++) {
                     int memberId = (int) tableModel.getValueAt(i, 0);
                     String status = (String) tableModel.getValueAt(i, 3);
-                    entries.add(new membersDAO.AttendanceEntry(memberId, status));
+                    entries.add(new membersDAO.AttendanceEntry(memberId, status.toLowerCase()));
                 }
                 try {
                     dao.addAttendance(attendanceDate, entries);
                     JOptionPane.showMessageDialog(this, "Attendance saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    resetAttendanceTable();
-                    mainPage.instance.refreshRecordsAttendancePage();
-                    mainPage.instance.refreshHomePage();
-                    saveBtn.setEnabled(false);
+                    loadAttendanceForDate(selectedDate);
+                    if (mainPage.instance != null) {
+                        mainPage.instance.refreshRecordsAttendancePage();
+                        mainPage.instance.refreshHomePage();
+                    }
                 } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(this, "Error saving attendance: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    if (ex.getMessage().equals("Attendance already saved for this date.")) {
+                        JOptionPane.showMessageDialog(this, "Attendance has already been saved for this date.", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(this, "Error saving attendance: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
-        add(saveBtn);
 
         JPanel totalPresentPane = createRoundedPanel();
         totalPresentPane.setBackground(new Color(51, 150, 51));
@@ -425,7 +423,66 @@ public class attendancePage extends JPanel {
         excusedLbl.setHorizontalAlignment(JLabel.CENTER);
         totalExcusedPane.add(excusedLbl);
 
-        updateCounts();
+        loadAttendanceForDate(selectedDate);
+    }
+
+    private void showDaySelectionDialog() {
+        LocalDate now = LocalDate.now();
+        int currentYear = now.getYear();
+        int currentMonth = now.getMonthValue();
+        int currentDay = now.getDayOfMonth();
+        YearMonth yearMonth = YearMonth.of(currentYear, currentMonth);
+        int daysInMonth = yearMonth.lengthOfMonth();
+
+        List<Integer> availableDays = new ArrayList<>();
+        for (int day = 1; day <= currentDay; day++) { // Limit to current day and past days
+            availableDays.add(day);
+        }
+
+        JComboBox<Integer> dayComboBox = new JComboBox<>(availableDays.toArray(new Integer[0]));
+        if (selectedDate.getYear() == currentYear && selectedDate.getMonthValue() == currentMonth &&
+                availableDays.contains(selectedDate.getDayOfMonth())) {
+            dayComboBox.setSelectedItem(selectedDate.getDayOfMonth());
+        } else {
+            dayComboBox.setSelectedItem(currentDay);
+        }
+
+        int option = JOptionPane.showConfirmDialog(this, dayComboBox, "Select Day", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (option == JOptionPane.OK_OPTION) {
+            int selectedDay = (int) dayComboBox.getSelectedItem();
+            selectedDate = LocalDate.of(currentYear, currentMonth, selectedDay);
+            dateLabel.setText(String.format("%02d/%02d/%d", currentMonth, selectedDay, currentYear));
+            loadAttendanceForDate(selectedDate);
+        }
+    }
+
+    private void loadAttendanceForDate(LocalDate date) {
+        java.sql.Date sqlDate = java.sql.Date.valueOf(date);
+        try {
+            List<membersDAO.AttendanceEntry> entries = dao.getAttendanceForDate(sqlDate);
+            Map<Integer, String> attendanceMap = new HashMap<>();
+            for (membersDAO.AttendanceEntry entry : entries) {
+                String status = entry.status.substring(0, 1).toUpperCase() + entry.status.substring(1).toLowerCase();
+                attendanceMap.put(entry.memberId, status);
+            }
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                int memberId = (int) tableModel.getValueAt(i, 0);
+                String status = attendanceMap.getOrDefault(memberId, "Absent");
+                tableModel.setValueAt(status, i, 3);
+            }
+            updateCounts();
+            boolean hasAttendance = dao.hasAttendanceForDate(sqlDate);
+            isEditable = !hasAttendance; // Set editability based on attendance existence
+            saveBtn.setEnabled(!hasAttendance); // Enable save button if no attendance saved
+            if (hasAttendance) {
+                saveBtn.setToolTipText("Attendance already saved for this date.");
+            } else {
+                saveBtn.setToolTipText(null);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading attendance: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void updateCounts() {
@@ -436,6 +493,7 @@ public class attendancePage extends JPanel {
                 case "Present": presentCount++; break;
                 case "Absent": absentCount++; break;
                 case "Excused": excusedCount++; break;
+                default: break;
             }
         }
         presentNumLbl.setText(String.valueOf(presentCount));
@@ -611,7 +669,6 @@ public class attendancePage extends JPanel {
                     .filter(m -> !"Deceased".equals(m.status) && !"Expired".equals(m.status))
                     .sorted(Comparator.comparing(m -> m.fullName.toLowerCase()))
                     .collect(Collectors.toList());
-            allRows.clear();
             tableModel.setRowCount(0);
             for (int i = 0; i < members.size(); i++) {
                 membersDAO.MemberData member = members.get(i);
@@ -619,8 +676,8 @@ public class attendancePage extends JPanel {
                 tableModel.addRow(row);
                 allRows.add(row);
             }
-            if (search != null) filterTable();
-            if (presentNumLbl != null) updateCounts();
+            filterTable();
+            updateCounts();
             table.revalidate();
             table.repaint();
         } catch (SQLException e) {

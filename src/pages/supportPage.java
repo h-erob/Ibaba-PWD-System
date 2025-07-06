@@ -307,7 +307,7 @@ public class supportPage extends JPanel {
         innerFaq.add(contlbl1);
 
         JButton contactBtn = new JButton("<html><u>here.</u></html>");
-        contactBtn.setBounds(346, 353, 65, 30);
+        contactBtn.setBounds(346, 353, 55, 30);
         contactBtn.setFont(new Font("Trebuchet MS", Font.BOLD, 15));
         contactBtn.setForeground(new Color(56, 117, 186));
         contactBtn.setBackground(new Color(249,245,245));

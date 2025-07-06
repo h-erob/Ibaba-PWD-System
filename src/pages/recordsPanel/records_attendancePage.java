@@ -110,7 +110,7 @@ public class records_attendancePage extends JPanel {
 
         allRows = new ArrayList<>();
 
-        tableModel = new DefaultTableModel(new String[]{" ", "Member Name", "Last Date Attended", "Total Present"}, 0){
+        tableModel = new DefaultTableModel(new String[]{" ", "Member Name", "Last Attended", "Total Present"}, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;

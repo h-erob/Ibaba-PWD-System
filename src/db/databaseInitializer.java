@@ -59,6 +59,7 @@ public class databaseInitializer {
                     guardian_mobile VARCHAR(20),
                     takes_medications TINYINT(1) DEFAULT 0,
                     status ENUM('Alive','Deceased','Renewed','Expired') DEFAULT 'Alive',
+                    last_renewed_date DATE,
                     PRIMARY KEY (member_id)
                 );
             """);

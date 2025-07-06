@@ -33,8 +33,8 @@ public class membersDAO {
 
             String memberSql = "INSERT INTO members (full_name, pwd_id_number, disability_type, fill_up_date, date_issued, id_valid_until, " +
                     "birthdate, age, sex, civil_status, place_of_birth, education_level, occupation, address, mobile_number, " +
-                    "email, fb_account_name, guardian_name, guardian_relation, guardian_mobile, takes_medications, status) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Alive')";
+                    "email, fb_account_name, guardian_name, guardian_relation, guardian_mobile, takes_medications, status, last_renewed_date) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Alive', NULL)";
             pstmt = connection.prepareStatement(memberSql, PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, fullName);
             pstmt.setString(2, pwdIdNumber);
@@ -149,6 +149,11 @@ public class membersDAO {
     }
 
     public List<MemberData> getMembers() throws SQLException {
+        String updateSql = "Update members SET status = 'Alive' WHERE status = 'Renewed' AND last_renewed_date <= DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH)";
+        try (PreparedStatement updatePstmt = connection.prepareStatement(updateSql)) {
+            updatePstmt.executeUpdate();
+        }
+
         List<MemberData> members = new ArrayList<>();
         PreparedStatement pstmtMembers = null;
         PreparedStatement pstmtHousehold = null;
@@ -256,6 +261,22 @@ public class membersDAO {
         return members;
     }
 
+    public List<AttendanceEntry> getAttendanceForDate(java.sql.Date date) throws SQLException {
+        List<AttendanceEntry> entries = new ArrayList<>();
+        String sql = "SELECT member_id, status FROM attendance WHERE attendance_date = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setDate(1, date);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int memberId = rs.getInt("member_id");
+                    String status = rs.getString("status");
+                    entries.add(new AttendanceEntry(memberId, status));
+                }
+            }
+        }
+        return entries;
+    }
+
     public static class AttendanceEntry {
         public int memberId;
         public String status;
@@ -267,7 +288,7 @@ public class membersDAO {
     }
 
     public boolean updateMember(
-            int memberId, String fullName, String pwdIdNumber, String disabilityType,String status,
+            int memberId, String fullName, String pwdIdNumber, String disabilityType, String status,
             Date dateIssued, Date idValidUntil, Date birthdate, int age, String sex, String civilStatus,
             String placeOfBirth, String educationLevel, String occupation, String address, String mobileNumber,
             String email, String fbAccountName, String guardianName, String guardianRelation, String guardianMobile,
@@ -280,6 +301,7 @@ public class membersDAO {
             connection.setAutoCommit(false);
 
             String memberSql = "UPDATE members SET full_name = ?, pwd_id_number = ?, disability_type = ?, status = ?, " +
+                    "last_renewed_date = CASE WHEN ? = 'Renewed' THEN CURRENT_DATE ELSE last_renewed_date END, " +
                     "birthdate = ?, age = ?, sex = ?, civil_status = ?, place_of_birth = ?, education_level = ?, " +
                     "occupation = ?, address = ?, mobile_number = ?, email = ?, fb_account_name = ?, guardian_name = ?, " +
                     "guardian_relation = ?, guardian_mobile = ?, takes_medications = ? WHERE member_id = ?";
@@ -288,22 +310,23 @@ public class membersDAO {
             pstmt.setString(2, pwdIdNumber);
             pstmt.setString(3, disabilityType);
             pstmt.setString(4, status);
-            pstmt.setDate(5, birthdate);
-            pstmt.setInt(6, age);
-            pstmt.setString(7, sex);
-            pstmt.setString(8, civilStatus);
-            pstmt.setString(9, placeOfBirth);
-            pstmt.setString(10, educationLevel);
-            pstmt.setString(11, occupation);
-            pstmt.setString(12, address);
-            pstmt.setString(13, mobileNumber);
-            pstmt.setString(14, email != null ? email : "");
-            pstmt.setString(15, fbAccountName != null ? fbAccountName : "");
-            pstmt.setString(16, guardianName);
-            pstmt.setString(17, guardianRelation);
-            pstmt.setString(18, guardianMobile);
-            pstmt.setBoolean(19, takesMedications);
-            pstmt.setInt(20, memberId);
+            pstmt.setString(5, status);
+            pstmt.setDate(6, birthdate);
+            pstmt.setInt(7, age);
+            pstmt.setString(8, sex);
+            pstmt.setString(9, civilStatus);
+            pstmt.setString(10, placeOfBirth);
+            pstmt.setString(11, educationLevel);
+            pstmt.setString(12, occupation);
+            pstmt.setString(13, address);
+            pstmt.setString(14, mobileNumber);
+            pstmt.setString(15, email != null ? email : "");
+            pstmt.setString(16, fbAccountName != null ? fbAccountName : "");
+            pstmt.setString(17, guardianName);
+            pstmt.setString(18, guardianRelation);
+            pstmt.setString(19, guardianMobile);
+            pstmt.setBoolean(20, takesMedications);
+            pstmt.setInt(21, memberId);
             pstmt.executeUpdate();
             pstmt.close();
 
@@ -415,16 +438,26 @@ public class membersDAO {
     }
 
     public void addAttendance(java.sql.Date attendanceDate, List<AttendanceEntry> entries) throws SQLException {
-        String sql = "INSERT INTO attendance (member_id, attendance_date, status) VALUES (?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE status = VALUES(status)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            for (AttendanceEntry entry : entries) {
-                pstmt.setInt(1, entry.memberId);
-                pstmt.setDate(2, attendanceDate);
-                pstmt.setString(3, entry.status.toLowerCase());
-                pstmt.addBatch();
+        // Check if attendance already exists for this date
+        String checkSql = "SELECT COUNT(*) FROM attendance WHERE attendance_date = ?";
+        try (PreparedStatement checkPstmt = connection.prepareStatement(checkSql)) {
+            checkPstmt.setDate(1, attendanceDate);
+            try (ResultSet rs = checkPstmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    throw new SQLException("Attendance already saved for this date.");
+                }
             }
-            pstmt.executeBatch();
+        }
+        // Insert new attendance records
+        String insertSql = "INSERT INTO attendance (member_id, attendance_date, status) VALUES (?, ?, ?)";
+        try (PreparedStatement insertPstmt = connection.prepareStatement(insertSql)) {
+            for (AttendanceEntry entry : entries) {
+                insertPstmt.setInt(1, entry.memberId);
+                insertPstmt.setDate(2, attendanceDate);
+                insertPstmt.setString(3, entry.status.toLowerCase());
+                insertPstmt.addBatch();
+            }
+            insertPstmt.executeBatch();
         }
     }
 

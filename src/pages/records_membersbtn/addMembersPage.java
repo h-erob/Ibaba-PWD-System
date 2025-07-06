@@ -12,7 +12,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.text.Document;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
@@ -355,23 +354,24 @@ public class addMembersPage extends JFrame {
 
         JLabel datelbl = new JLabel("Date:");
         datelbl.setFont(labelFont);
-        datelbl.setBounds(520, 0, 200, 30);
+        datelbl.setBounds(520, 0, 198, 30);
         panel.add(datelbl);
 
         fillUpDate = new JTextField(20);
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         fillUpDate.setText(sdf.format(new java.util.Date()));
-        fillUpDate.setBounds(563, 7, 120, 16);
+        fillUpDate.setBounds(562, 2, 118, 24);
         fillUpDate.setHorizontalAlignment(JTextField.CENTER);
-        fillUpDate.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+        //fillUpDate.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+        fillUpDate.setBorder(fieldBorder);
         fillUpDate.setFont(new Font("Arial", Font.PLAIN, 16));
-        fillUpDate.setOpaque(false);
+        fillUpDate.setOpaque(true);
         panel.add(fillUpDate);
 
         JLabel dateFormatlbl = new JLabel("MM/DD/YYYY");
         dateFormatlbl.setForeground(new Color(100, 100, 100));
         dateFormatlbl.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
-        dateFormatlbl.setBounds(587, 14, 200, 30);
+        dateFormatlbl.setBounds(584, 16, 200, 30);
         panel.add(dateFormatlbl);
 
         JLabel demographicLbl = new JLabel("DEMOGRAPHIC SHEET");
@@ -383,6 +383,12 @@ public class addMembersPage extends JFrame {
         namelbl.setFont(labelFont);
         namelbl.setBounds(30, 30, 400, 30);
         panel.add(namelbl);
+
+        JLabel asterisk = new JLabel("*");
+        asterisk.setForeground(new Color(239, 101, 80));
+        asterisk.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk.setBounds(108, 33, 400, 30);
+        panel.add(asterisk);
 
         fullName = new JTextField();
         fullName.setFont(fieldFont);
@@ -400,6 +406,12 @@ public class addMembersPage extends JFrame {
         lblSex.setFont(labelFont);
         lblSex.setBounds(390, 30, 100, 30);
         panel.add(lblSex);
+
+        JLabel asterisk1 = new JLabel("*");
+        asterisk1.setForeground(new Color(239, 101, 80));
+        asterisk1.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk1.setBounds(422, 33, 400, 30);
+        panel.add(asterisk1);
 
         ButtonGroup btnSex = new ButtonGroup();
         f = new JRadioButton("Female");
@@ -419,6 +431,12 @@ public class addMembersPage extends JFrame {
         pwdIdNolbl.setBounds(30, 110, 400, 30);
         panel.add(pwdIdNolbl);
 
+        JLabel asterisk2 = new JLabel("*");
+        asterisk2.setForeground(new Color(239, 101, 80));
+        asterisk2.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk2.setBounds(148, 113, 400, 30);
+        panel.add(asterisk2);
+
         pwdIdNo = new JTextField();
         pwdIdNo.setFont(fieldFont);
         pwdIdNo.setBounds(30, 140, 290, 33);
@@ -429,6 +447,12 @@ public class addMembersPage extends JFrame {
         typeOfDisabilitylbl.setFont(labelFont);
         typeOfDisabilitylbl.setBounds(390, 110, 400, 30);
         panel.add(typeOfDisabilitylbl);
+
+        JLabel asterisk3 = new JLabel("*");
+        asterisk3.setForeground(new Color(239, 101, 80));
+        asterisk3.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk3.setBounds(518, 113, 400, 30);
+        panel.add(asterisk3);
 
         disabilityType = new JTextField();
         disabilityType.setFont(fieldFont);
@@ -441,6 +465,12 @@ public class addMembersPage extends JFrame {
         dateIssuedlbl.setBounds(30, 180, 400, 30);
         panel.add(dateIssuedlbl);
 
+        JLabel asterisk4 = new JLabel("*");
+        asterisk4.setForeground(new Color(239, 101, 80));
+        asterisk4.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk4.setBounds(117, 183, 400, 30);
+        panel.add(asterisk4);
+
         dateIssued = new JTextField();
         dateIssued.setFont(fieldFont);
         dateIssued.setBounds(30, 210, 290, 33);
@@ -451,6 +481,12 @@ public class addMembersPage extends JFrame {
         idValiditylbl.setFont(labelFont);
         idValiditylbl.setBounds(390, 180, 400, 30);
         panel.add(idValiditylbl);
+
+        JLabel asterisk5 = new JLabel("*");
+        asterisk5.setForeground(new Color(239, 101, 80));
+        asterisk5.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk5.setBounds(469, 183, 400, 30);
+        panel.add(asterisk5);
 
         idValidity = new JTextField();
         idValidity.setFont(fieldFont);
@@ -504,6 +540,12 @@ public class addMembersPage extends JFrame {
         birthdatelbl.setBounds(30, 250, 400, 30);
         panel.add(birthdatelbl);
 
+        JLabel asterisk6 = new JLabel("*");
+        asterisk6.setForeground(new Color(239, 101, 80));
+        asterisk6.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk6.setBounds(103, 253, 400, 30);
+        panel.add(asterisk6);
+
         birthdate = new JTextField();
         birthdate.setFont(fieldFont);
         birthdate.setBounds(30, 280, 290, 33);
@@ -538,6 +580,12 @@ public class addMembersPage extends JFrame {
         agelbl.setBounds(390, 250, 400, 30);
         panel.add(agelbl);
 
+        JLabel asterisk7 = new JLabel("*");
+        asterisk7.setForeground(new Color(239, 101, 80));
+        asterisk7.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk7.setBounds(424, 253, 400, 30);
+        panel.add(asterisk7);
+
         age = new JTextField();
         age.setFont(fieldFont);
         age.setBounds(390, 280, 290, 33);
@@ -549,6 +597,12 @@ public class addMembersPage extends JFrame {
         birthPlacelbl.setBounds(30, 313, 400, 30);
         panel.add(birthPlacelbl);
 
+        JLabel asterisk8 = new JLabel("*");
+        asterisk8.setForeground(new Color(239, 101, 80));
+        asterisk8.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk8.setBounds(133, 315, 400, 30);
+        panel.add(asterisk8);
+
         birthPlace = new JTextField();
         birthPlace.setFont(fieldFont);
         birthPlace.setBounds(30, 343, 290, 33);
@@ -559,6 +613,12 @@ public class addMembersPage extends JFrame {
         civilStatuslbl.setFont(labelFont);
         civilStatuslbl.setBounds(390, 313, 400, 30);
         panel.add(civilStatuslbl);
+
+        JLabel asterisk9 = new JLabel("*");
+        asterisk9.setForeground(new Color(239, 101, 80));
+        asterisk9.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk9.setBounds(475, 315, 400, 30);
+        panel.add(asterisk9);
 
         civilStatusCombo = new JComboBox<>(new String[]{"Single", "Married", "Widowed", "Separated", "Divorced"});
         civilStatusCombo.setFont(fieldFont);
@@ -607,6 +667,12 @@ public class addMembersPage extends JFrame {
         educAttainmentlbl.setBounds(30, 385, 400, 30);
         panel.add(educAttainmentlbl);
 
+        JLabel asterisk10 = new JLabel("*");
+        asterisk10.setForeground(new Color(239, 101, 80));
+        asterisk10.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk10.setBounds(202, 386, 400, 30);
+        panel.add(asterisk10);
+
         educAttainment = new JTextField();
         educAttainment.setFont(fieldFont);
         educAttainment.setBounds(30, 415, 290, 33);
@@ -617,6 +683,12 @@ public class addMembersPage extends JFrame {
         occupationlbl.setFont(labelFont);
         occupationlbl.setBounds(390, 385, 400, 30);
         panel.add(occupationlbl);
+
+        JLabel asterisk11 = new JLabel("*");
+        asterisk11.setForeground(new Color(239, 101, 80));
+        asterisk11.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk11.setBounds(475, 386, 400, 30);
+        panel.add(asterisk11);
 
         occupation = new JTextField();
         occupation.setFont(fieldFont);
@@ -644,6 +716,12 @@ public class addMembersPage extends JFrame {
         mobileNumlbl.setBounds(30, 30, 400, 30);
         panel.add(mobileNumlbl);
 
+        JLabel asterisk1 = new JLabel("*");
+        asterisk1.setForeground(new Color(239, 101, 80));
+        asterisk1.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk1.setBounds(143, 33, 400, 30);
+        panel.add(asterisk1);
+
         mobileNum = new JTextField();
         mobileNum.setFont(fieldFont);
         mobileNum.setBounds(30, 60, 290, 33);
@@ -654,6 +732,12 @@ public class addMembersPage extends JFrame {
         emailAddlbl.setFont(labelFont);
         emailAddlbl.setBounds(30, 100, 400, 30);
         panel.add(emailAddlbl);
+
+        JLabel asterisk2 = new JLabel("*");
+        asterisk2.setForeground(new Color(239, 101, 80));
+        asterisk2.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk2.setBounds(135, 103, 400, 30);
+        panel.add(asterisk2);
 
         emailAdd = new JTextField();
         emailAdd.setFont(fieldFont);
@@ -666,6 +750,12 @@ public class addMembersPage extends JFrame {
         fbNamelbl.setBounds(30, 170, 400, 30);
         panel.add(fbNamelbl);
 
+        JLabel asterisk3 = new JLabel("*");
+        asterisk3.setForeground(new Color(239, 101, 80));
+        asterisk3.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk3.setBounds(159, 173, 400, 30);
+        panel.add(asterisk3);
+
         fbName = new JTextField();
         fbName.setFont(fieldFont);
         fbName.setBounds(30, 200, 290, 33);
@@ -676,6 +766,12 @@ public class addMembersPage extends JFrame {
         lblHouseNum.setFont(labelFont);
         lblHouseNum.setBounds(380, 30, 200, 30);
         panel.add(lblHouseNum);
+
+        JLabel asterisk4 = new JLabel("*");
+        asterisk4.setForeground(new Color(239, 101, 80));
+        asterisk4.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk4.setBounds(442, 33, 400, 30);
+        panel.add(asterisk4);
 
         houseNum = new JTextArea();
         houseNum.setFont(fieldFont);
@@ -695,6 +791,12 @@ public class addMembersPage extends JFrame {
         guardianNamelbl.setBounds(30, 290, 400, 30);
         panel.add(guardianNamelbl);
 
+        JLabel asterisk5 = new JLabel("*");
+        asterisk5.setForeground(new Color(239, 101, 80));
+        asterisk5.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk5.setBounds(277, 293, 400, 30);
+        panel.add(asterisk5);
+
         guardianName = new JTextField();
         guardianName.setFont(fieldFont);
         guardianName.setBounds(30, 320, 290, 33);
@@ -706,6 +808,12 @@ public class addMembersPage extends JFrame {
         relationlbl.setBounds(380, 290, 400, 30);
         panel.add(relationlbl);
 
+        JLabel asterisk6 = new JLabel("*");
+        asterisk6.setForeground(new Color(239, 101, 80));
+        asterisk6.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk6.setBounds(525, 293, 400, 30);
+        panel.add(asterisk6);
+
         relationToMem = new JTextField();
         relationToMem.setFont(fieldFont);
         relationToMem.setBounds(380, 320, 290, 33);
@@ -716,6 +824,12 @@ public class addMembersPage extends JFrame {
         guardianMobileNumlbl.setFont(labelFont);
         guardianMobileNumlbl.setBounds(30, 360, 400, 30);
         panel.add(guardianMobileNumlbl);
+
+        JLabel asterisk7 = new JLabel("*");
+        asterisk7.setForeground(new Color(239, 101, 80));
+        asterisk7.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk7.setBounds(144, 363, 400, 30);
+        panel.add(asterisk7);
 
         guardianMobileNum = new JTextField();
         guardianMobileNum.setFont(fieldFont);
@@ -997,6 +1111,12 @@ public class addMembersPage extends JFrame {
         lblTakingMeds.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
         lblTakingMeds.setBounds(30, 30, 400, 30);
         panel.add(lblTakingMeds);
+
+        JLabel asterisk = new JLabel("*");
+        asterisk.setForeground(new Color(239, 101, 80));
+        asterisk.setFont(new Font("Arial", Font.BOLD, 19));
+        asterisk.setBounds(343, 33, 400, 30);
+        panel.add(asterisk);
 
         takingMeds = new JCheckBox("Yes");
         notTakingMeds = new JCheckBox("No");

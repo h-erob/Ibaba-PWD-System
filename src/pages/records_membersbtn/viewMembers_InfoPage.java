@@ -136,7 +136,7 @@ public class viewMembers_InfoPage extends JFrame {
         fullName.setEditable(false);
         fullName.setFocusable(false);
         fullName.setOpaque(false);
-        fullName.setBounds(105, 38, 500, 33);
+        fullName.setBounds(105, 38, 400, 26);
         topPanel.add(fullName);
 
         pwdIdNum = new JTextField(memberData.pwdIdNumber != null ? memberData.pwdIdNumber : "");
@@ -145,7 +145,7 @@ public class viewMembers_InfoPage extends JFrame {
         pwdIdNum.setEditable(false);
         pwdIdNum.setFocusable(false);
         pwdIdNum.setOpaque(false);
-        pwdIdNum.setBounds(107, 59, 190, 33);
+        pwdIdNum.setBounds(105, 63, 150, 20);
         topPanel.add(pwdIdNum);
 
         disabilityType = new JTextField(memberData.disabilityType != null ? memberData.disabilityType : "");
@@ -154,13 +154,13 @@ public class viewMembers_InfoPage extends JFrame {
         disabilityType.setEditable(false);
         disabilityType.setFocusable(false);
         disabilityType.setOpaque(false);
-        disabilityType.setBounds(107, 76, 150, 33);
+        disabilityType.setBounds(105, 82, 150, 20);
         topPanel.add(disabilityType);
 
         JLabel validDatelbl = new JLabel("ID validity:");
         validDatelbl.setForeground(new Color(100, 100, 100));
         validDatelbl.setFont(labelFont);
-        validDatelbl.setBounds(263, 61, 400, 30);
+        validDatelbl.setBounds(263, 60, 400, 30);
         topPanel.add(validDatelbl);
 
         idValidity = new JTextField(memberData.idValidUntil != null ? sdf.format(memberData.idValidUntil) : "");
@@ -169,7 +169,7 @@ public class viewMembers_InfoPage extends JFrame {
         idValidity.setEditable(false);
         idValidity.setFocusable(false);
         idValidity.setOpaque(false);
-        idValidity.setBounds(263, 79, 150, 33);
+        idValidity.setBounds(263, 77, 150, 33);
         topPanel.add(idValidity);
 
         JLabel statuslbl = new JLabel("Status:");
@@ -245,7 +245,7 @@ public class viewMembers_InfoPage extends JFrame {
         birthday.setEditable(false);
         birthday.setFocusable(false);
         birthday.setOpaque(false);
-        birthday.setBounds(34, 47, 150, 33);
+        birthday.setBounds(34, 53, 100, 18);
         panel.add(birthday);
 
         JLabel agelbl = new JLabel("Age");
@@ -260,7 +260,7 @@ public class viewMembers_InfoPage extends JFrame {
         age.setEditable(false);
         age.setFocusable(false);
         age.setOpaque(false);
-        age.setBounds(34, 89, 150, 33);
+        age.setBounds(34, 94, 100, 18);
         panel.add(age);
 
         JLabel sexlbl = new JLabel("Sex");
@@ -272,7 +272,7 @@ public class viewMembers_InfoPage extends JFrame {
         sexCombo = new JComboBox<>(new String[]{"Male", "Female", "Other"});
         sexCombo.setSelectedItem(memberData.sex != null ? memberData.sex : "Other");
         sexCombo.setFont(fieldFont);
-        sexCombo.setBounds(215, 52, 100, 18);
+        sexCombo.setBounds(215, 53, 80, 17);
         sexCombo.setFocusable(false);
         sexCombo.setEnabled(false);
         sexCombo.setForeground(Color.BLACK);
@@ -301,7 +301,7 @@ public class viewMembers_InfoPage extends JFrame {
         civilStatusCombo = new JComboBox<>(new String[]{"Single", "Married", "Widowed", "Separated", "Divorced"});
         civilStatusCombo.setSelectedItem(memberData.civilStatus != null ? memberData.civilStatus : "Single");
         civilStatusCombo.setFont(fieldFont);
-        civilStatusCombo.setBounds(215, 92, 100, 20);
+        civilStatusCombo.setBounds(215, 93, 100, 18);
         civilStatusCombo.setFocusable(false);
         civilStatusCombo.setEnabled(false);
         civilStatusCombo.setForeground(Color.BLACK);
@@ -333,7 +333,7 @@ public class viewMembers_InfoPage extends JFrame {
         placeOfBirth.setEditable(false);
         placeOfBirth.setFocusable(false);
         placeOfBirth.setOpaque(false);
-        placeOfBirth.setBounds(400, 47, 200, 33);
+        placeOfBirth.setBounds(400, 52, 180, 18);
         panel.add(placeOfBirth);
 
         JLabel educationLevellbl = new JLabel("Education Level");
@@ -348,7 +348,7 @@ public class viewMembers_InfoPage extends JFrame {
         educationLevel.setEditable(false);
         educationLevel.setFocusable(false);
         educationLevel.setOpaque(false);
-        educationLevel.setBounds(400, 89, 290, 33);
+        educationLevel.setBounds(400, 94, 180, 19);
         panel.add(educationLevel);
 
         JLabel occupationlbl = new JLabel("Occupation");
@@ -363,13 +363,13 @@ public class viewMembers_InfoPage extends JFrame {
         occupation.setEditable(false);
         occupation.setFocusable(false);
         occupation.setOpaque(false);
-        occupation.setBounds(600, 47, 290, 33);
+        occupation.setBounds(600, 52, 120, 18);
         panel.add(occupation);
 
         JLabel addresslbl = new JLabel("Address");
         addresslbl.setForeground(new Color(100, 100, 100));
         addresslbl.setFont(labelFont);
-        addresslbl.setBounds(33, 114, 400, 30);
+        addresslbl.setBounds(33, 114, 150, 30);
         panel.add(addresslbl);
 
         address = new JTextField(memberData.address != null ? memberData.address : "");
@@ -378,7 +378,7 @@ public class viewMembers_InfoPage extends JFrame {
         address.setEditable(false);
         address.setFocusable(false);
         address.setOpaque(false);
-        address.setBounds(34, 130, 290, 33);
+        address.setBounds(34, 136, 500, 19);
         panel.add(address);
 
         JSeparator separator1 = new JSeparator();
@@ -403,7 +403,7 @@ public class viewMembers_InfoPage extends JFrame {
         mobileNum.setEditable(false);
         mobileNum.setFocusable(false);
         mobileNum.setOpaque(false);
-        mobileNum.setBounds(34, 215, 290, 33);
+        mobileNum.setBounds(34, 220, 290, 19);
         panel.add(mobileNum);
 
         JLabel fbNamelbl = new JLabel("Facebook Name");
@@ -418,7 +418,7 @@ public class viewMembers_InfoPage extends JFrame {
         fbName.setEditable(false);
         fbName.setFocusable(false);
         fbName.setOpaque(false);
-        fbName.setBounds(33, 257, 290, 33);
+        fbName.setBounds(33, 262, 290, 19);
         panel.add(fbName);
 
         JLabel emaillbl = new JLabel("Email");
@@ -433,7 +433,7 @@ public class viewMembers_InfoPage extends JFrame {
         email.setEditable(false);
         email.setFocusable(false);
         email.setOpaque(false);
-        email.setBounds(33, 299, 290, 33);
+        email.setBounds(33, 304, 290, 19);
         panel.add(email);
 
         JSeparator verticalSeparator = new JSeparator(SwingConstants.VERTICAL);
@@ -458,7 +458,7 @@ public class viewMembers_InfoPage extends JFrame {
         guardianName.setEditable(false);
         guardianName.setFocusable(false);
         guardianName.setOpaque(false);
-        guardianName.setBounds(376, 215, 290, 33);
+        guardianName.setBounds(376, 220, 300, 19);
         panel.add(guardianName);
 
         JLabel guardianRelationlbl = new JLabel("Guardian Relation");
@@ -473,7 +473,7 @@ public class viewMembers_InfoPage extends JFrame {
         guardianRelation.setEditable(false);
         guardianRelation.setFocusable(false);
         guardianRelation.setOpaque(false);
-        guardianRelation.setBounds(376, 257, 290, 33);
+        guardianRelation.setBounds(376, 262, 300, 19);
         panel.add(guardianRelation);
 
         JLabel guardianMobilelbl = new JLabel("Guardian Mobile");
@@ -488,7 +488,7 @@ public class viewMembers_InfoPage extends JFrame {
         guardianMobile.setEditable(false);
         guardianMobile.setFocusable(false);
         guardianMobile.setOpaque(false);
-        guardianMobile.setBounds(376, 299, 290, 33);
+        guardianMobile.setBounds(376, 304, 300, 19);
         panel.add(guardianMobile);
 
         JSeparator separator2 = new JSeparator();
@@ -819,17 +819,28 @@ public class viewMembers_InfoPage extends JFrame {
             for (JTextField field : fields) {
                 field.setEditable(true);
                 field.setFocusable(true);
+                field.setOpaque(true);
+                field.setBorder(new LineBorder(Color.BLACK));
             }
 
             statusCombo.setEnabled(true);
             statusCombo.setFocusable(true);
             statusCombo.setForeground(Color.BLACK);
+            statusCombo.setOpaque(true);
+            statusCombo.setBackground(Color.WHITE);
+            statusCombo.setBorder(new LineBorder(Color.BLACK));
             sexCombo.setEnabled(true);
             sexCombo.setFocusable(true);
             sexCombo.setForeground(Color.BLACK);
+            sexCombo.setOpaque(true);
+            sexCombo.setBackground(Color.WHITE);
+            sexCombo.setBorder(new LineBorder(Color.BLACK));
             civilStatusCombo.setEnabled(true);
             civilStatusCombo.setFocusable(true);
             civilStatusCombo.setForeground(Color.BLACK);
+            civilStatusCombo.setOpaque(true);
+            civilStatusCombo.setBackground(Color.WHITE);
+            civilStatusCombo.setBorder(new LineBorder(Color.BLACK));
 
             JTable table = findHouseholdTable();
             if (table != null) {
